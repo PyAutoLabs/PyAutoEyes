@@ -1,0 +1,55 @@
+# ruff configuration for autolens_visualization.
+#
+# This repo is a collection of standalone visualization scripts, not a Python
+# package — there is no pyproject.toml. A standalone ruff.toml at the
+# repository root is the supported configuration location for that case
+# (see https://docs.astral.sh/ruff/configuration/).
+#
+# Sister PyAuto* repos do not yet have a ruff config; this file is the
+# baseline for the autolens_visualization repo (copied from autolens_profiling). If the broader
+# PyAutoLabs ecosystem later standardises on a shared ruff config, this
+# file should be updated to match.
+
+target-version = "py311"
+line-length = 100
+
+# Exclude generated / external folders.
+extend-exclude = [
+    "results",
+    "dataset",
+    ".venv",
+    "venv",
+]
+
+[lint]
+# Conservative selection — catch real bugs without imposing a strict style.
+# Profiling scripts use scientific patterns that can clash with stricter rule
+# sets (long lines for table headers, `if __name__ == "__main__":` is rare
+# because scripts run top-level, etc.).
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes (undefined names, unused imports)
+    "W",   # pycodestyle warnings
+    "I",   # isort (import order)
+    "UP",  # pyupgrade (Python version idioms)
+    "B",   # flake8-bugbear (likely bugs)
+]
+ignore = [
+    "E501",  # long lines — common in scientific code; ruff format handles wrapping
+    "E402",  # module-level imports not at top of file — profiling scripts often
+             # set env vars (NUMBA_CACHE_DIR etc.) before importing autolens
+    "F401",  # unused imports — some scripts deliberately import-for-side-effect
+             # (e.g. `from autoconf import jax_wrapper  # noqa: F401`)
+    "B008",  # function call in default argument — common autofit pattern
+    "B905",  # zip() without strict= — scripts zip equal-length lists they built
+             # themselves; threading strict= through adds noise, not safety
+    "B007",  # unused loop-control variable — warm-up/repeat loops (`for _i in
+             # range(n)`) are the dominant pattern in timing code
+]
+
+[lint.per-file-ignores]
+# build_readme.py uses dynamic re.sub callbacks that confuse some checkers.
+"scripts/misc/tooling/build_readme.py" = ["B023"]  # function-uses-loop-variable
+
+[format]
+# Defaults: black-compatible. Nothing to override.
