@@ -1,0 +1,117 @@
+# lint.yml — PR / push-to-main gate.
+#
+# CPU-only. Runs on every PR and on push to main against the PyAutoLabs library
+# MAINS (the stack a figure change is developed against):
+#
+#   1. ruff check + ruff format --check
+#   2. gallery_build.py --check on the COMMITTED figures (GALLERY.md current)
+#   3. pytest scripts/misc/test (hermetic gallery-builder tests)
+#   4. lychee link-rot over every *.md (GALLERY.md's image links included)
+#   5. run BOTH producers for real, then gallery_build.py --check again — proves
+#      they still render on the mains and that the committed GALLERY.md lists
+#      exactly the figure set they produce (a stale committed gallery fails the
+#      PR). There is no pixel diff: re-rendered PNG bytes are not compared.
+#
+# Refreshing the committed PNGs on a release lives in `render.yml`.
+
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      NUMBA_CACHE_DIR: /tmp/numba_cache
+      MPLCONFIGDIR: /tmp/matplotlib
+      PYTHONPATH: ${{ github.workspace }}/PyAutoNerves:${{ github.workspace }}/PyAutoFit:${{ github.workspace }}/PyAutoArray:${{ github.workspace }}/PyAutoGalaxy:${{ github.workspace }}/PyAutoLens
+    steps:
+      - name: Checkout autolens_visualization
+        uses: actions/checkout@v4
+        with:
+          path: autolens_visualization
+
+      - name: Checkout PyAutoNerves
+        uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoNerves
+          path: PyAutoNerves
+      - name: Checkout PyAutoFit
+        uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoFit
+          path: PyAutoFit
+      - name: Checkout PyAutoArray
+        uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoArray
+          path: PyAutoArray
+      - name: Checkout PyAutoGalaxy
+        uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoGalaxy
+          path: PyAutoGalaxy
+      - name: Checkout PyAutoLens
+        uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoLens
+          path: PyAutoLens
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install runtime dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          # Install each sibling checkout in dependency order: satisfies the full
+          # third-party dep chain without a hand-maintained list. PYTHONPATH (job
+          # env) still resolves the PyAuto* imports from the checkouts.
+          for r in PyAutoNerves PyAutoFit PyAutoArray PyAutoGalaxy PyAutoLens; do
+            pip install "./$r[optional]"
+          done
+
+      - name: Install lint tools
+        run: |
+          pip install ruff pytest
+          curl -sSfL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz \
+            | tar -xz -C /usr/local/bin --strip-components=1 lychee-x86_64-unknown-linux-gnu/lychee
+
+      - name: ruff check
+        working-directory: autolens_visualization
+        run: ruff check .
+
+      - name: ruff format --check
+        working-directory: autolens_visualization
+        run: ruff format --check .
+
+      - name: gallery_build.py --check (committed figures)
+        working-directory: autolens_visualization
+        run: python gallery/gallery_build.py --check
+
+      - name: pytest — scripts/misc/test/
+        working-directory: autolens_visualization
+        run: pytest scripts/misc/test/ -q
+
+      - name: lychee — markdown link-rot
+        working-directory: autolens_visualization
+        run: |
+          lychee \
+            --exclude '^https://github\.com/.*/(issues|pull|commit|releases)/' \
+            --exclude '^https://join\.slack\.com/' \
+            --no-progress \
+            --accept '200..=299,429' \
+            --max-redirects 5 \
+            $(find . -name '*.md' -not -path './output/*' -not -path './.claude/*')
+
+      - name: Render both producers + gallery_build.py --check
+        working-directory: autolens_visualization
+        run: bash gallery/gallery_run.sh --all
