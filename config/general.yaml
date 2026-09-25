@@ -1,0 +1,2 @@
+version:
+  workspace_version_check: false    # this repo renders against library mains locally and PyPI releases in CI; the mismatch warning is expected noise.

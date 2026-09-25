@@ -1,0 +1,77 @@
+# render.yml — manual + on-PyAutoLens-release figure refresh.
+#
+# Installs the RELEASED stack from PyPI (what users get), runs every producer via
+# `gallery/gallery_run.sh --all`, rebuilds GALLERY.md, and commits the refreshed
+# PNGs + GALLERY.md back to main as `github-actions[bot]` with `[skip ci]`.
+#
+# Triggers:
+#   - workflow_dispatch (manual, GitHub UI)
+#   - repository_dispatch type `pyautolens-release`, sent by the release pipeline
+#     once a PyAutoLens release is on PyPI.
+#
+# Adapted from autolens_profiling/.github/workflows/profile.yml. `[skip ci]` keeps
+# lint.yml from re-running on the bot commit (it would loop); `contents: write`
+# lets the bot push.
+
+name: render
+
+on:
+  workflow_dispatch:
+    inputs:
+      autolens_version:
+        description: "PyPI autolens version to render with (blank = latest)"
+        required: false
+        default: ""
+  repository_dispatch:
+    types: [pyautolens-release]
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      NUMBA_CACHE_DIR: /tmp/numba_cache
+      MPLCONFIGDIR: /tmp/matplotlib
+    steps:
+      - name: Checkout autolens_visualization
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install the released stack from PyPI
+        env:
+          VERSION: ${{ inputs.autolens_version || github.event.client_payload.version || '' }}
+        run: |
+          python -m pip install --upgrade pip
+          if [ -n "$VERSION" ]; then
+            pip install "autolens[optional]==$VERSION"
+          else
+            pip install "autolens[optional]"
+          fi
+          python -c "import autolens; print('autolens', autolens.__version__)"
+
+      - name: Render figures + rebuild GALLERY.md
+        run: bash gallery/gallery_run.sh --all
+
+      - name: Commit and push refreshed figures + GALLERY.md
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A scripts/*/images GALLERY.md
+          if git diff --cached --quiet; then
+            echo "No changes — exiting clean."
+            exit 0
+          fi
+          version=$(python -c "import autolens; print(autolens.__version__)")
+          git commit -m "chore: re-render gallery with autolens ${version} [skip ci]
+
+          Triggered by ${{ github.event_name }} (run ${{ github.run_id }})."
+          git push origin HEAD:main

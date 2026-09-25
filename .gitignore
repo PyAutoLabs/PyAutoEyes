@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+output/
+*.log
+
+# JAX / numba / matplotlib caches (when not redirected via env vars)
+.jax_cache/
+__jax_cache__/
+.numba_cache/
+.mplconfig/
+
+# Local virtualenvs
+.venv/
+venv/
+
+# Lensed-source adapt caches written by the simulators; regenerable, never an input.
+dataset/**/lensed_source.fits
+
+# Visualizer outputs: PNG figures are TRACKED (they are the gallery); the FITS / CSV /
+# JSON data products the visualizer also writes are bulky and not viewable on GitHub.
+scripts/**/images/**/*.fits
+scripts/**/images/**/*.csv
+scripts/**/images/**/*.json
