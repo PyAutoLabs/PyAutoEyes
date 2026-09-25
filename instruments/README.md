@@ -29,6 +29,13 @@ Splitting the dicts into a dedicated home means:
 - Helpers like `mask_radius_pixels(instrument)` can centralise math that
   was previously inlined across multiple files.
 
+## Deviation from autolens_profiling
+
+These presets are copied from `autolens_profiling/instruments/` with one change: the
+interferometer `sma` preset uses `noise_sigma = 10.0` (profiling: `1000.0`). At 1000 the
+190-visibility dataset was pure noise in the dirty image; at 10 the Einstein ring is visible
+so the interferometer gallery figures can be judged.
+
 ## Schema
 
 ### Imaging fields

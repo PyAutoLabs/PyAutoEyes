@@ -38,7 +38,8 @@ INSTRUMENTS: dict[str, dict] = {
         "mask_radius": 3.5,
         "n_visibilities": 190,
         "uv_scale": 3.0e5,
-        "noise_sigma": 1000.0,
+        # Deviates from autolens_profiling (1000.0) so the dirty image shows the ring (visibility).
+        "noise_sigma": 10.0,
         "seed": 1,
         "transformer": "dft",  # 190 vis × 256² grid; DFT is cheap and exact
         "transformer_chunk_size": None,  # sma is tiny; one-shot

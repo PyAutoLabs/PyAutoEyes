@@ -70,7 +70,10 @@ not regenerate byte-identically). `dataset/interferometer/sma` was produced by
 python scripts/misc/simulators/interferometer.py --instrument sma
 ```
 
-with the imaging simulator's lens mass, shear and source (no lens light). The auto-simulate hook
+with the imaging simulator's lens mass, shear and source (no lens light). This repo's `sma`
+preset **deviates from autolens_profiling**: `noise_sigma` is 10.0 (profiling: 1000.0), so the
+integrated SNR is a few hundred and the dirty image, residual and chi-squared panels show the ring
+instead of pure noise. The auto-simulate hook
 in `_viz_cli.py` only fires when `data.fits` is absent — it never deletes a tracked dataset.
 
 ## Adding a domain
