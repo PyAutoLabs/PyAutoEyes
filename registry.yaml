@@ -1,0 +1,31 @@
+# PyAutoEyes instance registry: one row per `<lib>_visualization` project repo.
+#
+# The project repo makes, stores and tracks its figures, and commits a TRACKED
+# figure manifest (the read contract in REFERENCE.md). This organ reads that
+# manifest and links to the PNGs where they live. It copies nothing, renders
+# nothing and judges nothing. `bin/pyauto-eyes check` validates this file.
+#
+# Fields (all required):
+#   name             short instance key used by the dashboard, `/eyes review` and `survey`
+#   repo             the project repo's name in the body map (PyAutoMind/repos.yaml)
+#   path             its checkout, relative to the workspace root (grouped layout)
+#   github           owner/repo on GitHub
+#   library          the PyAuto library whose figures it renders
+#   import_name      that library's import / PyPI name (the freshness lookup key)
+#   manifest         the tracked manifest's path inside the project repo
+#   images_base_url  raw.githubusercontent base; manifest `file` paths join onto it
+#   gallery          the project repo's browsable gallery page, relative to its root
+#   dispatch_event   the library-release repository_dispatch the project repo
+#                    re-renders on (its render.yml then fires `eyes-refresh` here)
+schema: 1
+instances:
+  - name: lens
+    repo: autolens_visualization
+    path: lens/autolens_visualization
+    github: PyAutoLabs/autolens_visualization
+    library: PyAutoLens
+    import_name: autolens
+    manifest: gallery/viz_manifest.yaml
+    images_base_url: https://raw.githubusercontent.com/PyAutoLabs/autolens_visualization/main/
+    gallery: GALLERY.md
+    dispatch_event: pyautolens-release

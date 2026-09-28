@@ -1,0 +1,66 @@
+# lint.yml: the PR / push-to-main gate for the PyAutoEyes organ.
+#
+#   1. ruff check + ruff format --check
+#   2. pytest tests/ (hermetic: registry, manifest reader, board builder, check)
+#   3. `bin/pyauto-eyes check`: registry valid, every instance's tracked
+#      manifest reachable at its raw GitHub URL and valid against the contract
+#      (REFERENCE.md), every listed PNG URL resolves, and the committed
+#      dashboard.md was built from the manifests now published
+#   4. lychee link-rot over the prose *.md. raw.githubusercontent.com is
+#      excluded because step 3 already HEADs every figure URL, and
+#      dashboard.md is excluded for the same reason.
+#
+# A stale dashboard on main is not an error that needs a human:
+# dashboard_refresh.yml self-heals it. On a PR, re-run `bin/pyauto-eyes board`
+# and commit the result.
+
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: |
+          python -m pip install --quiet ruff pytest pyyaml
+          curl -sSfL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz \
+            | tar -xz -C /usr/local/bin --strip-components=1 lychee-x86_64-unknown-linux-gnu/lychee
+
+      - name: ruff check
+        run: ruff check .
+
+      - name: ruff format --check
+        run: ruff format --check .
+
+      - name: pytest (hermetic)
+        run: python -m pytest tests -q
+
+      - name: pyauto-eyes check
+        run: bin/pyauto-eyes check
+
+      - name: lychee (markdown link-rot)
+        run: |
+          lychee \
+            --exclude '^https://raw\.githubusercontent\.com/' \
+            --exclude '^https://github\.com/.*/(issues|pull|commit|releases)/' \
+            --no-progress \
+            --accept '200..=299,429' \
+            --max-redirects 5 \
+            $(find . -name '*.md' -not -name 'dashboard.md' -not -path './.claude/*' -not -path './.git/*')
