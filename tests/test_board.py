@@ -1,6 +1,11 @@
+import html
+import json
+import re
+import urllib.parse
+
 import pytest
 
-from eyes import board, registry
+from eyes import board, context, registry
 
 
 @pytest.fixture
@@ -77,7 +82,117 @@ def test_an_unavailable_manifest_still_renders(registry_file):
     assert "Manifest unavailable" in board.render_html([view])
 
 
-def test_write_emits_both_pages(views, tmp_path):
+def test_write_emits_both_pages_and_the_badge(views, tmp_path):
     paths = board.write(views, tmp_path)
-    assert [p.name for p in paths] == ["dashboard.md", "dashboard.html"]
+    assert [p.name for p in paths] == ["dashboard.md", "dashboard.html", "badge.json"]
     assert all(p.read_text() for p in paths)
+    assert json.loads(paths[2].read_text())["label"] == "eyes"
+
+
+# ------------------------------------------------ phase 2: content + route ---
+
+
+@pytest.fixture
+def rich_views(registry_file, project, fake_brain, mind):
+    """Views with a live survey (fabricated conductor) and live critiques."""
+    brain, _ = fake_brain
+
+    def lookup(inst, checkout, previous):
+        return context.gather(inst, checkout, previous, mind=mind, brain=brain)
+
+    instances = registry.load(registry_file)
+    return board.collect(
+        instances,
+        {"demo": project},
+        release_lookup=lambda name: "2026.9.27.2",
+        context_lookup=lookup,
+    )
+
+
+def test_the_head_of_the_page_is_the_counts_table_the_brain_reads(rich_views):
+    md = board.render_markdown(rich_views)
+    head = md.split("\n## ", 1)[0]
+    assert "| [Instances](#instances) | 1 |" in head
+    assert "| [Figures](#instances) | 3 |" in head
+    assert "| [Behind](#instances) | 1 |" in head
+    assert "| [Critiques](#instances) | 2 |" in head
+    # The Brain board's regex over the head finds exactly these four rows.
+    rows = re.findall(r"^\|\s*\[([^\]]+)\]\([^)]*\)[^|]*\|\s*(\d+)\s*\|", head, re.M)
+    assert [r[0] for r in rows] == ["Instances", "Figures", "Behind", "Critiques"]
+
+
+def test_the_instance_row_and_section_carry_survey_and_critiques(rich_views, project):
+    md = board.render_markdown(rich_views)
+    assert "| 3 png · 1 gaps · 0 orphans · 1 stale | 2 |" in md
+    assert "3 PNGs on disk (imaging 2, interferometer 1)" in md
+    assert "gaps `interferometer/visualization_jax`" in md
+    assert "stale renders `imaging/visualization`" in md
+    assert "- Restyle the -- fit panel (`draft/feature/demo/restyle_fit.md`)" in md
+    # Never a machine path: not the checkout, not the survey's workspace.
+    assert str(project.parent) not in md and "/somewhere/on/a/laptop" not in md
+    page = board.render_html(rich_views)
+    assert "Restyle the -- fit panel" in page and "3 png · 1 gaps" in page
+    assert str(project.parent) not in page
+
+
+def test_each_figure_has_a_prefilled_issue_on_the_project_repo(rich_views):
+    view = rich_views[0]
+    demo, man = view.instance, view.manifest
+    md = board.render_markdown(rich_views)
+    page = board.render_html(rich_views)
+    for fig in man.figures:
+        url = board.issue_url(demo, man, fig)
+        assert url.startswith("https://github.com/PyAutoLabs/demo_visualization/issues/new?")
+        q = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+        assert q["title"] == [f"figure: {fig.domain}/{board._figure_label(fig)}"]
+        assert q["labels"] == ["eyes-critique"]
+        body = q["body"][0]
+        assert f"Raw PNG: {demo.image_url(fig.file)}" in body
+        assert "generated 2026-09-28, rendered with autodemo 2026.9.1.1" in body
+        assert "Suggested improvement:" in body
+        assert f"/eyes review demo {fig.file}" in body
+        # The markdown link survives the table (no raw pipe or paren in it).
+        assert f"| [suggest]({url}) |" in md and "|" not in url and ")" not in url
+        assert html.escape(url, quote=True) in page
+    assert page.count("Suggest an improvement</a>") == len(man.figures)
+
+
+def test_a_manifest_survey_mismatch_is_called_out(registry_file, project, mind):
+    extra = context.Survey(domains={"imaging": 5})
+    instances = registry.load(registry_file)
+    (view,) = board.collect(
+        instances,
+        {"demo": project},
+        offline=True,
+        context_lookup=lambda i, c, p: context.Context(survey=extra, critiques=[]),
+    )
+    md = board.render_markdown([view])
+    assert "The checkout holds 5 PNGs but the manifest lists 3" in md
+    assert "(PyAutoMind drafts mentioning this instance): none." in md
+
+
+def test_a_ci_render_carries_the_last_local_reading_forward(rich_views, registry_file, project):
+    local = board.render_markdown(rich_views)
+    instances = registry.load(registry_file)
+    # The runner: no checkout, no Brain, no Mind — only the committed page.
+    ci = board.collect(
+        instances,
+        {"demo": project},
+        release_lookup=lambda name: "2026.9.27.2",
+        context_lookup=lambda inst, checkout, prev: context.gather(inst, None, prev, mind=False),
+        previous=local,
+    )
+    assert board.render_markdown(ci) == local
+    assert board.render_html(ci) == board.render_html(rich_views)
+
+
+def test_badge_tracks_behind_and_unavailable(rich_views, registry_file):
+    assert board.render_badge(rich_views) == {
+        "schemaVersion": 1,
+        "label": "eyes",
+        "message": "3 figures · 1 behind",
+        "color": "yellow",
+    }
+    instances = registry.load(registry_file)
+    (missing,) = board.collect(instances)  # network refused
+    assert board.render_badge([missing])["color"] == "red"

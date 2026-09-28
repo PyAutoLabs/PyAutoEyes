@@ -10,3 +10,6 @@ venv/
 
 # Pages staging (pages_dashboard.yml builds it on the runner)
 _site/
+
+# PyAutoMind checkout the refresh workflow reads critiques from
+_mind/

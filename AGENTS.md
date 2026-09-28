@@ -62,17 +62,18 @@ registry.yaml        one row per instance (lens today)
 REFERENCE.md         the manifest contract (schema 1), registry fields, refresh chain
 eyes/registry.py     read + validate registry.yaml; resolve local checkouts
 eyes/manifest.py     read a manifest from a checkout / file / raw GitHub URL; validate
-eyes/board.py        build dashboard.md + dashboard.html (deterministic, no stamp)
+eyes/context.py      per-instance survey (asks the Brain Eyes conductor) + open critiques (Mind drafts)
+eyes/board.py        build dashboard.md + dashboard.html + badge.json (deterministic, no stamp)
 eyes/cli.py          the pyauto-eyes commands
 bin/pyauto-eyes      board | check | survey
-dashboard.md/.html   GENERATED; never edit by hand
+dashboard.md/.html   GENERATED; never edit by hand (badge.json too)
 tests/               hermetic pytest (no network)
 ```
 
 ## Commands
 
 ```bash
-bin/pyauto-eyes board [--offline] [--from [INSTANCE=]PATH]   # render the dashboard
+bin/pyauto-eyes board [--offline] [--from [INSTANCE=]PATH] [--no-survey] [--mind PATH]   # render the dashboard
 bin/pyauto-eyes check [--offline] [--from ...]              # the gate (exit 1 on failure)
 bin/pyauto-eyes survey [<instance> | --all]                 # pyauto-brain eyes survey <checkout>
 ```
@@ -82,6 +83,29 @@ flat bundle's `<root>/<repo>`) and skips the PyPI freshness lookup. `--from`
 points an instance at a specific checkout, such as a project-repo worktree
 whose manifest is not on `main` yet. Image links are always the raw GitHub
 URLs, so the committed dashboard carries no machine paths.
+
+`board` also reads two local inputs per instance. It asks the Brain Eyes
+conductor to survey the instance's checkout (`pyauto-brain eyes --json survey
+<checkout>`), and it lists the open PyAutoMind drafts that mention the
+instance (`$PYAUTO_MIND`, or `--mind`). Neither is available on the CI runner.
+Whatever cannot be read is carried forward from the `<!-- eyes:context … -->`
+marker in the committed dashboard, so a CI render never erases the last local
+reading and the page does not flap. `dashboard_refresh.yml` checks out
+PyAutoMind, so critiques stay live there; the survey refreshes whenever
+someone runs `bin/pyauto-eyes board` where the instance is checked out.
+
+## The critique route
+
+Each figure carries two affordances, and neither files anything:
+
+- a copyable `/eyes review <instance> <figure>` line for a Claude Code session;
+- a **Suggest an improvement** link that opens a pre-filled "new issue" form on
+  the *project* repo. The title is `figure: <domain>/<file>`, the body holds the
+  raw PNG link, the manifest version and a `Suggested improvement:` stub, and
+  the label is `eyes-critique`.
+
+The human submits the issue. An accepted critique then becomes a PyAutoMind
+intake prompt and goes through start_dev, as any other change does.
 
 ## Testing
 
@@ -102,9 +126,10 @@ the project repos bump after (REFERENCE.md, "Versioning").
 ## Adding an instance
 
 Birth the `<lib>_visualization` project repo with a tracked schema-1
-manifest, and have its `render.yml` fire `eyes-refresh` here. Then add its
-`registry.yaml` row, run `bin/pyauto-eyes board` and `bin/pyauto-eyes check`,
-and commit.
+manifest, and have its `render.yml` fire `eyes-refresh` here. Create its
+`eyes-critique` label (`gh label create eyes-critique --repo <owner/repo>`).
+Then add its `registry.yaml` row, run `bin/pyauto-eyes board` and
+`bin/pyauto-eyes check`, and commit.
 
 <!-- repos_sync:history:begin -->
 ## Never rewrite history
