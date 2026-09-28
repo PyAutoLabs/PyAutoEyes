@@ -8,7 +8,9 @@
 #      dashboard.md was built from the manifests now published
 #   4. lychee link-rot over the prose *.md. raw.githubusercontent.com is
 #      excluded because step 3 already HEADs every figure URL, and
-#      dashboard.md is excluded for the same reason.
+#      dashboard.md is excluded for the same reason. The organ's own Pages
+#      URL (pyautolabs.github.io/PyAutoEyes) is excluded until it publishes
+#      (Pages enabled + merged).
 #
 # A stale dashboard on main is not an error that needs a human:
 # dashboard_refresh.yml self-heals it. On a PR, re-run `bin/pyauto-eyes board`
@@ -59,6 +61,7 @@ jobs:
         run: |
           lychee \
             --exclude '^https://raw\.githubusercontent\.com/' \
+            --exclude '^https://pyautolabs\.github\.io/PyAutoEyes' \
             --exclude '^https://github\.com/.*/(issues|pull|commit|releases)/' \
             --no-progress \
             --accept '200..=299,429' \
