@@ -1,0 +1,49 @@
+name: Pages Dashboard
+
+# Publishes the generated `dashboard.html` (the dashboard's thumbnail twin of
+# dashboard.md, with one-tap copy of each figure's `/eyes review` line) as this
+# repo's GitHub Pages index: https://pyautolabs.github.io/PyAutoEyes/
+#
+# The page is rendered by `bin/pyauto-eyes board` and kept fresh by
+# dashboard_refresh.yml. This workflow only publishes it, and it publishes only
+# that one file. The thumbnails are <img> links to the raw PNGs in each project
+# repo, so no figure is copied into the site. (Cortex pattern.)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dashboard.html"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      # enablement: true creates the Pages site on first run, so no manual
+      # Settings -> Pages step is needed.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Stage the dashboard as the site index
+        run: |
+          mkdir -p _site
+          cp dashboard.html _site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,147 +1,110 @@
-# autolens_visualization — Agent Instructions
+# PyAutoEyes — Agent Guidance
 
-This repo is the single home for **what PyAutoLens figures look like**: it stores, in git, the
-most up-to-date rendering of every figure the PyAutoLens visualizers write during a model-fit,
-on realistic HST-scale imaging and SMA-scale interferometer data, so visualization can be judged
-and improved (by humans or AI chats against the source) without re-running a workspace fit. It is
-a collection of standalone producer scripts, **not** an installable package — there is no
-`pyproject.toml`. These are the canonical, agent-agnostic instructions for this repo; the
-`README.md` is the human-facing overview and `GALLERY.md` is the browsable gallery.
+This file is for AI coding agents (Claude Code, Codex, Cursor, etc.) and humans
+discovering this repository. PyAutoEyes is the **Eyes** organ of the PyAuto
+organism. It is where the human checks in on what the figures look like across
+every library.
 
-## Repository Structure
+<!-- repos_sync:map:begin -->
+**You are one organ of the PyAuto organism** — an agentic ecosystem for
+human-led, natural-language software development. The organs below are
+peer repositories; this repo is one of them, not a part of another.
+Canonical boundaries live in `PyAutoBrain/ORGANISM.md`; the full body map
+(every repo, not just organs) is `PyAutoMind/repos.yaml`.
 
-Producers are laid out **flat, one per domain** (`scripts/<domain>/visualization*.py`), because
-the Brain Eyes agent scans `scripts/<domain>/*.py` non-recursively for stems containing
-`visualization`:
+| Organ | Repo | Role |
+|-------|------|------|
+| **Brain** | PyAutoBrain | Reasoning/orchestration layer; how work is decomposed and routed; the specialist agents. |
+| **Mind** | PyAutoMind | Intent, goals, priorities, workflow state; every task starts as a markdown prompt here. |
+| **Cortex** | PyAutoCortex | The Cortex — where the organism keeps track of what is true: the science body map (`projects.yaml`) and one ledger per science project (what was run, what came back, what was learned, where to pick up); the science mirror of the Mind (runs and a dated log, not prompts and PRs). |
+| **Memory** | PyAutoMemory | Long-term scientific/software/project knowledge (see science pointer below). |
+| **Eyes** | PyAutoEyes | The Eyes — where the organism sees what its figures look like: the cross-project visualization dashboard over the `<lib>_visualization` project repos (autolens_visualization first) — the registry of those repos, the tracked-manifest read contract (`gallery/viz_manifest.yaml`) and the Pages board that links to their PNGs as the single point of contact for the visual behaviour of the whole ecosystem. Renders nothing and copies no figures (the project repos render and hold them); never judges them (the Brain's Eyes conductor does) and never edits library plot code (critiques route through intake). |
+| **Heart** | PyAutoHeart | Health/readiness — the authoritative "is it safe to release?" verdict. |
+| **Hands** | PyAutoHands | Packaging, tagging, notebook generation, PyPI release execution. |
+| **Nerves** | PyAutoNerves | The Nerves — the configuration/serialization layer connecting workspace conventions to libraries (layered config, version handshake, test_mode), delivered as the `autonerves` package. |
+| **Gut** | PyAutoGut | Owns the lifecycle of condemned self-material (stale branches, stashes, dead code/tests): holds it as durable, recoverable git refs through a transit window and voids it on a sweep. The storage mirror of Memory (retention vs release). |
+
+Call chain (always this order): **Brain → Heart (gate) → Build (execute)**. Brain agents are **conductors** (front-door; a human drives them; they decide *and* act) or **faculties** (read-only opinions the conductors consult; they judge and stop). New capability grows as a faculty, not a new organ, unless it owns state or effects no existing organ can.
+
+Generated from `PyAutoMind/repos.yaml` + `PyAutoBrain/ORGANISM.md`; edit there, then run `python3 PyAutoMind/scripts/repos_sync.py --write`.
+<!-- repos_sync:map:end -->
+## What this repo is
+
+The design has **two layers** (human decision 2026-09-28):
+
+- **Project repos** `<lib>_visualization` make, store and track the figures.
+  The first is `lens/autolens_visualization`; galaxy, fit and cti follow. Each
+  one owns its producers, simulators, datasets, `plots.yaml`, instruments,
+  tracked PNGs, `GALLERY.md`, render harness and lint/render workflows, and
+  it commits a tracked **figure manifest** (`gallery/viz_manifest.yaml`).
+- **This organ** is the cross-project dashboard over them. It reads each
+  instance's manifest and publishes `dashboard.md` + `dashboard.html`
+  (Pages), which link to the PNGs where they live.
+
+This is the same layering as `autolens_profiling` / `autolens_inference`
+under the Brain board.
+
+## Boundary (what this organ never does)
+
+- **Renders nothing.** Figures are rendered in the project repos by their own
+  harness, on library release.
+- **Copies no figures.** Thumbnails are links to the raw PNGs, and the Pages
+  site publishes `dashboard.html` alone.
+- **Never judges.** Critique is the Brain Eyes conductor's
+  (`PyAutoBrain/agents/conductors/eyes/`), per instance via this registry.
+- **Never edits library plot code.** Accepted critiques route through intake →
+  start_dev like any other change.
+
+## Layout
 
 ```
-scripts/
-  imaging/visualization.py          VisualizerImaging on dataset/imaging/hst
-  imaging/images/visualization/     its output: before-fit PNGs + parametric/ + delaunay/
-  interferometer/visualization.py   VisualizerInterferometer on dataset/interferometer/sma
-  interferometer/images/visualization/
-  misc/simulators/                  imaging.py + interferometer.py (regenerate datasets)
-  misc/test/                        hermetic pytest for the gallery builder
-gallery/gallery_build.py            GALLERY.md + output/gallery/{gallery.html,viz_manifest.yaml}
-gallery/gallery_run.sh              run producers -> build -> --check
-config/general.yaml                 layered over the library config (version check off)
-config/visualize/plots.yaml         the library default with EVERY toggle on
-instruments/                        imaging + interferometer presets (copied from profiling)
-dataset/imaging/hst/                TRACKED, byte-for-byte copy of autolens_profiling's hst
-dataset/interferometer/sma/         TRACKED, simulated here (190 visibilities)
-_viz_cli.py                         repo-root finder, dataset paths, auto-simulate hook
-GALLERY.md                          TRACKED, generated — never edit by hand
+registry.yaml        one row per instance (lens today)
+REFERENCE.md         the manifest contract (schema 1), registry fields, refresh chain
+eyes/registry.py     read + validate registry.yaml; resolve local checkouts
+eyes/manifest.py     read a manifest from a checkout / file / raw GitHub URL; validate
+eyes/board.py        build dashboard.md + dashboard.html (deterministic, no stamp)
+eyes/cli.py          the pyauto-eyes commands
+bin/pyauto-eyes      board | check | survey
+dashboard.md/.html   GENERATED; never edit by hand
+tests/               hermetic pytest (no network)
 ```
 
-**What is tracked.** PNG figures under `scripts/<domain>/images/**` and `GALLERY.md`. The FITS /
-CSV / JSON data products the visualizers also write are gitignored (bulky, not viewable on
-GitHub), as are `output/` and `dataset/**/lensed_source.fits`.
-
-**Import model.** Producers find the repo root by walking up to the directory containing
-`ruff.toml` (a depth-proof sentinel) and put it on `sys.path`, so `_viz_cli` and `instruments`
-import by their top-level names.
-
-## Rendering
-
-From the repo root, with the library checkouts on `PYTHONPATH` (`source activate.sh`):
+## Commands
 
 ```bash
-bash gallery/gallery_run.sh --all        # both producers, then build + --check (~3 min)
-python scripts/imaging/visualization.py  # one producer (~75 s)
-python gallery/gallery_build.py          # rebuild GALLERY.md + output/gallery/ only
-python gallery/gallery_build.py --check  # fail if GALLERY.md is stale vs the PNGs on disk
+bin/pyauto-eyes board [--offline] [--from [INSTANCE=]PATH]   # render the dashboard
+bin/pyauto-eyes check [--offline] [--from ...]              # the gate (exit 1 on failure)
+bin/pyauto-eyes survey [<instance> | --all]                 # pyauto-brain eyes survey <checkout>
 ```
 
-Each producer wipes its own `scripts/<domain>/images/visualization/` tree first, so the committed
-PNG set is exactly what the last run produced. Commit the PNGs and `GALLERY.md` together.
-
-Each producer pushes `config/` via `conf.instance.push` (the all-true `plots.yaml`), loads its
-tracked dataset, builds the simulator's **true model** (every parameter fixed), and calls
-`Visualizer*.visualize_before_fit` once and `Visualizer*.visualize` once per source type
-(`parametric/` = SersicCore, `delaunay/` = Overlay image-mesh + `Delaunay` + `ConstantSplit`),
-with a `SimpleNamespace(image_path=..., output_path=...)` paths stub. Adapt images are the
-per-galaxy images of the parametric fit.
-
-**Datasets.** `dataset/imaging/hst` is a byte-for-byte copy of
-`autolens_profiling/dataset/imaging/hst` (do not re-simulate it; profiling documents that it does
-not regenerate byte-identically). `dataset/interferometer/sma` was produced by
-
-```bash
-python scripts/misc/simulators/interferometer.py --instrument sma
-```
-
-with the imaging simulator's lens mass, shear and source (no lens light). This repo's `sma`
-preset **deviates from autolens_profiling**: `noise_sigma` is 10.0 (profiling: 1000.0), so the
-integrated SNR is a few hundred and the dirty image, residual and chi-squared panels show the ring
-instead of pure noise. The auto-simulate hook
-in `_viz_cli.py` only fires when `data.fits` is absent — it never deletes a tracked dataset.
-
-## Adding a domain
-
-1. Add a simulator under `scripts/misc/simulators/` (or an instrument preset) and track its
-   dataset under `dataset/<domain>/<instrument>/`.
-2. Add a flat producer `scripts/<domain>/visualization.py` modelled on the imaging one, writing
-   to `scripts/<domain>/images/visualization/`.
-3. Run `bash gallery/gallery_run.sh --all` and commit the PNGs + `GALLERY.md`.
-
-## Improving a figure (edit surfaces)
-
-- **config** — `config/visualize/plots.yaml` here: which figures are written at all.
-- **plot API** — the plotting code in the libraries: `PyAutoLens/autolens/**/plot/`,
-  `PyAutoGalaxy/autogalaxy/**/plot/`, `PyAutoArray/autoarray/plot/` (library changes go through
-  the normal library workflow, then this repo is re-rendered).
-- **script** — the producer in `scripts/<domain>/visualization.py` (dataset, model, source types).
-
-## Eyes agent contract
-
-The Brain Eyes agent (`organs/PyAutoBrain/agents/conductors/eyes/`) reviews this repo:
-`bin/pyauto-brain eyes survey lens/autolens_visualization`. It expects flat
-`scripts/<domain>/visualization*.py` producers writing `scripts/<domain>/images/<stem>/**`, a
-`gallery/gallery_run.sh` harness, and `output/gallery/{gallery.html,viz_manifest.yaml}`
-(`{domain: {script: [{file, kind, group}]}}`). Keep that layout when adding domains; accepted
-critiques route through intake / start_dev like any other change.
+`--offline` reads manifests from local checkouts (`<root>/<path>`, or a
+flat bundle's `<root>/<repo>`) and skips the PyPI freshness lookup. `--from`
+points an instance at a specific checkout, such as a project-repo worktree
+whose manifest is not on `main` yet. Image links are always the raw GitHub
+URLs, so the committed dashboard carries no machine paths.
 
 ## Testing
 
-The PR gate is `lint.yml` on Python 3.12 against the library mains:
+The PR gate is `lint.yml`: `ruff check .`, `ruff format --check .`,
+`python -m pytest tests -q`, `bin/pyauto-eyes check` (against the live raw
+URLs), and lychee over the prose markdown. When a change alters the
+dashboard, re-run `bin/pyauto-eyes board` and commit `dashboard.*` in the
+same PR. On `main`, `dashboard_refresh.yml` self-heals a stale dashboard,
+triggered by `repository_dispatch: eyes-refresh` from the project repos'
+`render.yml`, by a daily cron, or by hand.
 
-```bash
-ruff check .
-ruff format --check .
-python gallery/gallery_build.py --check
-pytest scripts/misc/test -q
-```
+## Changing the contract
 
-plus `lychee` on every `*.md`, then both producers run for real followed by
-`gallery_build.py --check` (a PR that changes the figure set without regenerating `GALLERY.md`
-fails). `render.yml` (manual + `repository_dispatch: pyautolens-release`) re-renders with the
-released PyPI stack and commits PNGs + `GALLERY.md` back as `github-actions[bot]` `[skip ci]`.
+Additive manifest fields need no change here. A breaking change bumps
+`schema`. The organ adds the new version to `SUPPORTED_SCHEMAS` first, and
+the project repos bump after (REFERENCE.md, "Versioning").
 
-## Sandboxed / restricted runs
+## Adding an instance
 
-```bash
-NUMBA_CACHE_DIR=/tmp/numba_cache MPLCONFIGDIR=/tmp/matplotlib python scripts/imaging/visualization.py
-```
-
-## Bulk-edit safety
-
-When editing the same region across many scripts in one pass, only rewrite the targeted region.
-**Never produce a whole-file write unless you have read the entire current file.**
-
-## Related Repos
-
-- `../PyAutoLens` — the visualizers being rendered (plus `../PyAutoGalaxy`, `../PyAutoArray`,
-  `../PyAutoFit`, `../PyAutoNerves` on `PYTHONPATH`).
-- `../autolens_workspace` — user-facing science scripts and tutorials.
-- `../autolens_workspace_test` — visualization *tests* (file/HDU assertions) and the gallery
-  harness this repo's was adapted from.
-- `../autolens_profiling` — source of the instrument presets, simulators and HST dataset.
-
-## Task Workflows
-
-When changing a producer, the config or a dataset, re-render (`gallery/gallery_run.sh --all`),
-keep `ruff check .` / `ruff format --check .` clean, and commit the PNGs + `GALLERY.md` in the same
-PR. Do not commit machine-specific absolute paths.
+Birth the `<lib>_visualization` project repo with a tracked schema-1
+manifest, and have its `render.yml` fire `eyes-refresh` here. Then add its
+`registry.yaml` row, run `bin/pyauto-eyes board` and `bin/pyauto-eyes check`,
+and commit.
 
 <!-- repos_sync:history:begin -->
 ## Never rewrite history

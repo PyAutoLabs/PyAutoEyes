@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""pyauto-eyes: board | check | survey. See `pyauto-eyes --help` and README.md."""
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from eyes.cli import main  # noqa: E402
+
+raise SystemExit(main())

@@ -1,0 +1,79 @@
+name: Dashboard Refresh
+
+# Re-renders dashboard.md / dashboard.html from registry.yaml and every
+# instance's tracked manifest, and commits them to main as github-actions[bot]
+# when they changed. (Cortex pattern.)
+#
+# Triggers:
+#   - repository_dispatch `eyes-refresh`: fired by each project repo's
+#     render.yml after it commits a re-render (client_payload {repo, sha,
+#     manifest}). The payload is only logged: the board always re-reads every
+#     manifest from its raw GitHub URL, so a dispatch can never make the
+#     dashboard disagree with main of the project repo.
+#   - a daily cron: catches library releases (freshness is measured against the
+#     latest PyPI release) and any dispatch that did not arrive.
+#   - workflow_dispatch: manual.
+#
+# The render is deterministic (it has no wall-clock stamp), so a night with no
+# change commits nothing. The bot commit uses GITHUB_TOKEN, which never
+# triggers other workflows. So after a commit this workflow dispatches
+# pages_dashboard.yml explicitly. Without that dispatch the Pages copy would
+# lag behind the repo copy.
+
+on:
+  repository_dispatch:
+    types: [eyes-refresh]
+  schedule:
+    - cron: "50 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+# Every workflow in this repo that pushes to main shares one queue.
+concurrency:
+  group: eyes-main-writers
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log the trigger
+        env:
+          PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        run: |
+          echo "event: ${GITHUB_EVENT_NAME}"
+          if [ "${GITHUB_EVENT_NAME}" = "repository_dispatch" ]; then echo "payload: ${PAYLOAD}"; fi
+
+      - name: Dependencies
+        run: python3 -m pip install --quiet pyyaml
+
+      - name: Render and commit the dashboard (only when changed)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            bin/pyauto-eyes board
+            if git diff --quiet -- dashboard.md dashboard.html; then
+              echo "dashboard unchanged: nothing to commit"
+              exit 0
+            fi
+            git add dashboard.md dashboard.html
+            git commit -q -m "eyes: refresh dashboard (${GITHUB_EVENT_NAME}) [skip ci]"
+            if git push -q origin HEAD:main; then
+              gh workflow run pages_dashboard.yml --ref main \
+                || echo "::warning::could not dispatch pages_dashboard.yml; Pages lags until its next trigger"
+              exit 0
+            fi
+            echo "push rejected (main moved); retrying on the new tip"
+          done
+          echo "::error::could not push the refreshed dashboard after 3 attempts"
+          exit 1
