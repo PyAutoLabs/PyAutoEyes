@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import argparse
-import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 from eyes import ORGAN_ROOT, board, manifest, registry
+from eyes import context as context_mod
 
 
 def _sources(values, instances) -> dict[str, Path]:
@@ -41,9 +40,26 @@ def _load(args):
     return instances, _sources(getattr(args, "sources", None), instances)
 
 
+def _context_lookup(args):
+    """The survey + critiques reader for ``board`` (see eyes/context.py)."""
+    mind = Path(args.mind).expanduser() if args.mind else True
+
+    def lookup(inst, checkout, previous):
+        return context_mod.gather(inst, checkout, previous, survey=not args.no_survey, mind=mind)
+
+    return lookup
+
+
 def cmd_board(args) -> int:
     instances, sources = _load(args)
-    views = board.collect(instances, sources, offline=args.offline)
+    previous_md = Path(args.out) / "dashboard.md"
+    views = board.collect(
+        instances,
+        sources,
+        offline=args.offline,
+        context_lookup=_context_lookup(args),
+        previous=previous_md.read_text() if previous_md.is_file() else None,
+    )
     for path in board.write(views, args.out):
         print(f"wrote {path}")
     for v in views:
@@ -51,6 +67,10 @@ def cmd_board(args) -> int:
             print(f"warning: {v.instance.name}: {v.error}", file=sys.stderr)
         else:
             print(f"{v.instance.name}: {len(v.manifest.figures)} figures; {v.freshness}")
+        ctx = v.context
+        survey = board.survey_cell(v) if ctx.survey else (ctx.survey_note or "not run")
+        critiques = board.critiques_count(v) if ctx.critiques is not None else ctx.critiques_note
+        print(f"{v.instance.name}: survey {survey}; critiques {critiques}")
     return 0
 
 
@@ -104,17 +124,10 @@ def cmd_check(args) -> int:
 
 
 def _brain_cli() -> list[str]:
-    candidates = []
-    if os.environ.get("PYAUTO_BRAIN"):
-        candidates.append(Path(os.environ["PYAUTO_BRAIN"]) / "bin" / "pyauto-brain")
-    candidates.append(ORGAN_ROOT.parent / "PyAutoBrain" / "bin" / "pyauto-brain")
-    for c in candidates:
-        if c.is_file():
-            return [str(c)]
-    found = shutil.which("pyauto-brain")
-    if found:
-        return [found]
-    raise SystemExit("pyauto-eyes: cannot find pyauto-brain (set PYAUTO_BRAIN)")
+    found = context_mod.brain_cli()
+    if not found:
+        raise SystemExit("pyauto-eyes: cannot find pyauto-brain (set PYAUTO_BRAIN)")
+    return found
 
 
 def cmd_survey(args) -> int:
@@ -163,8 +176,19 @@ def main(argv=None) -> int:
         )
         p.add_argument("--out", default=str(ORGAN_ROOT), help=argparse.SUPPRESS)
 
-    p = sub.add_parser("board", help="render dashboard.md + dashboard.html")
+    p = sub.add_parser("board", help="render dashboard.md + dashboard.html + badge.json")
     reading(p)
+    p.add_argument(
+        "--no-survey",
+        action="store_true",
+        help="do not run the Brain Eyes survey (carry the last recorded one forward)",
+    )
+    p.add_argument(
+        "--mind",
+        metavar="PATH",
+        help="the PyAutoMind checkout to read open critiques from "
+        "(default: $PYAUTO_MIND, else beside this organ)",
+    )
     p.set_defaults(func=cmd_board)
     p = sub.add_parser(
         "check",

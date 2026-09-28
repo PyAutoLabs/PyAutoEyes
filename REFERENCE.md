@@ -11,7 +11,7 @@ change at their own pace.
 |-------|------|------------|
 | Project repo (`<lib>_visualization`, e.g. `lens/autolens_visualization`) | producers, simulators, datasets, `plots.yaml`, instruments, the tracked PNGs, `GALLERY.md`, the render harness, its lint/render workflows, and the tracked **figure manifest** | judge its own figures |
 | Organ (PyAutoEyes) | `registry.yaml`, this contract, the `eyes/` package, `bin/pyauto-eyes`, `dashboard.md` / `dashboard.html` (Pages) | render, copy or store figures; judge them; edit plot code |
-| Brain Eyes conductor (`PyAutoBrain/agents/conductors/eyes/`) | survey, review and critique of one instance at a time | edit plot code directly; accepted critiques route through intake → start_dev |
+| Brain Eyes conductor (`PyAutoBrain/agents/conductors/eyes/`) | survey, review and critique of an instance, named by `--instance <name>` through this registry (or all of them, given the organ root) | edit plot code directly; accepted critiques route through intake → start_dev |
 
 This is the same layering as `autolens_profiling` / `autolens_inference`
 under the Brain board: the project repos hold the runs, and the organ is where
@@ -74,7 +74,7 @@ validates them.
 
 | Field | Meaning (lens row) |
 |-------|--------------------|
-| `name` | instance key used by the dashboard, `/eyes review` and `survey` (`lens`) |
+| `name` | instance key used by the dashboard, `/eyes review`, `survey` and the conductor's `--instance` (`lens`) |
 | `repo` | the project repo's body-map name (`autolens_visualization`) |
 | `path` | checkout relative to the workspace root (`lens/autolens_visualization`); a flat task bundle's `<root>/<repo>` is tried too |
 | `github` | `owner/repo` (`PyAutoLabs/autolens_visualization`) |
@@ -85,9 +85,18 @@ validates them.
 | `gallery` | the project repo's browsable gallery (`GALLERY.md`) |
 | `dispatch_event` | the library-release `repository_dispatch` the project repo re-renders on (`pyautolens-release`) |
 
+The Brain Eyes conductor reads this file too. `pyauto-brain eyes survey
+--instance <name>` (or `review`) resolves the instance's checkout from `path`
+(grouped layout) or `repo` (flat bundle) under the workspace root, and it
+checks the `manifest` path is present. Handing the conductor this organ's root
+covers every registered instance. An instance with no local checkout is skipped
+with a note. The conductor reads the registry with a stdlib parser, so rows
+must stay one `key: value` string per line, as `check` enforces.
+
 Adding an instance: birth the project repo with a tracked schema-1 manifest,
-and have its render workflow fire `eyes-refresh` at this repo. Then add its
-row here and run `bin/pyauto-eyes board` and `bin/pyauto-eyes check`.
+and have its render workflow fire `eyes-refresh` at this repo. Create the
+`eyes-critique` label on the project repo, add its row here, and run
+`bin/pyauto-eyes board` and `bin/pyauto-eyes check`.
 
 ## Refresh chain
 
@@ -103,14 +112,34 @@ row here and run `bin/pyauto-eyes board` and `bin/pyauto-eyes check`.
 
 ## The dashboard
 
-`dashboard.md` (on GitHub) and `dashboard.html` (on Pages,
-<https://pyautolabs.github.io/PyAutoEyes/>) are generated and never edited by
-hand. For each instance they show the figure count, `rendered_with`, the
-`generated` date, and freshness against the library's latest PyPI release.
-Freshness reads `unknown` when that lookup is offline. Below that come the
-figures grouped by domain. Each figure links to its full-size raw PNG, and the
-HTML page shows it as a lazy thumbnail, and each figure has a copyable
-`/eyes review <instance> <file>` line. Each instance section records the
+`dashboard.md` (on GitHub), `dashboard.html` (on Pages,
+<https://pyautolabs.github.io/PyAutoEyes/>) and `badge.json` are generated and
+never edited by hand.
+
+The page opens with a counts table: `| [Instances](#instances) | n |` for
+Instances, Figures, Behind and Critiques. The Brain board's Eyes strip reads
+that table, so keep one `| [Label](#anchor) | n |` row per count above the
+first `## ` heading.
+
+For each instance the page shows:
+
+- the figure count, `rendered_with`, the `generated` date, and freshness
+  against the library's latest PyPI release (`unknown` when that lookup is
+  offline);
+- the Brain Eyes conductor's survey of the local checkout: PNGs on disk per
+  domain, gaps, orphans and stale renders, plus a note when the checkout and
+  the manifest disagree on the count;
+- the open critiques, meaning the PyAutoMind drafts that mention the
+  instance's repo name or one of its `/eyes review` lines, with links;
+- the figures grouped by domain. Each figure links to its full-size raw PNG
+  (a lazy thumbnail on the HTML page) and carries the critique route: a
+  copyable `/eyes review <instance> <file>` line and a pre-filled "new issue"
+  link on the project repo (label `eyes-critique`).
+
+The survey and the critiques are local readings. Each section records them
+in an `<!-- eyes:context name=… {json} -->` marker, and a render that cannot
+read them (the CI runner has no checkout and no Brain) carries the recorded
+reading forward instead of erasing it. Each instance section records the
 manifest's content digest in an `<!-- eyes:instance name=… manifest=… -->`
 marker. `check` compares that digest to decide whether the committed dashboard
 is current. The render has no wall-clock stamp, so re-rendering unchanged
@@ -120,9 +149,9 @@ inputs is a no-op.
 
 | Command | Does |
 |---------|------|
-| `board [--offline] [--from [INSTANCE=]PATH]` | render `dashboard.md` + `dashboard.html`; `--offline` reads local checkouts and skips the PyPI lookup; `--from` points one instance at a checkout or manifest file |
+| `board [--offline] [--from [INSTANCE=]PATH] [--no-survey] [--mind PATH]` | render `dashboard.md` + `dashboard.html` + `badge.json`; `--offline` reads local checkouts and skips the PyPI lookup; `--from` points one instance at a checkout or manifest file; `--no-survey` skips the conductor survey; `--mind` names the PyAutoMind checkout for critiques |
 | `check [--offline] [--from …]` | registry valid; each manifest reachable and valid; every PNG resolves (raw URL HEAD, or the local file's size + sha256); dashboard current. Exit 1 on any failure |
-| `survey [<instance> \| --all]` | run `pyauto-brain eyes survey <instance checkout>` for each chosen instance |
+| `survey [<instance> \| --all]` | run `pyauto-brain eyes survey <instance checkout>` for each chosen instance (the conductor's own `--instance <name>` resolves through this registry as well) |
 
 Image links always point at the raw GitHub URLs, never at local paths, even
 when the manifest was read with `--from`. That keeps the committed dashboard

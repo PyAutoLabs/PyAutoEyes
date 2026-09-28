@@ -82,3 +82,33 @@ def test_survey_delegates_to_the_brain_eyes_conductor(registry_file, project, mo
 def test_survey_unknown_instance(registry_file, capsys):
     assert run("--registry", str(registry_file), "survey", "galaxy") == 1
     assert "no instance 'galaxy'" in capsys.readouterr().err
+
+
+def test_board_reads_critiques_from_mind_and_carries_them_forward(
+    registry_file, project, mind, out, capsys
+):
+    reg, o = base(registry_file, out)
+    args = [*reg, "board", "--offline", "--from", f"demo={project}", *o]
+    assert run(*args, "--mind", str(mind), "--no-survey") == 0
+    text = capsys.readouterr().out
+    assert "wrote" in text and str(out / "badge.json") in text
+    assert "demo: survey not run (--no-survey); critiques 2" in text
+    first = (out / "dashboard.md").read_text()
+    assert "Restyle the -- fit panel" in first
+    # A re-render with no Mind reachable keeps the recorded critiques.
+    assert run(*args, "--no-survey") == 0
+    assert (out / "dashboard.md").read_text() == first
+    assert run(*reg, "check", "--offline", "--from", str(project), *o) == 0
+
+
+def test_board_runs_the_conductor_survey_on_the_checkout(
+    registry_file, project, fake_brain, out, monkeypatch
+):
+    from eyes import context
+
+    brain, log = fake_brain
+    monkeypatch.setattr(context, "brain_cli", lambda: brain)
+    reg, o = base(registry_file, out)
+    assert run(*reg, "board", "--offline", "--from", f"demo={project}", *o) == 0
+    assert log.read_text().split() == ["eyes", "--json", "survey", str(project)]
+    assert "3 png · 1 gaps · 0 orphans · 1 stale" in (out / "dashboard.md").read_text()

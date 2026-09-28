@@ -15,7 +15,10 @@ name: Dashboard Refresh
 #   - workflow_dispatch: manual.
 #
 # The render is deterministic (it has no wall-clock stamp), so a night with no
-# change commits nothing. The bot commit uses GITHUB_TOKEN, which never
+# change commits nothing. The runner has no project-repo checkout and no Brain,
+# so each instance's conductor survey is carried forward from the committed
+# dashboard (the last local `bin/pyauto-eyes board`); the open critiques are
+# read live from a checkout of PyAutoMind (public). The bot commit uses GITHUB_TOKEN, which never
 # triggers other workflows. So after a commit this workflow dispatches
 # pages_dashboard.yml explicitly. Without that dispatch the Pages copy would
 # lag behind the repo copy.
@@ -50,6 +53,12 @@ jobs:
           echo "event: ${GITHUB_EVENT_NAME}"
           if [ "${GITHUB_EVENT_NAME}" = "repository_dispatch" ]; then echo "payload: ${PAYLOAD}"; fi
 
+      - name: PyAutoMind (open critiques are read from its draft/)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/PyAutoMind
+          path: _mind
+
       - name: Dependencies
         run: python3 -m pip install --quiet pyyaml
 
@@ -61,12 +70,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for attempt in 1 2 3; do
             git fetch -q origin main && git reset -q --hard origin/main
-            bin/pyauto-eyes board
-            if git diff --quiet -- dashboard.md dashboard.html; then
+            bin/pyauto-eyes board --mind _mind
+            if git diff --quiet -- dashboard.md dashboard.html badge.json; then
               echo "dashboard unchanged: nothing to commit"
               exit 0
             fi
-            git add dashboard.md dashboard.html
+            git add dashboard.md dashboard.html badge.json
             git commit -q -m "eyes: refresh dashboard (${GITHUB_EVENT_NAME}) [skip ci]"
             if git push -q origin HEAD:main; then
               gh workflow run pages_dashboard.yml --ref main \

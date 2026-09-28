@@ -5,15 +5,17 @@ name: Pages Dashboard
 # repo's GitHub Pages index: https://pyautolabs.github.io/PyAutoEyes/
 #
 # The page is rendered by `bin/pyauto-eyes board` and kept fresh by
-# dashboard_refresh.yml. This workflow only publishes it, and it publishes only
-# that one file. The thumbnails are <img> links to the raw PNGs in each project
-# repo, so no figure is copied into the site. (Cortex pattern.)
+# dashboard_refresh.yml. This workflow only publishes it, with badge.json (the
+# one-line headline other boards read) beside it, and nothing else. The
+# thumbnails are <img> links to the raw PNGs in each project repo, so no figure
+# is copied into the site. (Cortex pattern.)
 
 on:
   push:
     branches: [main]
     paths:
       - "dashboard.html"
+      - "badge.json"
   workflow_dispatch:
 
 permissions:
@@ -42,6 +44,7 @@ jobs:
         run: |
           mkdir -p _site
           cp dashboard.html _site/index.html
+          cp badge.json _site/badge.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

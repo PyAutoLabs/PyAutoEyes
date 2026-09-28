@@ -29,8 +29,17 @@ bin/pyauto-eyes survey lens      # pyauto-brain eyes survey on the lens project 
 bin/pyauto-eyes board --offline --from lens=../../lens/autolens_visualization   # no network
 ```
 
-To ask for a figure to be improved, copy its `/eyes review <instance> <figure>`
-line from the dashboard into a Claude Code session.
+To ask for a figure to be improved, use its **Suggest an improvement** link on
+the dashboard. It opens a pre-filled issue on the project repo (title
+`figure: <domain>/<file>`, the raw PNG link and a `Suggested improvement:`
+stub, label `eyes-critique`). Or copy its `/eyes review <instance> <figure>`
+line into a Claude Code session. The dashboard files nothing itself, and an
+accepted critique becomes a PyAutoMind intake prompt that goes through
+start_dev.
+
+For each instance the dashboard also shows the Brain Eyes conductor's survey
+of the local checkout (PNGs on disk, never-rendered gaps, orphan image trees,
+stale renders), and the open PyAutoMind drafts that mention the instance.
 
 ## What is here
 
@@ -38,9 +47,9 @@ line from the dashboard into a Claude Code session.
 |------|------|
 | `registry.yaml` | one row per instance (lens today; galaxy, fit and cti follow) |
 | `REFERENCE.md` | the manifest contract (schema 1), the registry fields and the refresh chain |
-| `eyes/` | `registry.py`, `manifest.py`, `board.py`, `cli.py` |
+| `eyes/` | `registry.py`, `manifest.py`, `context.py` (survey + critiques), `board.py`, `cli.py` |
 | `bin/pyauto-eyes` | `board`, `check`, `survey` |
-| `dashboard.md` / `dashboard.html` | generated, never hand-edited |
+| `dashboard.md` / `dashboard.html` / `badge.json` | generated, never hand-edited |
 | `tests/` | hermetic tests (no network) |
 | `.github/workflows/` | `lint.yml`, `pages_dashboard.yml`, `dashboard_refresh.yml` |
 
