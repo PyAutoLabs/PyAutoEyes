@@ -39,3 +39,23 @@ instances:
     images_base_url: https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/
     gallery: GALLERY.md
     dispatch_event: pyautogalaxy-release
+  - name: fit
+    repo: autofit_visualization
+    path: fit/autofit_visualization
+    github: PyAutoLabs/autofit_visualization
+    library: PyAutoFit
+    import_name: autofit
+    manifest: gallery/viz_manifest.yaml
+    images_base_url: https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/
+    gallery: GALLERY.md
+    dispatch_event: pyautofit-release
+  - name: cti
+    repo: autocti_visualization
+    path: cti/autocti_visualization
+    github: PyAutoLabs/autocti_visualization
+    library: PyAutoCTI
+    import_name: autocti
+    manifest: gallery/viz_manifest.yaml
+    images_base_url: https://raw.githubusercontent.com/PyAutoLabs/autocti_visualization/main/
+    gallery: GALLERY.md
+    dispatch_event: pyautocti-release

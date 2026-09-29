@@ -22,7 +22,7 @@ from eyes.registry import Instance
 
 SUPPORTED_SCHEMAS = (1,)
 FIGURE_FIELDS = ("file", "producer", "domain", "source", "bytes", "sha256")
-LIBRARIES = ("autolens", "autogalaxy", "autoarray", "autofit")
+LIBRARIES = ("autolens", "autogalaxy", "autoarray", "autofit", "autocti")
 TIMEOUT = 20
 USER_AGENT = "pyauto-eyes (+https://github.com/PyAutoLabs/PyAutoEyes)"
 

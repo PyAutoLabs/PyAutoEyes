@@ -18,7 +18,7 @@ Canonical boundaries live in `PyAutoBrain/ORGANISM.md`; the full body map
 | **Mind** | PyAutoMind | Intent, goals, priorities, workflow state; every task starts as a markdown prompt here. |
 | **Cortex** | PyAutoCortex | The Cortex — where the organism keeps track of what is true: the science body map (`projects.yaml`) and one ledger per science project (what was run, what came back, what was learned, where to pick up); the science mirror of the Mind (runs and a dated log, not prompts and PRs). |
 | **Memory** | PyAutoMemory | Long-term scientific/software/project knowledge (see science pointer below). |
-| **Eyes** | PyAutoEyes | The Eyes — where the organism sees what its figures look like: the cross-project visualization dashboard over the `<lib>_visualization` project repos (autolens_visualization and autogalaxy_visualization) — the registry of those repos, the tracked-manifest read contract (`gallery/viz_manifest.yaml`) and the Pages board that links to their PNGs as the single point of contact for the visual behaviour of the whole ecosystem. Renders nothing and copies no figures (the project repos render and hold them); never judges them (the Brain's Eyes conductor does) and never edits library plot code (critiques route through intake). |
+| **Eyes** | PyAutoEyes | The Eyes — where the organism sees what its figures look like: the cross-project visualization dashboard over the `<lib>_visualization` project repos (autolens_visualization, autogalaxy_visualization, autofit_visualization and autocti_visualization) — the registry of those repos, the tracked-manifest read contract (`gallery/viz_manifest.yaml`) and the Pages board that links to their PNGs as the single point of contact for the visual behaviour of the whole ecosystem. Renders nothing and copies no figures (the project repos render and hold them); never judges them (the Brain's Eyes conductor does) and never edits library plot code (critiques route through intake). |
 | **Heart** | PyAutoHeart | Health/readiness — the authoritative "is it safe to release?" verdict. |
 | **Hands** | PyAutoHands | Packaging, tagging, notebook generation, PyPI release execution. |
 | **Nerves** | PyAutoNerves | The Nerves — the configuration/serialization layer connecting workspace conventions to libraries (layered config, version handshake, test_mode), delivered as the `autonerves` package. |
@@ -33,8 +33,9 @@ Generated from `PyAutoMind/repos.yaml` + `PyAutoBrain/ORGANISM.md`; edit there, 
 The design has **two layers** (human decision 2026-09-28):
 
 - **Project repos** `<lib>_visualization` make, store and track the figures.
-  Two are registered: `lens/autolens_visualization` and
-  `galaxy/autogalaxy_visualization`; fit and cti follow. Each
+  Four are registered: `lens/autolens_visualization`,
+  `galaxy/autogalaxy_visualization`, `fit/autofit_visualization` and
+  `cti/autocti_visualization`. Each
   one owns its producers, simulators, datasets, `plots.yaml`, instruments,
   tracked PNGs, `GALLERY.md`, render harness and lint/render workflows, and
   it commits a tracked **figure manifest** (`gallery/viz_manifest.yaml`).
