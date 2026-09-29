@@ -19,6 +19,23 @@ def test_the_committed_registry_is_valid_and_has_the_lens_row():
     )
 
 
+def test_the_committed_registry_has_the_galaxy_row():
+    instances = registry.load()
+    galaxy = registry.get(instances, "galaxy")
+    assert galaxy.repo == "autogalaxy_visualization"
+    assert galaxy.path == "galaxy/autogalaxy_visualization"
+    assert galaxy.github == "PyAutoLabs/autogalaxy_visualization"
+    assert galaxy.library == "PyAutoGalaxy"
+    assert galaxy.import_name == "autogalaxy"
+    assert galaxy.manifest == "gallery/viz_manifest.yaml"
+    assert galaxy.dispatch_event == "pyautogalaxy-release"
+    assert galaxy.manifest_url == (
+        "https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/"
+        "gallery/viz_manifest.yaml"
+    )
+    assert [i.name for i in instances] == ["lens", "galaxy"]
+
+
 def test_load_fabricated_registry(registry_file):
     (demo,) = registry.load(registry_file)
     assert demo.image_url("a/b.png") == ROW["images_base_url"] + "a/b.png"
@@ -59,7 +76,7 @@ def test_load_raises_with_every_problem(tmp_path):
 
 def test_get_unknown_instance_names_the_known_ones(registry_file):
     with pytest.raises(registry.RegistryError, match="known: demo"):
-        registry.get(registry.load(registry_file), "galaxy")
+        registry.get(registry.load(registry_file), "nonesuch")
 
 
 def test_local_checkout_grouped_then_flat(tmp_path, registry_file):

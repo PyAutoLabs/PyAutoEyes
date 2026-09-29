@@ -29,3 +29,13 @@ instances:
     images_base_url: https://raw.githubusercontent.com/PyAutoLabs/autolens_visualization/main/
     gallery: GALLERY.md
     dispatch_event: pyautolens-release
+  - name: galaxy
+    repo: autogalaxy_visualization
+    path: galaxy/autogalaxy_visualization
+    github: PyAutoLabs/autogalaxy_visualization
+    library: PyAutoGalaxy
+    import_name: autogalaxy
+    manifest: gallery/viz_manifest.yaml
+    images_base_url: https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/
+    gallery: GALLERY.md
+    dispatch_event: pyautogalaxy-release
