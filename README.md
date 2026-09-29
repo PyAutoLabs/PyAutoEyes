@@ -7,8 +7,10 @@ with thumbnails and one-tap copy on Pages at
 
 ## Two layers
 
-- **Project repos** `<lib>_visualization` (today: [`autolens_visualization`](https://github.com/PyAutoLabs/autolens_visualization)
-  and [`autogalaxy_visualization`](https://github.com/PyAutoLabs/autogalaxy_visualization))
+- **Project repos** `<lib>_visualization` (today: [`autolens_visualization`](https://github.com/PyAutoLabs/autolens_visualization),
+  [`autogalaxy_visualization`](https://github.com/PyAutoLabs/autogalaxy_visualization),
+  [`autofit_visualization`](https://github.com/PyAutoLabs/autofit_visualization)
+  and [`autocti_visualization`](https://github.com/PyAutoLabs/autocti_visualization))
   make, store and track the figures: producers, datasets, the tracked PNGs,
   `GALLERY.md`, and a tracked figure manifest. They re-render on every library
   release.
@@ -46,7 +48,7 @@ stale renders), and the open PyAutoMind drafts that mention the instance.
 
 | Path | What |
 |------|------|
-| `registry.yaml` | one row per instance (lens and galaxy today; fit and cti follow) |
+| `registry.yaml` | one row per instance (lens, galaxy, fit and cti) |
 | `REFERENCE.md` | the manifest contract (schema 1), the registry fields and the refresh chain |
 | `eyes/` | `registry.py`, `manifest.py`, `context.py` (survey + critiques), `board.py`, `cli.py` |
 | `bin/pyauto-eyes` | `board`, `check`, `survey` |

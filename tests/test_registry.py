@@ -33,7 +33,51 @@ def test_the_committed_registry_has_the_galaxy_row():
         "https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/"
         "gallery/viz_manifest.yaml"
     )
-    assert [i.name for i in instances] == ["lens", "galaxy"]
+
+
+def test_the_committed_registry_has_the_fit_row():
+    instances = registry.load()
+    fit = registry.get(instances, "fit")
+    assert fit.repo == "autofit_visualization"
+    assert fit.path == "fit/autofit_visualization"
+    assert fit.github == "PyAutoLabs/autofit_visualization"
+    assert fit.library == "PyAutoFit"
+    assert fit.import_name == "autofit"
+    assert fit.manifest == "gallery/viz_manifest.yaml"
+    assert fit.images_base_url == (
+        "https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/"
+    )
+    assert fit.gallery == "GALLERY.md"
+    assert fit.dispatch_event == "pyautofit-release"
+    assert fit.manifest_url == (
+        "https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/"
+        "gallery/viz_manifest.yaml"
+    )
+
+
+def test_the_committed_registry_has_the_cti_row():
+    instances = registry.load()
+    cti = registry.get(instances, "cti")
+    assert cti.repo == "autocti_visualization"
+    assert cti.path == "cti/autocti_visualization"
+    assert cti.github == "PyAutoLabs/autocti_visualization"
+    assert cti.library == "PyAutoCTI"
+    assert cti.import_name == "autocti"
+    assert cti.manifest == "gallery/viz_manifest.yaml"
+    assert cti.images_base_url == (
+        "https://raw.githubusercontent.com/PyAutoLabs/autocti_visualization/main/"
+    )
+    assert cti.gallery == "GALLERY.md"
+    assert cti.dispatch_event == "pyautocti-release"
+    assert cti.manifest_url == (
+        "https://raw.githubusercontent.com/PyAutoLabs/autocti_visualization/main/"
+        "gallery/viz_manifest.yaml"
+    )
+
+
+def test_the_committed_registry_orders_the_instances():
+    instances = registry.load()
+    assert [i.name for i in instances] == ["lens", "galaxy", "fit", "cti"]
 
 
 def test_load_fabricated_registry(registry_file):

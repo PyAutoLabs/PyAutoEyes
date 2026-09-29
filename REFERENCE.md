@@ -9,7 +9,7 @@ change at their own pace.
 
 | Layer | Owns | Never does |
 |-------|------|------------|
-| Project repo (`<lib>_visualization`, e.g. `lens/autolens_visualization`, `galaxy/autogalaxy_visualization`) | producers, simulators, datasets, `plots.yaml`, instruments, the tracked PNGs, `GALLERY.md`, the render harness, its lint/render workflows, and the tracked **figure manifest** | judge its own figures |
+| Project repo (`<lib>_visualization`, e.g. `lens/autolens_visualization`, `galaxy/autogalaxy_visualization`, `fit/autofit_visualization`, `cti/autocti_visualization`) | producers, simulators, datasets, `plots.yaml`, instruments, the tracked PNGs, `GALLERY.md`, the render harness, its lint/render workflows, and the tracked **figure manifest** | judge its own figures |
 | Organ (PyAutoEyes) | `registry.yaml`, this contract, the `eyes/` package, `bin/pyauto-eyes`, `dashboard.md` / `dashboard.html` (Pages) | render, copy or store figures; judge them; edit plot code |
 | Brain Eyes conductor (`PyAutoBrain/agents/conductors/eyes/`) | survey, review and critique of an instance, named by `--instance <name>` through this registry (or all of them, given the organ root) | edit plot code directly; accepted critiques route through intake → start_dev |
 
@@ -93,9 +93,11 @@ covers every registered instance. An instance with no local checkout is skipped
 with a note. The conductor reads the registry with a stdlib parser, so rows
 must stay one `key: value` string per line, as `check` enforces.
 
-Two instances are registered today: `lens` (`autolens_visualization`,
-re-rendered on `pyautolens-release`) and `galaxy` (`autogalaxy_visualization`,
-re-rendered on `pyautogalaxy-release`).
+Four instances are registered today: `lens` (`autolens_visualization`,
+re-rendered on `pyautolens-release`), `galaxy` (`autogalaxy_visualization`,
+re-rendered on `pyautogalaxy-release`), `fit` (`autofit_visualization`,
+re-rendered on `pyautofit-release`) and `cti` (`autocti_visualization`,
+re-rendered on `pyautocti-release`).
 
 Adding an instance: birth the project repo with a tracked schema-1 manifest,
 and have its render workflow fire `eyes-refresh` at this repo. Create the
