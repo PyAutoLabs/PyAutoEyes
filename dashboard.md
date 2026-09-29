@@ -94,7 +94,7 @@ Rendered with autolens 2026.8.17.1, autogalaxy 2026.8.17.1, autoarray 2026.8.17.
 
 ## galaxy
 
-<!-- eyes:instance name=galaxy manifest=17479dc95e06d2d2 -->
+<!-- eyes:instance name=galaxy manifest=6277ccc6f97226ce -->
 <!-- eyes:context name=galaxy {"critiques":[["`PlotterEllipse.fit_ellipse` writes every variant to `ellipse_fit.png`, so only the last survives","draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ellipse":17,"imaging":11,"interferometer":13},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 PyAutoGalaxy figures from [PyAutoLabs/autogalaxy_visualization](https://github.com/PyAutoLabs/autogalaxy_visualization) (manifest `gallery/viz_manifest.yaml`; re-rendered on `pyautogalaxy-release`).
 
