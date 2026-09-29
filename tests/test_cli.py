@@ -80,8 +80,8 @@ def test_survey_delegates_to_the_brain_eyes_conductor(registry_file, project, mo
 
 
 def test_survey_unknown_instance(registry_file, capsys):
-    assert run("--registry", str(registry_file), "survey", "galaxy") == 1
-    assert "no instance 'galaxy'" in capsys.readouterr().err
+    assert run("--registry", str(registry_file), "survey", "nonesuch") == 1
+    assert "no instance 'nonesuch'" in capsys.readouterr().err
 
 
 def test_board_reads_critiques_from_mind_and_carries_them_forward(
