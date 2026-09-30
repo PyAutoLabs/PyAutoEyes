@@ -27,6 +27,7 @@ import os
 import re
 import shutil
 import subprocess
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -213,9 +214,53 @@ def _title(text: str, fallback: str) -> str:
     return fallback
 
 
-def find_critiques(mind: Path, inst: Instance) -> list[tuple[str, str]]:
-    """Open Mind drafts that mention the instance: its repo name, or a
-    ``/eyes review <instance> `` line. Sorted by path."""
+_HEADER_LINES = 40
+
+
+def _header_targets(text: str) -> list[str]:
+    """The repos a draft's light header names, in priority order: the
+    ``Target:`` value first, then each ``- `` bullet under ``Repos:``.
+    Only the first ``_HEADER_LINES`` lines are read; values are lower-cased."""
+    target: list[str] = []
+    repos: list[str] = []
+    in_repos = False
+    for line in text.splitlines()[:_HEADER_LINES]:
+        stripped = line.strip()
+        if in_repos:
+            if stripped.startswith("- "):
+                repos.append(stripped[2:].strip().lower())
+                continue
+            in_repos = False
+        if stripped.startswith("Target:") and not target:
+            target.append(stripped[len("Target:") :].strip().lower())
+        elif stripped.startswith("Repos:"):
+            in_repos = True
+    return [v for v in target + repos if v]
+
+
+def _attributed(text: str, instances: Sequence[Instance]) -> str | None:
+    """The one registered instance (by name) a draft's header names, if any."""
+    by_key = {}
+    for i in instances:
+        by_key.setdefault(i.repo.lower(), i.name)
+        by_key.setdefault(i.name.lower(), i.name)
+    for value in _header_targets(text):
+        if value in by_key:
+            return by_key[value]
+    return None
+
+
+def find_critiques(
+    mind: Path, inst: Instance, instances: Sequence[Instance] | None = None
+) -> list[tuple[str, str]]:
+    """Open Mind drafts for the instance, sorted by path.
+
+    With ``instances`` (every registered row), a draft whose light header
+    names a registered instance (``Target:`` first, else the first matching
+    ``Repos:`` bullet, by repo or name) belongs to that instance only. A draft
+    whose header names none, or any draft when ``instances`` is None, falls
+    back to text mention: the instance's repo name, or a
+    ``/eyes review <instance> `` line."""
     needles = (inst.repo.lower(), f"/eyes review {inst.name} ")
     found = []
     for path in sorted((mind / "draft").rglob("*.md")):
@@ -223,8 +268,13 @@ def find_critiques(mind: Path, inst: Instance) -> list[tuple[str, str]]:
             text = path.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             continue
-        low = text.lower()
-        if any(n in low for n in needles):
+        owner = _attributed(text, instances) if instances else None
+        if owner is not None:
+            hit = owner == inst.name
+        else:
+            low = text.lower()
+            hit = any(n in low for n in needles)
+        if hit:
             rel = path.relative_to(mind).as_posix()
             found.append((_title(text, path.stem), rel))
     return found
@@ -240,11 +290,14 @@ def gather(
     survey: bool = True,
     mind: Path | None | bool = True,
     brain: list[str] | None = None,
+    instances: Sequence[Instance] | None = None,
 ) -> Context:
     """Read an instance's context, carrying forward what cannot be read here.
 
     ``checkout`` is the instance's local checkout (None when absent);
-    ``mind`` is a Mind checkout, True to resolve one, or False/None to skip.
+    ``mind`` is a Mind checkout, True to resolve one, or False/None to skip;
+    ``instances`` is every registered row, used to attribute each critique to
+    the one instance its header names (see ``find_critiques``).
     """
     ctx = Context()
     if survey and checkout is not None:
@@ -258,7 +311,7 @@ def gather(
 
     mind_path = mind_root() if mind is True else (mind or None)
     if mind_path is not None:
-        ctx.critiques = find_critiques(mind_path, inst)
+        ctx.critiques = find_critiques(mind_path, inst, instances)
         ctx.mind_url = mind_github_url(mind_path)
     elif previous is not None and previous.critiques is not None:
         ctx.critiques, ctx.mind_url = previous.critiques, previous.mind_url

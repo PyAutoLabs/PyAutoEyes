@@ -1,3 +1,5 @@
+import dataclasses
+
 from conftest import EYES_SURVEY, REAL_MIND_ROOT
 
 from eyes import context, registry
@@ -44,6 +46,65 @@ def test_critiques_are_open_mind_drafts_that_mention_the_instance(registry_file,
     assert found == [
         ("Restyle the -- fit panel", "draft/feature/demo/restyle_fit.md"),
         ("From a review", "draft/feature/x/review_line.md"),
+    ]
+
+
+def _two_instances(registry_file):
+    demo = _demo(registry_file)
+    other = dataclasses.replace(demo, name="other", repo="other_visualization")
+    return demo, other
+
+
+def _write_drafts(root, drafts):
+    for rel, text in drafts.items():
+        path = root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text)
+    return root
+
+
+def test_a_draft_whose_header_names_an_instance_is_attributed_to_it_only(registry_file, tmp_path):
+    demo, other = _two_instances(registry_file)
+    mind = _write_drafts(
+        tmp_path / "PyAutoMind",
+        {
+            "draft/bug/demo/targeted.md": (
+                "# Targeted at demo\n\nTarget: demo_visualization\n\n"
+                "Works in other_visualization already; copy its render.yml.\n"
+            ),
+            "draft/bug/demo/repos_only.md": (
+                "# Repos header\n\nRepos:\n- Demo_Visualization\n- PyAutoFit\n\n"
+                "See other_visualization for the precedent.\n"
+            ),
+        },
+    )
+    both = [demo, other]
+    assert context.find_critiques(mind, demo, both) == [
+        ("Repos header", "draft/bug/demo/repos_only.md"),
+        ("Targeted at demo", "draft/bug/demo/targeted.md"),
+    ]
+    assert context.find_critiques(mind, other, both) == []
+
+
+def test_a_draft_whose_header_names_no_instance_falls_back_to_text_mention(registry_file, tmp_path):
+    demo, other = _two_instances(registry_file)
+    mind = _write_drafts(
+        tmp_path / "PyAutoMind",
+        {
+            "draft/feature/x/no_header.md": "# No header\n\ndemo_visualization and other_visualization\n",
+            "draft/feature/x/unknown.md": (
+                "# Unknown target\n\nTarget: PyAutoLens\nRepos:\n- PyAutoLens\n\n"
+                "Touches other_visualization.\n"
+            ),
+        },
+    )
+    both = [demo, other]
+    assert context.find_critiques(mind, demo, both) == [
+        ("No header", "draft/feature/x/no_header.md")
+    ]
+    assert context.find_critiques(mind, other, both) == [
+        ("No header", "draft/feature/x/no_header.md"),
+        ("Unknown target", "draft/feature/x/unknown.md"),
     ]
 
 
