@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
+import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -74,6 +77,53 @@ def cmd_board(args) -> int:
     return 0
 
 
+def _state_validator():
+    """The Brain's cockpit-feed validator (board/_state.py), or None.
+
+    Looked for at $PYAUTO_BRAIN, then beside this organ (flat or grouped
+    ``organs/`` layouts both put PyAutoBrain next to PyAutoEyes).
+    """
+    candidates = []
+    if os.environ.get("PYAUTO_BRAIN"):
+        candidates.append(Path(os.environ["PYAUTO_BRAIN"]).expanduser())
+    candidates.append(ORGAN_ROOT.parent / "PyAutoBrain")
+    for root in candidates:
+        path = root / "board" / "_state.py"
+        if path.is_file():
+            spec = importlib.util.spec_from_file_location("_brain_state", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod
+    return None
+
+
+def _check_state(path: Path) -> list[str]:
+    """state.json exists, parses, and (when the Brain is here) meets contract v1.
+
+    Its content is not compared to a fresh render: ``updated`` is a render
+    stamp, and the badge is not compared either. Staleness is the dashboard
+    marker check's job.
+    """
+    if not path.is_file():
+        print("FAIL state: state.json missing — run `pyauto-eyes board`")
+        return ["state.json missing"]
+    try:
+        state = json.loads(path.read_text())
+    except ValueError as exc:
+        print(f"FAIL state: state.json unreadable ({exc})")
+        return [f"state.json unreadable: {exc}"]
+    validator = _state_validator()
+    if validator is None:
+        print("skip state: no PyAutoBrain here to validate state.json (set PYAUTO_BRAIN)")
+        return []
+    errors = validator.validate_state(state)
+    if errors:
+        print(f"FAIL state: {'; '.join(errors)}")
+        return [f"state.json: {e}" for e in errors]
+    print(f"ok   state: valid against the Brain contract ({state['status']}, {state['headline']})")
+    return []
+
+
 def cmd_check(args) -> int:
     problems = []
     try:
@@ -119,6 +169,7 @@ def cmd_check(args) -> int:
             print(f"FAIL dashboard: stale for {', '.join(stale + extra)} — run `pyauto-eyes board`")
         else:
             print("ok   dashboard: current with every manifest")
+    problems += _check_state(out / "state.json")
     print("check: " + ("FAIL" if problems else "OK"))
     return 1 if problems else 0
 
@@ -176,7 +227,9 @@ def main(argv=None) -> int:
         )
         p.add_argument("--out", default=str(ORGAN_ROOT), help=argparse.SUPPRESS)
 
-    p = sub.add_parser("board", help="render dashboard.md + dashboard.html + badge.json")
+    p = sub.add_parser(
+        "board", help="render dashboard.md + dashboard.html + badge.json + state.json"
+    )
     reading(p)
     p.add_argument(
         "--no-survey",

@@ -26,7 +26,7 @@ the Brain board.
 ## Use
 
 ```bash
-bin/pyauto-eyes board            # re-render dashboard.md + dashboard.html
+bin/pyauto-eyes board            # re-render dashboard.md + dashboard.html + badge.json + state.json
 bin/pyauto-eyes check            # registry, manifests, every PNG URL, dashboard current
 bin/pyauto-eyes survey lens      # pyauto-brain eyes survey on the lens project repo
 bin/pyauto-eyes board --offline --from lens=../../lens/autolens_visualization   # no network
@@ -44,6 +44,11 @@ For each instance the dashboard also shows the Brain Eyes conductor's survey
 of the local checkout (PNGs on disk, never-rendered gaps, orphan image trees,
 stale renders), and the open PyAutoMind drafts that mention the instance.
 
+Beside the page on Pages sit `badge.json` (the one-line headline) and
+`state.json`, the organ-cockpit feed: one status, one headline and the rows
+that ask something of a human, in the shared contract
+`PyAutoBrain/board/state_schema.json` (validated on publish).
+
 ## What is here
 
 | Path | What |
@@ -52,7 +57,7 @@ stale renders), and the open PyAutoMind drafts that mention the instance.
 | `REFERENCE.md` | the manifest contract (schema 1), the registry fields and the refresh chain |
 | `eyes/` | `registry.py`, `manifest.py`, `context.py` (survey + critiques), `board.py`, `cli.py` |
 | `bin/pyauto-eyes` | `board`, `check`, `survey` |
-| `dashboard.md` / `dashboard.html` / `badge.json` | generated, never hand-edited |
+| `dashboard.md` / `dashboard.html` / `badge.json` / `state.json` | generated, never hand-edited |
 | `tests/` | hermetic tests (no network) |
 | `.github/workflows/` | `lint.yml`, `pages_dashboard.yml`, `dashboard_refresh.yml` |
 

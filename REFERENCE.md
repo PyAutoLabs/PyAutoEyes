@@ -119,8 +119,9 @@ and have its render workflow fire `eyes-refresh` at this repo. Create the
 ## The dashboard
 
 `dashboard.md` (on GitHub), `dashboard.html` (on Pages,
-<https://pyautolabs.github.io/PyAutoEyes/>) and `badge.json` are generated and
-never edited by hand.
+<https://pyautolabs.github.io/PyAutoEyes/>), `badge.json` and `state.json` (the
+organ-cockpit feed, contract `PyAutoBrain/board/state_schema.json`) are
+generated and never edited by hand.
 
 The page opens with a counts table: `| [Instances](#instances) | n |` for
 Instances, Figures, Behind and Critiques. The Brain board's Eyes strip reads
@@ -155,8 +156,8 @@ inputs is a no-op.
 
 | Command | Does |
 |---------|------|
-| `board [--offline] [--from [INSTANCE=]PATH] [--no-survey] [--mind PATH]` | render `dashboard.md` + `dashboard.html` + `badge.json`; `--offline` reads local checkouts and skips the PyPI lookup; `--from` points one instance at a checkout or manifest file; `--no-survey` skips the conductor survey; `--mind` names the PyAutoMind checkout for critiques |
-| `check [--offline] [--from …]` | registry valid; each manifest reachable and valid; every PNG resolves (raw URL HEAD, or the local file's size + sha256); dashboard current. Exit 1 on any failure |
+| `board [--offline] [--from [INSTANCE=]PATH] [--no-survey] [--mind PATH]` | render `dashboard.md` + `dashboard.html` + `badge.json` + `state.json`; `--offline` reads local checkouts and skips the PyPI lookup; `--from` points one instance at a checkout or manifest file; `--no-survey` skips the conductor survey; `--mind` names the PyAutoMind checkout for critiques |
+| `check [--offline] [--from …]` | registry valid; each manifest reachable and valid; every PNG resolves (raw URL HEAD, or the local file's size + sha256); dashboard current; `state.json` present and (when a PyAutoBrain checkout is found via `$PYAUTO_BRAIN` or beside this organ) valid against the Brain contract. Exit 1 on any failure |
 | `survey [<instance> \| --all]` | run `pyauto-brain eyes survey <instance checkout>` for each chosen instance (the conductor's own `--instance <name>` resolves through this registry as well) |
 
 Image links always point at the raw GitHub URLs, never at local paths, even

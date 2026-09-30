@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "organ": "eyes",
+  "repo": "PyAutoEyes",
+  "status": "yellow",
+  "headline": "265 figures · 1 behind",
+  "updated": "2026-09-30T08:27:16Z",
+  "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
+  "items": [
+    {
+      "severity": "yellow",
+      "text": "lens: behind (rendered 2026.8.17.1, released 2026.9.27.2)",
+      "url": "https://github.com/PyAutoLabs/autolens_visualization",
+      "prompt": "/eyes survey --instance lens"
+    },
+    {
+      "severity": "yellow",
+      "text": "lens: 3 open critiques",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautoeyes/group_cluster_gallery.md",
+      "prompt": "/eyes review --instance lens"
+    },
+    {
+      "severity": "yellow",
+      "text": "galaxy: 2 open critiques",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md",
+      "prompt": "/eyes review --instance galaxy"
+    },
+    {
+      "severity": "yellow",
+      "text": "fit: 2 open critiques",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md",
+      "prompt": "/eyes review --instance fit"
+    },
+    {
+      "severity": "yellow",
+      "text": "cti: 1 open critique",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md",
+      "prompt": "/eyes review --instance cti"
+    }
+  ]
+}

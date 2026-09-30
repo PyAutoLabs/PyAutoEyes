@@ -65,10 +65,10 @@ REFERENCE.md         the manifest contract (schema 1), registry fields, refresh 
 eyes/registry.py     read + validate registry.yaml; resolve local checkouts
 eyes/manifest.py     read a manifest from a checkout / file / raw GitHub URL; validate
 eyes/context.py      per-instance survey (asks the Brain Eyes conductor) + open critiques (Mind drafts)
-eyes/board.py        build dashboard.md + dashboard.html + badge.json (deterministic, no stamp)
+eyes/board.py        build dashboard.md + dashboard.html + badge.json + state.json (deterministic)
 eyes/cli.py          the pyauto-eyes commands
 bin/pyauto-eyes      board | check | survey
-dashboard.md/.html   GENERATED; never edit by hand (badge.json too)
+dashboard.md/.html   GENERATED; never edit by hand (badge.json and state.json too)
 tests/               hermetic pytest (no network)
 ```
 
