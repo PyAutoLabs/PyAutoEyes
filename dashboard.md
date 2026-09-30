@@ -10,7 +10,7 @@ Thumbnails and one-tap copy: [https://pyautolabs.github.io/PyAutoEyes/](https://
 | [Instances](#instances) | 4 |
 | [Figures](#instances) | 265 |
 | [Behind](#instances) | 1 |
-| [Critiques](#instances) | 8 |
+| [Critiques](#instances) | 7 |
 
 ## Instances
 
@@ -18,7 +18,7 @@ Thumbnails and one-tap copy: [https://pyautolabs.github.io/PyAutoEyes/](https://
 |----------|---------|--------:|---------------|-----------|-----------|--------|----------:|---------|
 | [lens](#lens) | PyAutoLens | 40 | `autolens 2026.8.17.1` | 2026-09-28 | behind (rendered 2026.8.17.1, released 2026.9.27.2) | 40 png · 0 gaps · 0 orphans · 0 stale | 3 | [GALLERY.md](https://github.com/PyAutoLabs/autolens_visualization/blob/main/GALLERY.md) |
 | [galaxy](#galaxy) | PyAutoGalaxy | 41 | `autogalaxy 2026.9.27.2` | 2026-09-29 | current (2026.9.27.2) | 41 png · 0 gaps · 0 orphans · 0 stale | 2 | [GALLERY.md](https://github.com/PyAutoLabs/autogalaxy_visualization/blob/main/GALLERY.md) |
-| [fit](#fit) | PyAutoFit | 49 | `autofit 2026.9.27.2` | 2026-09-29 | current (2026.9.27.2) | 49 png · 0 gaps · 0 orphans · 0 stale | 2 | [GALLERY.md](https://github.com/PyAutoLabs/autofit_visualization/blob/main/GALLERY.md) |
+| [fit](#fit) | PyAutoFit | 49 | `autofit 2026.9.27.2` | 2026-09-29 | current (2026.9.27.2) | 49 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autofit_visualization/blob/main/GALLERY.md) |
 | [cti](#cti) | PyAutoCTI | 135 | `autocti 2024.11.13.2` | 2026-09-29 | current (2024.11.13.2) | 135 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autocti_visualization/blob/main/GALLERY.md) |
 
 To suggest an improvement to a figure, use its **suggest** link: it opens a pre-filled issue on the project repo (label `eyes-critique`). Or copy its `/eyes review` line into a Claude Code session. The dashboard files nothing itself, and accepted critiques route through PyAutoMind intake to start_dev.
@@ -165,14 +165,13 @@ Rendered with autogalaxy 2026.9.27.2, autoarray 2026.9.27.2, autofit 2026.9.27.2
 ## fit
 
 <!-- eyes:instance name=fit manifest=78e01182ec98d865 -->
-<!-- eyes:context name=fit {"critiques":[["autocti_visualization render.yml fails on the released stack until PyAutoCTI releases","draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md"],["autofit_visualization \u2014 seed every sampler so re-renders are byte-stable","draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ep":19,"model":12,"samples":15,"visualizer":3},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
+<!-- eyes:context name=fit {"critiques":[["autofit_visualization \u2014 seed every sampler so re-renders are byte-stable","draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ep":19,"model":12,"samples":15,"visualizer":3},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 PyAutoFit figures from [PyAutoLabs/autofit_visualization](https://github.com/PyAutoLabs/autofit_visualization) (manifest `gallery/viz_manifest.yaml`; re-rendered on `pyautofit-release`).
 
 **Survey** (Brain Eyes conductor, local checkout): 49 PNGs on disk (ep 19, model 12, samples 15, visualizer 3); gaps none; orphans none; stale renders none.
 
 **Open critiques** (PyAutoMind drafts mentioning this instance):
 
-- [autocti_visualization render.yml fails on the released stack until PyAutoCTI releases](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md) (`draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md`)
 - [autofit_visualization — seed every sampler so re-renders are byte-stable](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md) (`draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md`)
 
 Rendered with autofit 2026.9.27.2; generated 2026-09-29.

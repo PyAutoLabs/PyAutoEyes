@@ -4,7 +4,7 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "265 figures · 1 behind",
-  "updated": "2026-09-30T08:27:16Z",
+  "updated": "2026-09-30T08:48:24Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -27,8 +27,8 @@
     },
     {
       "severity": "yellow",
-      "text": "fit: 2 open critiques",
-      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md",
+      "text": "fit: 1 open critique",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md",
       "prompt": "/eyes review --instance fit"
     },
     {

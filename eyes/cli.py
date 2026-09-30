@@ -43,12 +43,19 @@ def _load(args):
     return instances, _sources(getattr(args, "sources", None), instances)
 
 
-def _context_lookup(args):
+def _context_lookup(args, instances=None):
     """The survey + critiques reader for ``board`` (see eyes/context.py)."""
     mind = Path(args.mind).expanduser() if args.mind else True
 
     def lookup(inst, checkout, previous):
-        return context_mod.gather(inst, checkout, previous, survey=not args.no_survey, mind=mind)
+        return context_mod.gather(
+            inst,
+            checkout,
+            previous,
+            survey=not args.no_survey,
+            mind=mind,
+            instances=instances,
+        )
 
     return lookup
 
@@ -60,7 +67,7 @@ def cmd_board(args) -> int:
         instances,
         sources,
         offline=args.offline,
-        context_lookup=_context_lookup(args),
+        context_lookup=_context_lookup(args, instances),
         previous=previous_md.read_text() if previous_md.is_file() else None,
     )
     for path in board.write(views, args.out):
