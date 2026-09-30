@@ -36,6 +36,17 @@ def test_check_fails_when_the_dashboard_is_stale(registry_file, project, out, ca
     assert "dashboard: stale for demo" in capsys.readouterr().out
 
 
+def test_check_fails_on_a_missing_or_broken_state_feed(registry_file, project, out, capsys):
+    reg, o = base(registry_file, out)
+    run(*reg, "board", "--offline", "--from", str(project), *o)
+    (out / "state.json").unlink()
+    assert run(*reg, "check", "--offline", "--from", str(project), *o) == 1
+    assert "state.json missing" in capsys.readouterr().out
+    (out / "state.json").write_text("{not json")
+    assert run(*reg, "check", "--offline", "--from", str(project), *o) == 1
+    assert "state.json unreadable" in capsys.readouterr().out
+
+
 def test_check_fails_on_a_missing_figure_or_dashboard(registry_file, project, out, capsys):
     reg, o = base(registry_file, out)
     assert run(*reg, "check", "--offline", "--from", str(project), *o) == 1

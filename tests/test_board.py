@@ -1,7 +1,10 @@
 import html
+import importlib.util
 import json
+import os
 import re
 import urllib.parse
+from pathlib import Path
 
 import pytest
 
@@ -82,11 +85,24 @@ def test_an_unavailable_manifest_still_renders(registry_file):
     assert "Manifest unavailable" in board.render_html([view])
 
 
-def test_write_emits_both_pages_and_the_badge(views, tmp_path):
+def test_write_emits_both_pages_the_badge_and_the_state_feed(views, tmp_path):
     paths = board.write(views, tmp_path)
-    assert [p.name for p in paths] == ["dashboard.md", "dashboard.html", "badge.json"]
+    assert [p.name for p in paths] == [
+        "dashboard.md",
+        "dashboard.html",
+        "badge.json",
+        "state.json",
+    ]
     assert all(p.read_text() for p in paths)
     assert json.loads(paths[2].read_text())["label"] == "eyes"
+    assert json.loads(paths[3].read_text())["organ"] == "eyes"
+
+
+def test_a_rewrite_on_unchanged_inputs_keeps_the_state_stamp(views, tmp_path):
+    feed = board.write(views, tmp_path, updated="2026-09-01T00:00:00Z")[3]
+    before = feed.read_text()
+    board.write(views, tmp_path)  # clock default, nothing else changed
+    assert feed.read_text() == before
 
 
 # ------------------------------------------------ phase 2: content + route ---
@@ -196,3 +212,75 @@ def test_badge_tracks_behind_and_unavailable(rich_views, registry_file):
     instances = registry.load(registry_file)
     (missing,) = board.collect(instances)  # network refused
     assert board.render_badge([missing])["color"] == "red"
+
+
+# ------------------------------------------------- phase 5: cockpit feed ---
+
+
+def _brain_state_validator():
+    """The Brain's board/_state.py (the contract), imported by path, or skip."""
+    roots = []
+    if os.environ.get("PYAUTO_BRAIN"):
+        roots.append(Path(os.environ["PYAUTO_BRAIN"]))
+    roots.append(Path(__file__).resolve().parents[1].parent / "PyAutoBrain")
+    for root in roots:
+        path = root / "board" / "_state.py"
+        if path.is_file():
+            spec = importlib.util.spec_from_file_location("_brain_state", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod
+    pytest.skip("no PyAutoBrain checkout here (set PYAUTO_BRAIN) to validate against")
+
+
+def test_state_feed_matches_brain_contract(rich_views, registry_file):
+    validator = _brain_state_validator()
+    state = board.render_state(rich_views, updated="2026-09-30T00:00:00Z")
+    assert validator.validate_state(state) == []
+    instances = registry.load(registry_file)
+    (missing,) = board.collect(instances)  # network refused
+    assert validator.validate_state(board.render_state([missing])) == []
+
+
+def test_state_feed_status_and_items(rich_views, registry_file):
+    state = board.render_state(rich_views, updated="2026-09-30T00:00:00Z")
+    assert state["schema_version"] == 1
+    assert (state["organ"], state["repo"]) == ("eyes", "PyAutoEyes")
+    assert state["pages_url"] == board.PAGES_URL
+    assert state["updated"] == "2026-09-30T00:00:00Z"
+    assert state["status"] == "yellow"
+    assert state["headline"] == board.render_badge(rich_views)["message"]
+    items = state["items"]
+    assert [i["severity"] for i in items] == ["yellow", "yellow", "info"]
+    behind, critiques, survey = items
+    assert behind["text"] == "demo: behind (rendered 2026.9.1.1, released 2026.9.27.2)"
+    assert behind["url"] == "https://github.com/PyAutoLabs/demo_visualization"
+    assert behind["prompt"] == "/eyes survey --instance demo"
+    assert critiques["text"] == "demo: 2 open critiques"
+    assert critiques["prompt"] == "/eyes review --instance demo"
+    assert critiques["url"] is None or critiques["url"].startswith("https://")
+    assert survey["text"] == "demo: 1 gaps · 1 stale · 0 orphans"
+    assert survey["url"] is None
+    assert all("\n" not in i["text"] and i["text"].strip() for i in items)
+
+    instances = registry.load(registry_file)
+    (missing,) = board.collect(instances)  # network refused
+    red = board.render_state([missing], updated="2026-09-30T00:00:00Z")
+    assert red["status"] == "red"
+    assert red["items"][0] == {
+        "severity": "red",
+        "text": "demo: manifest unavailable",
+        "url": "https://github.com/PyAutoLabs/demo_visualization",
+        "prompt": "/eyes survey --instance demo",
+    }
+
+
+def test_state_feed_is_green_when_nothing_asks_for_a_human(views):
+    state = board.render_state(views, updated="2026-09-30T00:00:00Z")
+    assert state["status"] == "green" and state["items"] == []
+    assert state["headline"] == "3 figures, all current"
+
+
+def test_state_updated_defaults_to_a_utc_z_stamp(views):
+    stamp = board.render_state(views)["updated"]
+    assert re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", stamp)

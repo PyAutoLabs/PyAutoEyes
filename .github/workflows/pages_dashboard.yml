@@ -6,7 +6,8 @@ name: Pages Dashboard
 #
 # The page is rendered by `bin/pyauto-eyes board` and kept fresh by
 # dashboard_refresh.yml. This workflow only publishes it, with badge.json (the
-# one-line headline other boards read) beside it, and nothing else. The
+# one-line headline other boards read) and state.json (the organ-cockpit feed,
+# contract PyAutoBrain/board/state_schema.json) beside it, and nothing else. The
 # thumbnails are <img> links to the raw PNGs in each project repo, so no figure
 # is copied into the site. (Cortex pattern.)
 
@@ -16,6 +17,7 @@ on:
     paths:
       - "dashboard.html"
       - "badge.json"
+      - "state.json"
   workflow_dispatch:
 
 permissions:
@@ -45,6 +47,15 @@ jobs:
           mkdir -p _site
           cp dashboard.html _site/index.html
           cp badge.json _site/badge.json
+          cp state.json _site/state.json
+      # The contract is owned by the Brain (board/_state.py); the Eyes only
+      # emit it. A feed the cockpit cannot read fails loudly here.
+      - uses: actions/checkout@v4
+        with:
+          repository: PyAutoLabs/PyAutoBrain
+          path: PyAutoBrain
+      - name: Validate the cockpit feed against the Brain contract
+        run: python3 PyAutoBrain/board/_state.py _site/state.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

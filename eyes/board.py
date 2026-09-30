@@ -1,4 +1,5 @@
-"""Build the dashboard (``dashboard.md`` + ``dashboard.html``) from the registry.
+"""Build the dashboard (``dashboard.md`` + ``dashboard.html``, plus ``badge.json``
+and the ``state.json`` organ-cockpit feed) from the registry.
 
 For each instance, the board shows the figure count, the stack the figures were
 rendered with, the manifest's generated date, freshness against the library's
@@ -11,8 +12,10 @@ the project repo. The board embeds no image bytes, copies no files and files
 nothing itself. The head of ``dashboard.md`` is a counts table (instances,
 figures, behind, critiques) that the Brain board's Eyes strip reads.
 
-The output is deterministic: it has no wall-clock stamp, so a re-render on
-unchanged inputs changes nothing and the daily refresh commits nothing. Each
+The output is deterministic: the pages have no wall-clock stamp, and
+``state.json``'s ``updated`` stamp moves only when the feed's content does, so
+a re-render on unchanged inputs changes nothing and the daily refresh commits
+nothing. Each
 instance section carries an ``eyes:instance`` marker with the manifest digest,
 and ``check`` uses that marker to tell whether the committed dashboard is
 current.
@@ -27,6 +30,7 @@ import urllib.error
 import urllib.parse
 from collections import defaultdict
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from pathlib import Path
 
 from eyes import ORGAN_ROOT
@@ -38,6 +42,7 @@ PAGES_URL = "https://pyautolabs.github.io/PyAutoEyes/"
 PYPI_JSON = "https://pypi.org/pypi/{name}/json"
 MARKER = re.compile(r"<!-- eyes:instance name=(\S+) manifest=(\S+) -->")
 CRITIQUE_LABEL = "eyes-critique"  # the label the pre-filled issue carries
+STATE_SCHEMA_VERSION = 1  # the organ-cockpit feed contract (PyAutoBrain/board/state_schema.json)
 
 
 @dataclass
@@ -509,20 +514,132 @@ def render_badge(views) -> dict:
     return {"schemaVersion": 1, "label": "eyes", "message": message, "color": color}
 
 
+def _utc_now() -> str:
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _survey_counts(v) -> tuple[int, int, int]:
+    s = v.context.survey
+    if s is None:
+        return 0, 0, 0
+    return len(s.gaps), len(s.stale), len(s.orphans)
+
+
+def render_state(views, updated: str | None = None) -> dict:
+    """The organ-cockpit feed (state.json, contract v1 in PyAutoBrain/board).
+
+    status: red when any instance's manifest is unavailable; yellow when any
+    instance is behind the latest release, has open critiques, or its survey
+    shows gaps, stale renders or orphans; else green. The headline is the
+    badge message (", all current" appended when green), so the cockpit and
+    the badge say the same thing. Items are the rows that ask something of a
+    human, most urgent first: red (manifest unavailable), yellow (behind,
+    open critiques), info (survey gaps / stale / orphans). Pure apart from the
+    clock default for ``updated``.
+    """
+    red, yellow, info = [], [], []
+    for v in views:
+        inst = v.instance
+        survey_prompt = f"/eyes survey --instance {inst.name}"
+        if not v.manifest:
+            red.append(
+                {
+                    "severity": "red",
+                    "text": f"{inst.name}: manifest unavailable",
+                    "url": inst.github_url,
+                    "prompt": survey_prompt,
+                }
+            )
+        if v.behind:
+            yellow.append(
+                {
+                    "severity": "yellow",
+                    "text": f"{inst.name}: {v.freshness}",
+                    "url": inst.github_url,
+                    "prompt": survey_prompt,
+                }
+            )
+        critiques = v.context.critiques or []
+        if critiques:
+            link = _critique_link(v, critiques[0][1])
+            n = len(critiques)
+            yellow.append(
+                {
+                    "severity": "yellow",
+                    "text": f"{inst.name}: {n} open critique{'' if n == 1 else 's'}",
+                    "url": link if link.startswith(("https://", "http://")) else None,
+                    "prompt": f"/eyes review --instance {inst.name}",
+                }
+            )
+        gaps, stale, orphans = _survey_counts(v)
+        if gaps or stale or orphans:
+            info.append(
+                {
+                    "severity": "info",
+                    "text": f"{inst.name}: {gaps} gaps · {stale} stale · {orphans} orphans",
+                    "url": None,
+                    "prompt": survey_prompt,
+                }
+            )
+    if red:
+        status = "red"
+    elif yellow or info:
+        status = "yellow"
+    else:
+        status = "green"
+    headline = render_badge(views)["message"]
+    if status == "green":
+        headline += ", all current"
+    return {
+        "schema_version": STATE_SCHEMA_VERSION,
+        "organ": "eyes",
+        "repo": "PyAutoEyes",
+        "status": status,
+        "headline": " ".join(headline.split()),
+        "updated": updated or _utc_now(),
+        "pages_url": PAGES_URL,
+        "items": red + yellow + info,
+    }
+
+
 # -------------------------------------------------------------------- output ---
 
 
-def write(views, out_dir: Path = ORGAN_ROOT) -> list[Path]:
+def _carried_updated(path: Path, state: dict) -> str | None:
+    """The committed state.json's ``updated`` when nothing else changed.
+
+    Keeps the render deterministic (a re-render on unchanged inputs changes no
+    file, so the daily refresh commits nothing): ``updated`` moves only when
+    the feed's content does.
+    """
+    try:
+        prior = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return None
+    if not isinstance(prior, dict) or not isinstance(prior.get("updated"), str):
+        return None
+    same = {k: val for k, val in prior.items() if k != "updated"} == {
+        k: val for k, val in state.items() if k != "updated"
+    }
+    return prior["updated"] if same else None
+
+
+def write(views, out_dir: Path = ORGAN_ROOT, updated: str | None = None) -> list[Path]:
     out_dir = Path(out_dir)
-    md, page, badge = (
+    md, page, badge, feed = (
         out_dir / "dashboard.md",
         out_dir / "dashboard.html",
         out_dir / "badge.json",
+        out_dir / "state.json",
     )
     md.write_text(render_markdown(views))
     page.write_text(render_html(views))
     badge.write_text(json.dumps(render_badge(views), indent=2) + "\n")
-    return [md, page, badge]
+    state = render_state(views, updated)
+    if updated is None:
+        state["updated"] = _carried_updated(feed, state) or state["updated"]
+    feed.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n")
+    return [md, page, badge, feed]
 
 
 def markers(text: str) -> dict[str, str]:
