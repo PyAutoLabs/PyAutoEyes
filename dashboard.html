@@ -39,6 +39,18 @@ code{color:var(--accent)}
 document.querySelectorAll('button[data-copy]').forEach(function(b){
   b.addEventListener('click',function(){
     var t=b.getAttribute('data-copy');
+    if(Array.from(t).length>50000){
+      var status=b.parentNode.querySelector('.copy-budget');
+      if(!status){status=document.createElement('p');status.className='copy-budget';
+        status.setAttribute('role','status');b.insertAdjacentElement('afterend',status);}
+      if(status.dataset.url)URL.revokeObjectURL(status.dataset.url);
+      status.textContent='Not copied: request exceeds 50,000 characters. '+
+        'Download the complete request and attach it to your coding chat. ';
+      var link=document.createElement('a');
+      link.href=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'}));
+      status.dataset.url=link.href;link.download='dashboard-request.txt';
+      link.textContent='Download complete request';status.appendChild(link);return;
+    }
     var done=function(){b.classList.add('copied');setTimeout(function(){b.classList.remove('copied')},1200)};
     if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,function(){})}
   });
