@@ -3,12 +3,50 @@ import importlib.util
 import json
 import os
 import re
+import shutil
+import subprocess
 import urllib.parse
 from pathlib import Path
 
 import pytest
 
 from eyes import board, context, registry
+
+
+@pytest.mark.parametrize("length", [50_000, 50_001])
+def test_review_copy_budget_retains_complete_unicode_request(length):
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("Node is needed for the browser clipboard contract")
+    script = (
+        r"""
+const assert=require('assert');
+let click,status,downloaded,writes=0;
+const text='🌌'.repeat(LENGTH);
+const b={getAttribute:()=>text,addEventListener:(event,fn)=>click=fn,
+ parentNode:{querySelector:()=>status},insertAdjacentElement:(where,s)=>status=s,
+ classList:{add(){},remove(){}}};
+global.document={querySelectorAll:()=>[b],
+ createElement:()=>({dataset:{},setAttribute(){},appendChild(){}})};
+Object.defineProperty(global,'navigator',{value:{clipboard:{writeText:async()=>{writes++}}}});
+global.URL={createObjectURL:blob=>{downloaded=blob;return 'blob:test'},revokeObjectURL(){}};
+global.setTimeout=()=>{};
+"""
+        + board.JS
+        + r"""
+click();assert.equal(writes,LENGTH<=50000?1:0);
+if(LENGTH>50000){
+ assert.match(status.textContent,/Not copied/);
+ downloaded.text().then(value=>assert.equal(value,text));
+}
+"""
+    )
+    subprocess.run(
+        [node, "-e", script.replace("LENGTH", str(length))],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
 
 
 @pytest.fixture

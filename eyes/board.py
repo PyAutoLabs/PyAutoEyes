@@ -378,15 +378,30 @@ padding:4px 6px;cursor:pointer;word-break:break-all}
 code{color:var(--accent)}
 """
 
+# Eyes renders without a Brain checkout. Match the family clipboard budget in
+# PyAutoBrain/board/_theme.py; keep this standalone guard for that offline path.
+MAX_PROMPT_CHARS = 50_000
 JS = """
 document.querySelectorAll('button[data-copy]').forEach(function(b){
   b.addEventListener('click',function(){
     var t=b.getAttribute('data-copy');
+    if(Array.from(t).length>__MAX_PROMPT_CHARS__){
+      var status=b.parentNode.querySelector('.copy-budget');
+      if(!status){status=document.createElement('p');status.className='copy-budget';
+        status.setAttribute('role','status');b.insertAdjacentElement('afterend',status);}
+      if(status.dataset.url)URL.revokeObjectURL(status.dataset.url);
+      status.textContent='Not copied: request exceeds 50,000 characters. '+
+        'Download the complete request and attach it to your coding chat. ';
+      var link=document.createElement('a');
+      link.href=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'}));
+      status.dataset.url=link.href;link.download='dashboard-request.txt';
+      link.textContent='Download complete request';status.appendChild(link);return;
+    }
     var done=function(){b.classList.add('copied');setTimeout(function(){b.classList.remove('copied')},1200)};
     if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,function(){})}
   });
 });
-"""
+""".replace("__MAX_PROMPT_CHARS__", str(MAX_PROMPT_CHARS))
 
 
 def _e(value) -> str:
