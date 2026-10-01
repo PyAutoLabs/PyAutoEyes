@@ -7,7 +7,7 @@ latest release, the Brain Eyes conductor's survey of the local checkout
 (PNGs on disk, gaps, orphans, stale renders), the open PyAutoMind drafts that
 mention the instance, and a thumbnail grid. Every thumbnail links to the raw
 PNG in the project repo. Each figure carries its critique route: a copyable
-``/eyes review <instance> <figure>`` line and a pre-filled "new issue" link on
+``Use the eyes skill. review <instance> <figure>`` line and a pre-filled "new issue" link on
 the project repo. The board embeds no image bytes, copies no files and files
 nothing itself. The head of ``dashboard.md`` is a counts table (instances,
 figures, behind, critiques) that the Brain board's Eyes strip reads.
@@ -142,7 +142,7 @@ def _checkout(inst: Instance, source) -> Path | None:
 
 
 def review_line(inst: Instance, fig) -> str:
-    return f"/eyes review {inst.name} {fig.file}"
+    return f"Use the eyes skill. review {inst.name} {fig.file}"
 
 
 def issue_title(fig) -> str:
@@ -164,7 +164,7 @@ def issue_body(inst: Instance, man, fig) -> str:
             "",
             "<!-- Say what should change and why. A maintainer turns an accepted "
             "critique into a PyAutoMind intake prompt and routes it through start_dev; "
-            f"to review it with Claude, copy: {review_line(inst, fig)} -->",
+            f"to review it with an AI assistant, copy: {review_line(inst, fig)} -->",
         ]
     )
 
@@ -299,7 +299,7 @@ def render_markdown(views) -> str:
         "",
         "To suggest an improvement to a figure, use its **suggest** link: it opens a "
         f"pre-filled issue on the project repo (label `{CRITIQUE_LABEL}`). Or copy its "
-        "`/eyes review` line into a Claude Code session. The dashboard files nothing "
+        "`Use the eyes skill. review` line into an AI assistant session. The dashboard files nothing "
         "itself, and accepted critiques route through PyAutoMind intake to start_dev.",
     ]
     for v in views:
@@ -471,7 +471,7 @@ def render_html(views) -> str:
                     f"<a href='{_e(url)}' target='_blank' rel='noopener'>"
                     f"<img loading='lazy' src='{_e(url)}' alt='{_e(fig.file)}'></a>"
                     f"<span class='name'>{_e(_figure_label(fig))}</span>"
-                    f"<button type='button' data-copy='{_e(line)}' title='Copy for Claude'>{_e(line)}</button>"
+                    f"<button type='button' data-copy='{_e(line)}' title='Copy for an AI assistant'>{_e(line)}</button>"
                     f"<a class='suggest' href='{_e(issue_url(inst, v.manifest, fig))}' "
                     "target='_blank' rel='noopener'>Suggest an improvement</a>"
                     "</div>"
@@ -488,7 +488,7 @@ def render_html(views) -> str:
         "<main><p class='lede'>The cross-project view of the organism's figures. Each "
         "<code>&lt;lib&gt;_visualization</code> project repo makes, stores and tracks its figures. "
         "This page links to them where they live. Tap a thumbnail for the full-size PNG, "
-        "tap its line to copy a review request for Claude, or use "
+        "tap its line to copy a review request for an AI assistant, or use "
         "<b>Suggest an improvement</b> to open a pre-filled issue on the project repo "
         f"(label <code>{CRITIQUE_LABEL}</code>). The page files nothing itself.</p>"
         f"<div class='stats'>{stat_tiles}</div>"
@@ -540,7 +540,7 @@ def render_state(views, updated: str | None = None) -> dict:
     red, yellow, info = [], [], []
     for v in views:
         inst = v.instance
-        survey_prompt = f"/eyes survey --instance {inst.name}"
+        survey_prompt = f"Use the eyes skill. survey --instance {inst.name}"
         if not v.manifest:
             red.append(
                 {
@@ -568,7 +568,7 @@ def render_state(views, updated: str | None = None) -> dict:
                     "severity": "yellow",
                     "text": f"{inst.name}: {n} open critique{'' if n == 1 else 's'}",
                     "url": link if link.startswith(("https://", "http://")) else None,
-                    "prompt": f"/eyes review --instance {inst.name}",
+                    "prompt": f"Use the eyes skill. review --instance {inst.name}",
                 }
             )
         gaps, stale, orphans = _survey_counts(v)
