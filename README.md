@@ -35,8 +35,8 @@ bin/pyauto-eyes board --offline --from lens=../../lens/autolens_visualization   
 To ask for a figure to be improved, use its **Suggest an improvement** link on
 the dashboard. It opens a pre-filled issue on the project repo (title
 `figure: <domain>/<file>`, the raw PNG link and a `Suggested improvement:`
-stub, label `eyes-critique`). Or copy its `/eyes review <instance> <figure>`
-line into a Claude Code session. The dashboard files nothing itself, and an
+stub, label `eyes-critique`). Or copy its `Use the eyes skill. review <instance> <figure>`
+line into an AI assistant session. The dashboard files nothing itself, and an
 accepted critique becomes a PyAutoMind intake prompt that goes through
 start_dev.
 

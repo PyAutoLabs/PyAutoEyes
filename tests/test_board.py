@@ -23,7 +23,7 @@ def test_markdown_lists_every_figure_with_raw_links_and_review_lines(views, proj
     assert "| [demo](#demo) | PyAutoDemo | 3 | `autodemo 2026.9.1.1` | 2026-09-28 |" in md
     for fig in views[0].manifest.figures:
         assert f"({demo.image_url(fig.file)})" in md
-        assert f"`/eyes review demo {fig.file}`" in md
+        assert f"`Use the eyes skill. review demo {fig.file}`" in md
     assert "### demo / imaging" in md and "### demo / interferometer" in md
     assert board.markers(md) == {"demo": views[0].manifest.digest}
     # Never a local path, even when the manifest was read from a checkout.
@@ -39,7 +39,7 @@ def test_html_thumbnails_link_to_the_full_size_raw_png(views, project):
         url = demo.image_url(fig.file)
         assert f"<a href='{url}' target='_blank'" in page
         assert f"<img loading='lazy' src='{url}'" in page
-        assert f"data-copy='/eyes review demo {fig.file}'" in page
+        assert f"data-copy='Use the eyes skill. review demo {fig.file}'" in page
     assert str(project) not in page
     assert "prefers-color-scheme:dark" in page
 
@@ -166,7 +166,7 @@ def test_each_figure_has_a_prefilled_issue_on_the_project_repo(rich_views):
         assert f"Raw PNG: {demo.image_url(fig.file)}" in body
         assert "generated 2026-09-28, rendered with autodemo 2026.9.1.1" in body
         assert "Suggested improvement:" in body
-        assert f"/eyes review demo {fig.file}" in body
+        assert f"Use the eyes skill. review demo {fig.file}" in body
         # The markdown link survives the table (no raw pipe or paren in it).
         assert f"| [suggest]({url}) |" in md and "|" not in url and ")" not in url
         assert html.escape(url, quote=True) in page
@@ -255,9 +255,9 @@ def test_state_feed_status_and_items(rich_views, registry_file):
     behind, critiques, survey = items
     assert behind["text"] == "demo: behind (rendered 2026.9.1.1, released 2026.9.27.2)"
     assert behind["url"] == "https://github.com/PyAutoLabs/demo_visualization"
-    assert behind["prompt"] == "/eyes survey --instance demo"
+    assert behind["prompt"] == "Use the eyes skill. survey --instance demo"
     assert critiques["text"] == "demo: 2 open critiques"
-    assert critiques["prompt"] == "/eyes review --instance demo"
+    assert critiques["prompt"] == "Use the eyes skill. review --instance demo"
     assert critiques["url"] is None or critiques["url"].startswith("https://")
     assert survey["text"] == "demo: 1 gaps · 1 stale · 0 orphans"
     assert survey["url"] is None
@@ -271,7 +271,7 @@ def test_state_feed_status_and_items(rich_views, registry_file):
         "severity": "red",
         "text": "demo: manifest unavailable",
         "url": "https://github.com/PyAutoLabs/demo_visualization",
-        "prompt": "/eyes survey --instance demo",
+        "prompt": "Use the eyes skill. survey --instance demo",
     }
 
 

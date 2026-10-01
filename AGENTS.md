@@ -100,7 +100,7 @@ someone runs `bin/pyauto-eyes board` where the instance is checked out.
 
 Each figure carries two affordances, and neither files anything:
 
-- a copyable `/eyes review <instance> <figure>` line for a Claude Code session;
+- a copyable `Use the eyes skill. review <instance> <figure>` line for an AI assistant session;
 - a **Suggest an improvement** link that opens a pre-filled "new issue" form on
   the *project* repo. The title is `figure: <domain>/<file>`, the body holds the
   raw PNG link, the manifest version and a `Suggested improvement:` stub, and
