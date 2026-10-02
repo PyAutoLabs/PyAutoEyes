@@ -3,13 +3,13 @@
   "organ": "eyes",
   "repo": "PyAutoEyes",
   "status": "yellow",
-  "headline": "265 figures · 1 behind",
-  "updated": "2026-10-01T12:15:54Z",
+  "headline": "265 figures · 3 behind",
+  "updated": "2026-10-02T10:04:12Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
       "severity": "yellow",
-      "text": "lens: behind (rendered 2026.8.17.1, released 2026.9.27.2)",
+      "text": "lens: behind (rendered 2026.8.17.1, released 2026.10.2.1)",
       "url": "https://github.com/PyAutoLabs/autolens_visualization",
       "prompt": "Use the eyes skill. survey --instance lens"
     },
@@ -21,9 +21,21 @@
     },
     {
       "severity": "yellow",
+      "text": "galaxy: behind (rendered 2026.9.27.2, released 2026.10.2.1)",
+      "url": "https://github.com/PyAutoLabs/autogalaxy_visualization",
+      "prompt": "Use the eyes skill. survey --instance galaxy"
+    },
+    {
+      "severity": "yellow",
       "text": "galaxy: 2 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md",
       "prompt": "Use the eyes skill. review --instance galaxy"
+    },
+    {
+      "severity": "yellow",
+      "text": "fit: behind (rendered 2026.9.27.2, released 2026.10.2.1)",
+      "url": "https://github.com/PyAutoLabs/autofit_visualization",
+      "prompt": "Use the eyes skill. survey --instance fit"
     },
     {
       "severity": "yellow",
