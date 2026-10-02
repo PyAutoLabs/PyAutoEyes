@@ -61,6 +61,7 @@ jobs:
         run: |
           lychee \
             --exclude '^https://raw\.githubusercontent\.com/' \
+            --exclude '^https://github\.com/.*/blob/' \
             --exclude '^https://pyautolabs\.github\.io/PyAutoEyes' \
             --exclude '^https://github\.com/.*/(issues|pull|commit|releases)/' \
             --no-progress \
