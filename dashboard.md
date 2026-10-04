@@ -16,9 +16,9 @@ Thumbnails and one-tap copy: [https://pyautolabs.github.io/PyAutoEyes/](https://
 
 | Instance | Library | Figures | Rendered with | Generated | Freshness | Survey | Critiques | Gallery |
 |----------|---------|--------:|---------------|-----------|-----------|--------|----------:|---------|
-| [lens](#lens) | PyAutoLens | 40 | `autolens 2026.8.17.1` | 2026-09-28 | behind (rendered 2026.8.17.1, released 2026.10.2.1) | 40 png · 0 gaps · 0 orphans · 0 stale | 3 | [GALLERY.md](https://github.com/PyAutoLabs/autolens_visualization/blob/main/GALLERY.md) |
-| [galaxy](#galaxy) | PyAutoGalaxy | 41 | `autogalaxy 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.2.1) | 41 png · 0 gaps · 0 orphans · 0 stale | 2 | [GALLERY.md](https://github.com/PyAutoLabs/autogalaxy_visualization/blob/main/GALLERY.md) |
-| [fit](#fit) | PyAutoFit | 49 | `autofit 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.2.1) | 49 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autofit_visualization/blob/main/GALLERY.md) |
+| [lens](#lens) | PyAutoLens | 40 | `autolens 2026.8.17.1` | 2026-09-28 | behind (rendered 2026.8.17.1, released 2026.10.4.1) | 40 png · 0 gaps · 0 orphans · 0 stale | 3 | [GALLERY.md](https://github.com/PyAutoLabs/autolens_visualization/blob/main/GALLERY.md) |
+| [galaxy](#galaxy) | PyAutoGalaxy | 41 | `autogalaxy 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.4.1) | 41 png · 0 gaps · 0 orphans · 0 stale | 2 | [GALLERY.md](https://github.com/PyAutoLabs/autogalaxy_visualization/blob/main/GALLERY.md) |
+| [fit](#fit) | PyAutoFit | 49 | `autofit 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.4.1) | 49 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autofit_visualization/blob/main/GALLERY.md) |
 | [cti](#cti) | PyAutoCTI | 135 | `autocti 2024.11.13.2` | 2026-09-29 | current (2024.11.13.2) | 135 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autocti_visualization/blob/main/GALLERY.md) |
 
 To suggest an improvement to a figure, use its **suggest** link: it opens a pre-filled issue on the project repo (label `eyes-critique`). Or copy its `Use the eyes skill. review` line into an AI assistant session. The dashboard files nothing itself, and accepted critiques route through PyAutoMind intake to start_dev.
