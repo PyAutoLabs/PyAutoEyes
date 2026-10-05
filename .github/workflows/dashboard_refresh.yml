@@ -16,7 +16,7 @@ name: Dashboard Refresh
 #
 # The render is deterministic (the pages have no wall-clock stamp, and
 # state.json's `updated` moves only when the feed's content does), so a night
-# with no change commits nothing. The runner has no project-repo checkout and no Brain,
+# with no change commits nothing. The runner has no project-repo checkout and uses Brain only for presentation,
 # so each instance's conductor survey is carried forward from the committed
 # dashboard (the last local `bin/pyauto-eyes board`); the open critiques are
 # read live from a checkout of PyAutoMind (public). The bot commit uses GITHUB_TOKEN, which never
@@ -46,6 +46,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+
+      - name: PyAutoBrain (shared board presentation)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/PyAutoBrain
+          path: _brain
 
       - name: Log the trigger
         env:

@@ -67,3 +67,11 @@ puts the repo on `sys.path`.
 ## AI policy
 
 See [AI_POLICY.md](AI_POLICY.md).
+
+### Shared board presentation
+
+Rendering the HTML board requires a current PyAutoBrain checkout beside this
+repo, at `_brain/`, or selected with `PYAUTO_BRAIN`. The banner, logo, responsive
+layout and section navigation come from its `board/_theme.py`; CI and dashboard
+refresh workflows check it out automatically. Counts and section links remain
+owned by this board.
