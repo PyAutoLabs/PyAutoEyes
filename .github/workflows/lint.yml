@@ -34,6 +34,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: PyAutoBrain (shared board presentation)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/PyAutoBrain
+          path: _brain
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -46,10 +52,10 @@ jobs:
             | tar -xz -C /usr/local/bin --strip-components=1 lychee-x86_64-unknown-linux-gnu/lychee
 
       - name: ruff check
-        run: ruff check .
+        run: ruff check --exclude _brain .
 
       - name: ruff format --check
-        run: ruff format --check .
+        run: ruff format --check --exclude _brain .
 
       - name: pytest (hermetic)
         run: python -m pytest tests -q
@@ -67,4 +73,4 @@ jobs:
             --no-progress \
             --accept '200..=299,429' \
             --max-redirects 5 \
-            $(find . -name '*.md' -not -name 'dashboard.md' -not -path './.claude/*' -not -path './.git/*')
+            $(find . -name '*.md' -not -name 'dashboard.md' -not -path './.claude/*' -not -path './.git/*' -not -path './_brain/*')
