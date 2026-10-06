@@ -497,6 +497,7 @@ def render_html(views) -> str:
                 ),
             ],
         )
+        + shared.prompt_heading("eyes")
         + "<main>"
         "<h2 id='overview'>Projects</h2>"
         "<div class='tablewrap'><table><thead><tr><th>Instance</th><th>Library</th><th>Figures</th>"
