@@ -322,3 +322,52 @@ def test_state_feed_is_green_when_nothing_asks_for_a_human(views):
 def test_state_updated_defaults_to_a_utc_z_stamp(views):
     stamp = board.render_state(views)["updated"]
     assert re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", stamp)
+
+
+def test_orchestration_links_every_project_and_the_owner(views, monkeypatch):
+    from dataclasses import replace
+
+    monkeypatch.setattr(
+        context, "mind_github_url", lambda root: "https://github.com/SomeOrg/FigureBoard"
+    )
+    second = replace(
+        views[0],
+        instance=replace(
+            views[0].instance,
+            name="other",
+            repo="other_visualization",
+            github="SomeOrg/other_visualization",
+        ),
+    )
+    page = board.render_html([*views, second])
+    preview = re.search(
+        r'<textarea id="orchestration-eyes-prompt"[^>]*>(.*?)</textarea>', page, re.S
+    ).group(1)
+    assert html.unescape(preview) == (
+        board.CHECKIN_PROMPT + "\n\nWork on GitHub:\n"
+        f"- {views[0].instance.repo}: {views[0].instance.github_url}\n"
+        "- other_visualization: https://github.com/SomeOrg/other_visualization\n"
+        f"- {board.ORGAN_ROOT.name}: https://github.com/SomeOrg/FigureBoard"
+    )
+    assert page.index('class="hero"') < page.index('id="orchestration-eyes"') < page.index("<main>")
+    assert board.theme().prompt_heading("eyes", heading_id="orchestration-eyes-heading") in page
+    # The shared handler and the existing figure handler have disjoint hooks.
+    assert page.count(board.JS) == 1
+    assert "button[data-copy]" in page
+    assert "data-orchestration-copy" in page
+    for view in [*views, second]:
+        for fig in view.manifest.figures:
+            assert (
+                f"data-copy='{html.escape(board.review_line(view.instance, fig), quote=True)}'"
+                in page
+            )
+            assert (
+                html.escape(board.issue_url(view.instance, view.manifest, fig), quote=True) in page
+            )
+
+
+def test_empty_orchestration_reports_unavailable_without_inventing_a_repo(monkeypatch):
+    monkeypatch.setattr(context, "mind_github_url", lambda root: None)
+    page = board.render_html([])
+    assert "Work repository unavailable in this snapshot." in page
+    assert "data-orchestration-copy" in page
