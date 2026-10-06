@@ -45,6 +45,18 @@ MARKER = re.compile(r"<!-- eyes:instance name=(\S+) manifest=(\S+) -->")
 CRITIQUE_LABEL = "eyes-critique"  # the label the pre-filled issue carries
 STATE_SCHEMA_VERSION = 1  # the organ-cockpit feed contract (PyAutoBrain/board/state_schema.json)
 
+CHECKIN_PROMPT = (
+    "Use the eyes skill to review all registered visualization projects in this "
+    "chat. Read PyAutoEyes/AGENTS.md and its registry, then inspect manifest "
+    "freshness, surveys, gaps, orphan figures and existing critiques. Summarize "
+    "each project and propose a bounded review priority. Apply my direction while "
+    "keeping all registered projects in view. Figures and rendering stay in their "
+    "project repositories; Brain owns critique judgement. Route accepted "
+    "improvements through intake and start-dev, preserving approval and merge "
+    "gates. Do not file issues, edit plotting code or launch renders merely to "
+    "check in."
+)
+
 
 @dataclass
 class InstanceView:
@@ -428,6 +440,15 @@ def _md_inline(text: str) -> str:
 
 def render_html(views) -> str:
     shared = theme()
+    # The registry owns project destinations; the checkout remote owns this
+    # organ's destination. Pages hosting is never used as a work repository.
+    work_links = [{"label": v.instance.repo, "href": v.instance.github_url} for v in views]
+    owner_url = context_mod.mind_github_url(ORGAN_ROOT)
+    if owner_url:
+        work_links.append({"label": ORGAN_ROOT.name, "href": owner_url})
+    panel = shared.orchestration_panel(
+        "eyes", "", "", CHECKIN_PROMPT, work_links=work_links, organ="eyes"
+    )
     rows = []
     for v in views:
         inst = v.instance
@@ -497,14 +518,14 @@ def render_html(views) -> str:
                 ),
             ],
         )
-        + shared.prompt_heading("eyes")
+        + panel
         + "<main>"
         "<h2 id='overview'>Projects</h2>"
         "<div class='tablewrap'><table><thead><tr><th>Instance</th><th>Library</th><th>Figures</th>"
         "<th>Rendered with</th><th>Generated</th><th>Freshness</th><th>Survey</th>"
         "<th>Critiques</th><th>Gallery</th></tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table></div>"
-        f"{''.join(sections)}</main><script>{JS}</script></body></html>\n"
+        f"{''.join(sections)}</main><script>{shared.JS}{JS}</script></body></html>\n"
     )
 
 
