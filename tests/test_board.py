@@ -371,3 +371,15 @@ def test_empty_orchestration_reports_unavailable_without_inventing_a_repo(monkey
     page = board.render_html([])
     assert "Work repository unavailable in this snapshot." in page
     assert "data-orchestration-copy" in page
+
+
+def test_refresh_uses_successful_collection_not_figure_generation(registry_file, project):
+    instances = registry.load(registry_file)
+    views = board.collect(
+        instances, {"demo": project}, offline=True, captured_at="2026-10-07T09:00:00Z"
+    )
+    page = board.render_html(views)
+    assert 'data-refreshed-at="2026-10-07T09:00:00Z"' in page
+    assert board.render_html(views) == page
+    views[0].captured_at = None
+    assert "Last updated unavailable" in board.render_html(views)
