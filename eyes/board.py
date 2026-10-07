@@ -528,7 +528,7 @@ def render_html(views) -> str:
                 )
             body.append(f"<h3>{_e(domain)}</h3><div class='grid'>{''.join(cards)}</div>")
         sections.append("".join(body))
-    return (
+    return shared.section_layout(
         "<!doctype html>\n<html lang='en'><head><meta charset='utf-8'>"
         "<meta name='viewport' content='width=device-width,initial-scale=1'>"
         "<title>PyAutoEyes dashboard</title>"
