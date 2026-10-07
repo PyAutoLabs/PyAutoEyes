@@ -83,6 +83,8 @@ class InstanceView:
     latest: str | None  # latest released library version, None if unknown
     context: context_mod.Context = field(default_factory=context_mod.Context)
 
+    captured_at: str | None = None  # successful manifest collection, never figure evidence
+
     @property
     def behind(self) -> bool:
         return self.freshness.startswith("behind")
@@ -132,6 +134,7 @@ def collect(
     release_lookup=latest_release,
     context_lookup=None,
     previous=None,
+    captured_at=None,
 ):
     """Read every instance's manifest (and its latest release, when online).
 
@@ -140,6 +143,7 @@ def collect(
     CLI); None skips it, carrying forward whatever ``previous`` (the
     committed dashboard.md text) recorded.
     """
+    capture_time = captured_at or _utc_now()
     sources = sources or {}
     before = context_mod.recorded(previous) if previous else {}
     views = []
@@ -156,7 +160,7 @@ def collect(
             ctx = context_lookup(inst, checkout, prior)
         else:
             ctx = prior or context_mod.Context()
-        views.append(InstanceView(inst, man, error, latest, ctx))
+        views.append(InstanceView(inst, man, error, latest, ctx, capture_time if man else None))
     return views
 
 
@@ -464,7 +468,18 @@ def render_html(views) -> str:
     if owner_url:
         work_links.append({"label": ORGAN_ROOT.name, "href": owner_url})
     panel = shared.orchestration_panel(
-        "eyes", "", "", CHECKIN_PROMPT, work_links=work_links, organ="eyes"
+        "eyes",
+        "",
+        "",
+        CHECKIN_PROMPT,
+        work_links=work_links,
+        organ="eyes",
+        refreshed_at=(
+            min(v.captured_at for v in views)
+            if views and all(v.manifest and v.captured_at for v in views)
+            else None
+        ),
+        refresh_url=(owner_url + "/actions/workflows/dashboard_refresh.yml") if owner_url else None,
     )
     rows = []
     for v in views:

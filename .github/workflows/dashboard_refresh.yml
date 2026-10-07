@@ -14,9 +14,10 @@ name: Dashboard Refresh
 #     latest PyPI release) and any dispatch that did not arrive.
 #   - workflow_dispatch: manual.
 #
-# The render is deterministic (the pages have no wall-clock stamp, and
-# state.json's `updated` moves only when the feed's content does), so a night
-# with no change commits nothing. The runner has no project-repo checkout and uses Brain only for presentation,
+# Rendering the same captured inputs is deterministic. Each successful
+# collection records its capture time in the orchestration panel; state.json
+# `updated` still moves only when the feed content changes. The runner has no
+# project-repo checkout and uses Brain only for presentation,
 # so each instance's conductor survey is carried forward from the committed
 # dashboard (the last local `bin/pyauto-eyes board`); the open critiques are
 # read live from a checkout of PyAutoMind (public). The bot commit uses GITHUB_TOKEN, which never
