@@ -9,15 +9,15 @@
 | [Instances](#instances) | 4 |
 | [Figures](#instances) | 265 |
 | [Behind](#instances) | 3 |
-| [Critiques](#instances) | 7 |
+| [Critiques](#instances) | 10 |
 
 ## Instances
 
 | Instance | Library | Figures | Rendered with | Generated | Freshness | Survey | Critiques | Gallery |
 |----------|---------|--------:|---------------|-----------|-----------|--------|----------:|---------|
-| [lens](#lens) | PyAutoLens | 40 | `autolens 2026.8.17.1` | 2026-09-28 | behind (rendered 2026.8.17.1, released 2026.10.4.1) | 40 png · 0 gaps · 0 orphans · 0 stale | 3 | [GALLERY.md](https://github.com/PyAutoLabs/autolens_visualization/blob/main/GALLERY.md) |
-| [galaxy](#galaxy) | PyAutoGalaxy | 41 | `autogalaxy 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.4.1) | 41 png · 0 gaps · 0 orphans · 0 stale | 2 | [GALLERY.md](https://github.com/PyAutoLabs/autogalaxy_visualization/blob/main/GALLERY.md) |
-| [fit](#fit) | PyAutoFit | 49 | `autofit 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.4.1) | 49 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autofit_visualization/blob/main/GALLERY.md) |
+| [lens](#lens) | PyAutoLens | 40 | `autolens 2026.8.17.1` | 2026-09-28 | behind (rendered 2026.8.17.1, released 2026.10.7.1) | 40 png · 0 gaps · 0 orphans · 0 stale | 3 | [GALLERY.md](https://github.com/PyAutoLabs/autolens_visualization/blob/main/GALLERY.md) |
+| [galaxy](#galaxy) | PyAutoGalaxy | 41 | `autogalaxy 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.7.1) | 41 png · 0 gaps · 0 orphans · 0 stale | 2 | [GALLERY.md](https://github.com/PyAutoLabs/autogalaxy_visualization/blob/main/GALLERY.md) |
+| [fit](#fit) | PyAutoFit | 49 | `autofit 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.7.1) | 49 png · 0 gaps · 0 orphans · 0 stale | 4 | [GALLERY.md](https://github.com/PyAutoLabs/autofit_visualization/blob/main/GALLERY.md) |
 | [cti](#cti) | PyAutoCTI | 135 | `autocti 2024.11.13.2` | 2026-09-29 | current (2024.11.13.2) | 135 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autocti_visualization/blob/main/GALLERY.md) |
 
 To suggest an improvement to a figure, use its **suggest** link: it opens a pre-filled issue on the project repo (label `eyes-critique`). Or copy its `Use the eyes skill. review` line into an AI assistant session. The dashboard files nothing itself, and accepted critiques route through PyAutoMind intake to start_dev.
@@ -164,7 +164,7 @@ Rendered with autogalaxy 2026.9.27.2, autoarray 2026.9.27.2, autofit 2026.9.27.2
 ## fit
 
 <!-- eyes:instance name=fit manifest=78e01182ec98d865 -->
-<!-- eyes:context name=fit {"critiques":[["autofit_visualization \u2014 seed every sampler so re-renders are byte-stable","draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ep":19,"model":12,"samples":15,"visualizer":3},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
+<!-- eyes:context name=fit {"critiques":[["autofit_visualization \u2014 seed every sampler so re-renders are byte-stable","draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md"],["Search extensibility epic: research report and phased plan","draft/research/autofit/search_extensibility_epic_report.md"],["03 \u2014 How non-linear searches are documented across PyAuto, and how that must scale","draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md"],["04 \u2014 Inference and profiling infrastructure survey for `autofit_inference` and `autofit_profiling`","draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ep":19,"model":12,"samples":15,"visualizer":3},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 PyAutoFit figures from [PyAutoLabs/autofit_visualization](https://github.com/PyAutoLabs/autofit_visualization) (manifest `gallery/viz_manifest.yaml`; re-rendered on `pyautofit-release`).
 
 **Survey** (Brain Eyes conductor, local checkout): 49 PNGs on disk (ep 19, model 12, samples 15, visualizer 3); gaps none; orphans none; stale renders none.
@@ -172,6 +172,9 @@ PyAutoFit figures from [PyAutoLabs/autofit_visualization](https://github.com/PyA
 **Open critiques** (PyAutoMind drafts mentioning this instance):
 
 - [autofit_visualization — seed every sampler so re-renders are byte-stable](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md) (`draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md`)
+- [Search extensibility epic: research report and phased plan](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_report.md) (`draft/research/autofit/search_extensibility_epic_report.md`)
+- [03 — How non-linear searches are documented across PyAuto, and how that must scale](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md) (`draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md`)
+- [04 — Inference and profiling infrastructure survey for `autofit_inference` and `autofit_profiling`](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md) (`draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md`)
 
 Rendered with autofit 2026.9.27.2; generated 2026-09-29.
 
