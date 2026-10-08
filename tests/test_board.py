@@ -58,28 +58,78 @@ def views(registry_file, project):
 def test_markdown_lists_every_figure_with_raw_links_and_review_lines(views, project):
     md = board.render_markdown(views)
     demo = views[0].instance
-    assert "| [demo](#demo) | PyAutoDemo | 3 | `autodemo 2026.9.1.1` | 2026-09-28 |" in md
+    assert "| [PyAutoDemo](#demo) | 3 | `2026.9.1.1` | Unknown |" in md
     for fig in views[0].manifest.figures:
         assert f"({demo.image_url(fig.file)})" in md
         assert f"`Use the eyes skill. review demo {fig.file}`" in md
-    assert "### demo / imaging" in md and "### demo / interferometer" in md
+    assert "### imaging" in md and "### interferometer" in md
     assert board.markers(md) == {"demo": views[0].manifest.digest}
     # Never a local path, even when the manifest was read from a checkout.
     assert str(project) not in md and str(project.parent) not in md
 
 
-def test_html_thumbnails_link_to_the_full_size_raw_png(views, project):
+def test_html_loads_selected_figures_only_and_keeps_actions_together(views, project):
     page = board.render_html(views)
     demo = views[0].instance
     assert page.startswith("<!doctype html>")
-    assert page.count("class='fig'") == 3
+    assert page.count("class='figure-browser'") == 2
+    assert "<img loading='lazy' src=" not in page
+    assert not re.search(r"<img[^>]+src=", page)
     for fig in views[0].manifest.figures:
         url = demo.image_url(fig.file)
-        assert f"<a href='{url}' target='_blank'" in page
-        assert f"<img loading='lazy' src='{url}'" in page
-        assert f"data-copy='Use the eyes skill. review demo {fig.file}'" in page
+        assert f"value='{url}' data-review='Use the eyes skill. review demo {fig.file}'" in page
+        assert (
+            f"data-suggest='{html.escape(board.issue_url(demo, views[0].manifest, fig), quote=True)}'"
+            in page
+        )
+        assert f"<li><a href='{url}'>" in page  # no-JS fallback
+    assert page.count("<dialog ") == 1
+    assert "<th>Survey</th>" not in page
+    assert "Figures from" not in page
+    assert "Rendered with autodemo" not in page
     assert str(project) not in page
     assert "prefers-color-scheme:dark" in page
+    identifiers = re.findall(r"<select id='([^']+)'", page)
+    assert len(identifiers) == len(set(identifiers)) == 2
+    assert all(f"<label for='{identifier}'>" in page for identifier in identifiers)
+
+
+@pytest.mark.parametrize(
+    "latest, label",
+    [
+        (None, "Unknown"),
+        ("2026.9.1.1", "Current"),
+        ("2026.10.1.1", "Behind"),
+        ("2026.8.1.1", "Ahead"),
+    ],
+)
+def test_compact_freshness_preserves_evidence(views, latest, label):
+    view = views[0]
+    view.latest = latest
+    before = board.render_state(views, updated="2026-09-01T00:00:00Z")
+    assert board.compact_freshness(view) == label
+    assert f"| {label} |" in board.render_markdown(views)
+    assert board.render_state(views, updated="2026-09-01T00:00:00Z") == before
+
+
+def test_empty_manifest_and_escaped_browser_metadata(views):
+    from dataclasses import replace
+
+    view = views[0]
+    fig = replace(view.manifest.figures[0], file="scripts/imaging/a'&<test>.png")
+    fragment = board._figure_browser(view.instance, view.manifest, "a<&", [fig], "figure-test")
+    assert "<summary>a&lt;&amp;</summary>" in fragment
+    assert "a&#x27;&amp;&lt;test&gt;.png" in fragment
+    assert "a'&<test>.png" not in fragment
+    empty = replace(
+        view,
+        manifest=replace(
+            view.manifest, doc={**view.manifest.doc, "figures": [], "figure_count": 0}
+        ),
+    )
+    page = board.render_html([empty])
+    assert "No figures available." in page
+    assert "<select" not in page
 
 
 def test_render_is_deterministic(views):
@@ -177,15 +227,14 @@ def test_the_head_of_the_page_is_the_counts_table_the_brain_reads(rich_views):
 
 def test_the_instance_row_and_section_carry_survey_and_critiques(rich_views, project):
     md = board.render_markdown(rich_views)
-    assert "| 3 png · 1 gaps · 0 orphans · 1 stale | 2 |" in md
-    assert "3 PNGs on disk (imaging 2, interferometer 1)" in md
-    assert "gaps `interferometer/visualization_jax`" in md
-    assert "stale renders `imaging/visualization`" in md
+    assert "PNGs on disk" not in md
+    assert "stale renders" not in md
+    assert context.recorded(md)["demo"].survey == rich_views[0].context.survey
     assert "- Restyle the -- fit panel (`draft/feature/demo/restyle_fit.md`)" in md
     # Never a machine path: not the checkout, not the survey's workspace.
     assert str(project.parent) not in md and "/somewhere/on/a/laptop" not in md
     page = board.render_html(rich_views)
-    assert "Restyle the -- fit panel" in page and "3 png · 1 gaps" in page
+    assert "Restyle the -- fit panel" in page and "3 png · 1 gaps" not in page
     assert str(project.parent) not in page
 
 
@@ -208,10 +257,10 @@ def test_each_figure_has_a_prefilled_issue_on_the_project_repo(rich_views):
         # The markdown link survives the table (no raw pipe or paren in it).
         assert f"| [suggest]({url}) |" in md and "|" not in url and ")" not in url
         assert html.escape(url, quote=True) in page
-    assert page.count("Suggest an improvement</a>") == len(man.figures)
+    assert page.count("Suggest an improvement</a>") == len(board._grouped(man))
 
 
-def test_a_manifest_survey_mismatch_is_called_out(registry_file, project, mind):
+def test_survey_evidence_is_retained_without_visible_diagnostics(registry_file, project, mind):
     extra = context.Survey(domains={"imaging": 5})
     instances = registry.load(registry_file)
     (view,) = board.collect(
@@ -221,8 +270,9 @@ def test_a_manifest_survey_mismatch_is_called_out(registry_file, project, mind):
         context_lookup=lambda i, c, p: context.Context(survey=extra, critiques=[]),
     )
     md = board.render_markdown([view])
-    assert "The checkout holds 5 PNGs but the manifest lists 3" in md
-    assert "(PyAutoMind drafts mentioning this instance): none." in md
+    assert context.recorded(md)["demo"].survey.png == 5
+    assert "PNGs" not in md
+    assert "Open critiques" not in md
 
 
 def test_a_ci_render_carries_the_last_local_reading_forward(rich_views, registry_file, project):
@@ -235,6 +285,7 @@ def test_a_ci_render_carries_the_last_local_reading_forward(rich_views, registry
         release_lookup=lambda name: "2026.9.27.2",
         context_lookup=lambda inst, checkout, prev: context.gather(inst, None, prev, mind=False),
         previous=local,
+        captured_at=rich_views[0].captured_at,
     )
     assert board.render_markdown(ci) == local
     assert board.render_html(ci) == board.render_html(rich_views)
@@ -358,7 +409,7 @@ def test_orchestration_links_every_project_and_the_owner(views, monkeypatch):
     for view in [*views, second]:
         for fig in view.manifest.figures:
             assert (
-                f"data-copy='{html.escape(board.review_line(view.instance, fig), quote=True)}'"
+                f"data-review='{html.escape(board.review_line(view.instance, fig), quote=True)}'"
                 in page
             )
             assert (

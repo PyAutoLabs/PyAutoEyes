@@ -128,20 +128,19 @@ Instances, Figures, Behind and Critiques. The Brain board's Eyes strip reads
 that table, so keep one `| [Label](#anchor) | n |` row per count above the
 first `## ` heading.
 
-For each instance the page shows:
+The overview shows each library's figure count, rendering version and concise
+freshness against its latest PyPI release: Current, Behind, Ahead or Unknown.
+Library sections open to dataset disclosures, each with a figure dropdown. Only
+the selected PNG loads; it appears large inside the page and can be enlarged in a
+keyboard-accessible dialog. The review prompt and **Suggest an improvement** link
+always refer to the selected figure. The latter opens a pre-filled issue on the
+project repo (label `eyes-critique`); the dashboard files nothing itself.
+Open critiques remain available in a collapsed disclosure. The Markdown page
+keeps a full linked figure index, and browsers without JavaScript get raw links.
 
-- the figure count, `rendered_with`, the `generated` date, and freshness
-  against the library's latest PyPI release (`unknown` when that lookup is
-  offline);
-- the Brain Eyes conductor's survey of the local checkout: PNGs on disk per
-  domain, gaps, orphans and stale renders, plus a note when the checkout and
-  the manifest disagree on the count;
-- the open critiques, meaning the PyAutoMind drafts that mention the
-  instance's repo name or one of its `/eyes review` lines, with links;
-- the figures grouped by domain. Each figure links to its full-size raw PNG
-  (a lazy thumbnail on the HTML page) and carries the critique route: a
-  copyable `/eyes review <instance> <file>` line and a pre-filled "new issue"
-  link on the project repo (label `eyes-critique`).
+Survey details, stack versions and generation dates are no longer repeated in
+the visible gallery. Survey collection and the machine-readable state feed are
+unchanged.
 
 The survey and the critiques are local readings. Each section records them
 in an `<!-- eyes:context name=… {json} -->` marker, and a render that cannot

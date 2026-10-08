@@ -1,16 +1,12 @@
 """Build the dashboard (``dashboard.md`` + ``dashboard.html``, plus ``badge.json``
 and the ``state.json`` organ-cockpit feed) from the registry.
 
-For each instance, the board shows the figure count, the stack the figures were
-rendered with, the manifest's generated date, freshness against the library's
-latest release, the Brain Eyes conductor's survey of the local checkout
-(PNGs on disk, gaps, orphans, stale renders), the open PyAutoMind drafts that
-mention the instance, and a thumbnail grid. Every thumbnail links to the raw
-PNG in the project repo. Each figure carries its critique route: a copyable
-``Use the eyes skill. review <instance> <figure>`` line and a pre-filled "new issue" link on
-the project repo. The board embeds no image bytes, copies no files and files
-nothing itself. The head of ``dashboard.md`` is a counts table (instances,
-figures, behind, critiques) that the Brain board's Eyes strip reads.
+The overview shows figure counts, rendering versions and concise freshness.
+Library and dataset disclosures lead to a single selected figure, loaded on demand
+and enlarged within the dashboard. Its review prompt and suggestion link always
+follow the selection. Figures remain hosted in their project repositories.
+Survey evidence is preserved in the context markers and machine-readable feeds.
+The head of ``dashboard.md`` retains the counts table consumed by Brain.
 
 The output is deterministic: the pages have no wall-clock stamp, and
 ``state.json``'s ``updated`` stamp moves only when the feed's content does, so
@@ -284,8 +280,8 @@ def _critique_lines(v) -> list[str]:
     if c is None:
         return [f"**Open critiques:** {v.context.critiques_note or 'not read'}."]
     if not c:
-        return ["**Open critiques** (PyAutoMind drafts mentioning this instance): none."]
-    lines = ["**Open critiques** (PyAutoMind drafts mentioning this instance):", ""]
+        return []
+    lines = ["**Open critiques:**", ""]
     for title, path in c:
         link = _critique_link(v, path)
         lines.append(f"- [{title}]({link}) (`{path}`)" if link else f"- {title} (`{path}`)")
@@ -307,53 +303,35 @@ def render_markdown(views) -> str:
         "",
         "## Instances",
         "",
-        "| Instance | Library | Figures | Rendered with | Generated | Freshness | Survey "
-        "| Critiques | Gallery |",
-        "|----------|---------|--------:|---------------|-----------|-----------|--------"
-        "|----------:|---------|",
+        "| Library | Figures | Rendered with | Freshness |",
+        "|---------|--------:|---------------|-----------|",
     ]
     for v in views:
         inst = v.instance
-        if v.manifest:
-            count = str(len(v.manifest.figures))
-            rendered = f"`{inst.import_name} {v.rendered}`" if v.rendered else "—"
-            generated = v.manifest.generated
-        else:
-            count, rendered, generated = "—", "—", "—"
+        count = str(len(v.manifest.figures)) if v.manifest else "—"
+        rendered = f"`{v.rendered}`" if v.rendered else "—"
         out.append(
-            f"| [{inst.name}](#{inst.name}) | {inst.library} | {count} | {rendered} | "
-            f"{generated} | {v.freshness} | {survey_cell(v)} | {critiques_count(v)} | "
-            f"[{inst.gallery}]({inst.gallery_url}) |"
+            f"| [{inst.library}](#{inst.name}) | {count} | {rendered} | {compact_freshness(v)} |"
         )
-    out += [
-        "",
-        "To suggest an improvement to a figure, use its **suggest** link: it opens a "
-        f"pre-filled issue on the project repo (label `{CRITIQUE_LABEL}`). Or copy its "
-        "`Use the eyes skill. review` line into an AI assistant session. The dashboard files nothing "
-        "itself, and accepted critiques route through PyAutoMind intake to start_dev.",
-    ]
     for v in views:
         inst = v.instance
         out += [
             "",
-            f"## {inst.name}",
+            f'<a id="{_e(inst.name)}"></a>',
+            "",
+            f"## {inst.library}",
             "",
             f"<!-- eyes:instance name={inst.name} manifest={v.digest} -->",
             context_mod.marker(inst.name, v.context),
-            f"{inst.library} figures from [{inst.github}]({inst.github_url}) "
-            f"(manifest `{inst.manifest}`; re-rendered on `{inst.dispatch_event}`).",
             "",
         ]
-        out += _survey_lines(v) + [""]
         out += _critique_lines(v) + [""]
         if not v.manifest:
             out.append(f"**Manifest unavailable:** {v.error}")
             continue
-        stack = ", ".join(f"{k} {val}" for k, val in v.manifest.rendered_with.items())
-        out += [f"Rendered with {stack}; generated {v.manifest.generated}.", ""]
         for domain, figs in _grouped(v.manifest).items():
             out += [
-                f"### {inst.name} / {domain}",
+                f"### {domain}",
                 "",
                 "| Figure | Review | Suggest |",
                 "|--------|--------|---------|",
@@ -376,20 +354,28 @@ h2,h3{color:var(--accent)}h2{border-bottom:1px solid var(--line);padding-bottom:
 a{color:var(--accent)}
 .lede{color:var(--muted)}
 .tablewrap{overflow-x:auto}
-.tablewrap table{min-width:720px}
 table{border-collapse:collapse;width:100%;font-size:14px}
 th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
 .ok{color:var(--ok)}.warn{color:var(--warn)}.muted{color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.fig{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;
-display:flex;flex-direction:column;gap:6px;min-width:0}
-.fig img{width:100%;height:140px;object-fit:contain;background:#fff;border-radius:4px}
-.fig .name{font-size:13px;word-break:break-all}
-.fig button{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;text-align:left;
-background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;
-padding:4px 6px;cursor:pointer;word-break:break-all}
-.fig button.copied{border-color:var(--ok)}
-.fig a.suggest{font-size:12px}
+.dataset{margin:12px 0;min-width:0}
+.dataset>summary{cursor:pointer;padding:12px;font-weight:600}
+.figure-browser{padding:12px;min-width:0}
+.figure-browser select{display:block;width:100%;max-width:100%;min-width:0;margin:8px 0 16px;
+font:inherit;padding:10px;background:var(--card);color:var(--fg);border:1px solid var(--line)}
+.figure-image{display:block;width:100%;padding:0;border:0;background:#fff;cursor:zoom-in}
+.figure-image img{display:block;width:100%;max-height:75vh;object-fit:contain}
+.figure-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:12px 0}
+.figure-actions button,.figure-dialog button{font:inherit;padding:10px;cursor:pointer;
+background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px}
+.figure-actions button.copied{border-color:var(--ok)}
+.figure-dialog{box-sizing:border-box;width:calc(100% - 24px);max-width:1600px;
+max-height:calc(100dvh - 24px);padding:12px;background:var(--bg);color:var(--fg);
+border:1px solid var(--line);overflow:auto}
+.figure-dialog::backdrop{background:#000b}
+.figure-dialog img{display:block;width:100%;height:auto;background:white}
+.figure-dialog header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.figure-dialog h2{margin:0;font-size:1rem;border:0;overflow-wrap:anywhere}
+[hidden]{display:none!important}
 .stats{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
 .stats div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 14px}
 .stats b{display:block;font-size:20px;color:var(--accent)}.stats span{font-size:12px;color:var(--muted)}
@@ -421,6 +407,113 @@ document.querySelectorAll('button[data-copy]').forEach(function(b){
 """.replace("__MAX_PROMPT_CHARS__", str(MAX_PROMPT_CHARS))
 
 
+VIEWER_JS = """
+(function(){
+  var dialog=document.querySelector('.figure-dialog');
+  var opener;
+  var close=dialog.querySelector('button');
+  close.addEventListener('click',function(){dialog.close()});
+  // Keep keyboard focus inside the modal even when the board is embedded.
+  dialog.addEventListener('keydown',function(event){
+    if(event.key==='Tab'){event.preventDefault();close.focus()}
+  });
+  dialog.addEventListener('close',function(){
+    dialog.querySelector('img').removeAttribute('src');
+    if(opener)opener.focus();
+  });
+  document.querySelectorAll('.figure-browser').forEach(function(browser){
+    var select=browser.querySelector('select');
+    var image=browser.querySelector('.figure-image img');
+    var imageButton=browser.querySelector('.figure-image');
+    var status=browser.querySelector('[role=status]');
+    var actions=browser.querySelector('.figure-actions');
+    var copy=actions.querySelector('[data-copy]');
+    var suggest=actions.querySelector('.suggest');
+    var retry=browser.querySelector('.figure-retry');
+    var revision=0;
+    function loadSelected(){
+      var option=select.selectedOptions[0];
+      var current=++revision;
+      imageButton.hidden=true;actions.hidden=true;retry.hidden=true;
+      image.removeAttribute('src');
+      if(!option.value){status.textContent='Choose a figure to view.';return}
+      copy.dataset.copy=option.dataset.review;
+      copy.title=option.dataset.review;
+      suggest.href=option.dataset.suggest;
+      actions.hidden=false;
+      status.textContent='Loading figure…';
+      // A new image object prevents an older response from replacing a newer selection.
+      var next=new Image();
+      next.alt=option.textContent;
+      next.onload=function(){
+        if(current!==revision)return;
+        image.replaceWith(next);image=next;imageButton.hidden=false;
+        status.textContent='Click the image to enlarge.';
+      };
+      next.onerror=function(){
+        if(current!==revision)return;
+        status.textContent='Could not load this figure.';retry.hidden=false;
+      };
+      next.src=option.value;
+    }
+    select.addEventListener('change',loadSelected);
+    retry.addEventListener('click',loadSelected);
+    imageButton.addEventListener('click',function(){
+      opener=imageButton;
+      dialog.querySelector('h2').textContent=image.alt;
+      var enlarged=dialog.querySelector('img');
+      enlarged.alt=image.alt;enlarged.src=image.src;
+      dialog.showModal();
+    });
+  });
+  // One dataset viewer at a time, including across different libraries.
+  document.querySelectorAll('.dataset').forEach(function(dataset){
+    dataset.addEventListener('toggle',function(){
+      if(dataset.open)document.querySelectorAll('.dataset').forEach(function(other){
+        if(other!==dataset)other.open=false;
+      });
+    });
+  });
+})();
+"""
+
+
+def compact_freshness(view) -> str:
+    """Presentation only: retain detailed evidence in the state feed."""
+    return {"current": "Current", "behind": "Behind", "ahead": "Ahead"}.get(
+        view.freshness.split()[0], "Unknown"
+    )
+
+
+def _figure_browser(inst, man, domain, figs, identifier):
+    options = ["<option value=''>Choose a figure…</option>"]
+    fallback = []
+    for fig in figs:
+        url = _e(inst.image_url(fig.file))
+        label = _e(_figure_label(fig))
+        options.append(
+            f"<option value='{url}' data-review='{_e(review_line(inst, fig))}' "
+            f"data-suggest='{_e(issue_url(inst, man, fig))}'>{label}</option>"
+        )
+        fallback.append(f"<li><a href='{url}'>{label}</a></li>")
+    return (
+        f"<details class='dataset'><summary>{_e(domain)}</summary>"
+        "<div class='figure-browser'>"
+        f"<label for='{identifier}'>Figure</label>"
+        f"<select id='{identifier}'>{''.join(options)}</select>"
+        "<p role='status' aria-live='polite'>Choose a figure to view.</p>"
+        "<button class='figure-retry' type='button' hidden>Retry loading</button>"
+        "<button class='figure-image' type='button' aria-label='Enlarge figure' hidden>"
+        "<img alt=''></button>"
+        "<div class='figure-actions' hidden>"
+        "<button type='button' data-copy=''>Copy review prompt</button>"
+        "<a class='suggest' target='_blank' rel='noopener'>Suggest an improvement</a>"
+        "</div>"
+        f"<noscript><p>Figure links (JavaScript is disabled):</p><ul>{''.join(fallback)}</ul>"
+        "</noscript></div></details>"
+    )
+
+
 def _e(value) -> str:
     return html.escape(str(value), quote=True)
 
@@ -440,15 +533,14 @@ def _html_survey(v) -> str:
 def _html_critiques(v) -> str:
     c = v.context.critiques
     if not c:
-        return f"<p class='muted'>{_md_inline(_critique_lines(v)[0])}</p>"
+        return ""
     items = []
     for title, path in c:
         link = _critique_link(v, path)
         name = f"<a href='{_e(link)}'>{_e(title)}</a>" if link else _e(title)
-        items.append(f"<li>{name} <code>{_e(path)}</code></li>")
+        items.append(f"<li>{name}</li>")
     return (
-        "<p class='muted'><b>Open critiques</b> (PyAutoMind drafts mentioning this instance):</p>"
-        f"<ul>{''.join(items)}</ul>"
+        f"<details><summary>Open critiques ({len(c)})</summary><ul>{''.join(items)}</ul></details>"
     )
 
 
@@ -485,48 +577,24 @@ def render_html(views) -> str:
     for v in views:
         inst = v.instance
         count = str(len(v.manifest.figures)) if v.manifest else "—"
-        rendered = f"{inst.import_name} {v.rendered}" if v.rendered else "—"
-        generated = v.manifest.generated if v.manifest else "—"
+        rendered = v.rendered or "—"
         rows.append(
-            f"<tr><td><a href='#{_e(inst.name)}'>{_e(inst.name)}</a></td><td>{_e(inst.library)}</td>"
-            f"<td>{count}</td><td><code>{_e(rendered)}</code></td><td>{_e(generated)}</td>"
-            f"<td class='{_freshness_class(v.freshness)}'>{_e(v.freshness)}</td>"
-            f"<td>{_e(survey_cell(v))}</td><td>{_e(critiques_count(v))}</td>"
-            f"<td><a href='{_e(inst.gallery_url)}'>{_e(inst.gallery)}</a></td></tr>"
+            f"<tr><td><a href='#{_e(inst.name)}'>{_e(inst.library)}</a></td>"
+            f"<td>{count}</td><td><code>{_e(rendered)}</code></td>"
+            f"<td class='{_freshness_class(v.freshness)}'>{compact_freshness(v)}</td></tr>"
         )
     sections = []
-    for v in views:
+    for index, v in enumerate(views):
         inst = v.instance
-        head = (
-            f"<h2 id='{_e(inst.name)}'>{_e(inst.name)} · {_e(inst.library)}</h2>"
-            f"<p class='lede'>Figures from <a href='{_e(inst.github_url)}'>{_e(inst.github)}</a>, "
-            f"manifest <code>{_e(inst.manifest)}</code>, re-rendered on "
-            f"<code>{_e(inst.dispatch_event)}</code>.</p>" + _html_survey(v) + _html_critiques(v)
-        )
+        head = f"<h2 id='{_e(inst.name)}'>{_e(inst.library)}</h2>" + _html_critiques(v)
         if not v.manifest:
             sections.append(head + f"<p class='warn'>Manifest unavailable: {_e(v.error)}</p>")
             continue
-        stack = ", ".join(f"{k} {val}" for k, val in v.manifest.rendered_with.items())
-        body = [
-            head,
-            f"<p class='muted'>Rendered with {_e(stack)}; generated {_e(v.manifest.generated)}.</p>",
-        ]
-        for domain, figs in _grouped(v.manifest).items():
-            cards = []
-            for fig in figs:
-                url = inst.image_url(fig.file)
-                line = review_line(inst, fig)
-                cards.append(
-                    "<div class='fig'>"
-                    f"<a href='{_e(url)}' target='_blank' rel='noopener'>"
-                    f"<img loading='lazy' src='{_e(url)}' alt='{_e(fig.file)}'></a>"
-                    f"<span class='name'>{_e(_figure_label(fig))}</span>"
-                    f"<button type='button' data-copy='{_e(line)}' title='Copy for an AI assistant'>{_e(line)}</button>"
-                    f"<a class='suggest' href='{_e(issue_url(inst, v.manifest, fig))}' "
-                    "target='_blank' rel='noopener'>Suggest an improvement</a>"
-                    "</div>"
-                )
-            body.append(f"<h3>{_e(domain)}</h3><div class='grid'>{''.join(cards)}</div>")
+        body = [head]
+        for group, (domain, figs) in enumerate(_grouped(v.manifest).items()):
+            body.append(_figure_browser(inst, v.manifest, domain, figs, f"figure-{index}-{group}"))
+        if not v.manifest.figures:
+            body.append("<p>No figures available.</p>")
         sections.append("".join(body))
     return shared.section_layout(
         "<!doctype html>\n<html lang='en'><head><meta charset='utf-8'>"
@@ -553,11 +621,15 @@ def render_html(views) -> str:
         + panel
         + "<main>"
         "<h2 id='overview'>Projects</h2>"
-        "<div class='tablewrap'><table><thead><tr><th>Instance</th><th>Library</th><th>Figures</th>"
-        "<th>Rendered with</th><th>Generated</th><th>Freshness</th><th>Survey</th>"
-        "<th>Critiques</th><th>Gallery</th></tr></thead>"
+        "<div class='tablewrap' role='region' aria-label='Project overview' tabindex='0'>"
+        "<table><thead><tr><th>Library</th><th>Figures</th>"
+        "<th>Rendered with</th><th>Freshness</th></tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table></div>"
-        f"{''.join(sections)}</main><script>{shared.JS}{JS}</script></body></html>\n"
+        f"{''.join(sections)}</main>"
+        "<dialog class='figure-dialog' aria-labelledby='enlarged-title'>"
+        "<header><h2 id='enlarged-title'>Figure</h2>"
+        "<button type='button' autofocus>Close</button></header><img alt=''></dialog>"
+        f"<script>{shared.JS}{JS}{VIEWER_JS}</script></body></html>\n"
     )
 
 

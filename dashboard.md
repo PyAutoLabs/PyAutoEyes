@@ -13,32 +13,27 @@
 
 ## Instances
 
-| Instance | Library | Figures | Rendered with | Generated | Freshness | Survey | Critiques | Gallery |
-|----------|---------|--------:|---------------|-----------|-----------|--------|----------:|---------|
-| [lens](#lens) | PyAutoLens | 40 | `autolens 2026.8.17.1` | 2026-09-28 | behind (rendered 2026.8.17.1, released 2026.10.7.1) | 40 png · 0 gaps · 0 orphans · 0 stale | 3 | [GALLERY.md](https://github.com/PyAutoLabs/autolens_visualization/blob/main/GALLERY.md) |
-| [galaxy](#galaxy) | PyAutoGalaxy | 41 | `autogalaxy 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.7.1) | 41 png · 0 gaps · 0 orphans · 0 stale | 2 | [GALLERY.md](https://github.com/PyAutoLabs/autogalaxy_visualization/blob/main/GALLERY.md) |
-| [fit](#fit) | PyAutoFit | 49 | `autofit 2026.9.27.2` | 2026-09-29 | behind (rendered 2026.9.27.2, released 2026.10.7.1) | 49 png · 0 gaps · 0 orphans · 0 stale | 4 | [GALLERY.md](https://github.com/PyAutoLabs/autofit_visualization/blob/main/GALLERY.md) |
-| [cti](#cti) | PyAutoCTI | 135 | `autocti 2024.11.13.2` | 2026-09-29 | current (2024.11.13.2) | 135 png · 0 gaps · 0 orphans · 0 stale | 1 | [GALLERY.md](https://github.com/PyAutoLabs/autocti_visualization/blob/main/GALLERY.md) |
+| Library | Figures | Rendered with | Freshness |
+|---------|--------:|---------------|-----------|
+| [PyAutoLens](#lens) | 40 | `2026.8.17.1` | Behind |
+| [PyAutoGalaxy](#galaxy) | 41 | `2026.9.27.2` | Behind |
+| [PyAutoFit](#fit) | 49 | `2026.9.27.2` | Behind |
+| [PyAutoCTI](#cti) | 135 | `2024.11.13.2` | Current |
 
-To suggest an improvement to a figure, use its **suggest** link: it opens a pre-filled issue on the project repo (label `eyes-critique`). Or copy its `Use the eyes skill. review` line into an AI assistant session. The dashboard files nothing itself, and accepted critiques route through PyAutoMind intake to start_dev.
+<a id="lens"></a>
 
-## lens
+## PyAutoLens
 
 <!-- eyes:instance name=lens manifest=d8dd28466586998d -->
 <!-- eyes:context name=lens {"critiques":[["autolens_visualization: group and cluster galleries (point-source + extended)","draft/feature/pyautoeyes/group_cluster_gallery.md"],["autolens_visualization: multi-galaxy gallery \u2014 producer and dataset","draft/feature/pyautoeyes/multi_galaxy_gallery.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"imaging":22,"interferometer":18},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
-PyAutoLens figures from [PyAutoLabs/autolens_visualization](https://github.com/PyAutoLabs/autolens_visualization) (manifest `gallery/viz_manifest.yaml`; re-rendered on `pyautolens-release`).
 
-**Survey** (Brain Eyes conductor, local checkout): 40 PNGs on disk (imaging 22, interferometer 18); gaps none; orphans none; stale renders none.
-
-**Open critiques** (PyAutoMind drafts mentioning this instance):
+**Open critiques:**
 
 - [autolens_visualization: group and cluster galleries (point-source + extended)](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautoeyes/group_cluster_gallery.md) (`draft/feature/pyautoeyes/group_cluster_gallery.md`)
 - [autolens_visualization: multi-galaxy gallery — producer and dataset](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautoeyes/multi_galaxy_gallery.md) (`draft/feature/pyautoeyes/multi_galaxy_gallery.md`)
 - [Hands release.yml fires the visualization re-render dispatches](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md) (`draft/feature/pyautohands/release_fires_visualization_dispatch.md`)
 
-Rendered with autolens 2026.8.17.1, autogalaxy 2026.8.17.1, autoarray 2026.8.17.1, autofit 2026.8.17.1; generated 2026-09-28.
-
-### lens / imaging
+### imaging
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -65,7 +60,7 @@ Rendered with autolens 2026.8.17.1, autogalaxy 2026.8.17.1, autoarray 2026.8.17.
 | [parametric/mappings_1.png](https://raw.githubusercontent.com/PyAutoLabs/autolens_visualization/main/scripts/imaging/images/visualization/parametric/mappings_1.png) | `Use the eyes skill. review lens scripts/imaging/images/visualization/parametric/mappings_1.png` | [suggest](https://github.com/PyAutoLabs/autolens_visualization/issues/new?title=figure%3A%20imaging%2Fparametric%2Fmappings_1.png&body=Figure%3A%20%60scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fmappings_1.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautolens_visualization%2Fmain%2Fscripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fmappings_1.png%0AInstance%3A%20lens%20%28PyAutoLabs%2Fautolens_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-28%2C%20rendered%20with%20autolens%202026.8.17.1%29%0AProducer%3A%20%60scripts%2Fimaging%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20lens%20scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fmappings_1.png%20--%3E&labels=eyes-critique) |
 | [parametric/tracer.png](https://raw.githubusercontent.com/PyAutoLabs/autolens_visualization/main/scripts/imaging/images/visualization/parametric/tracer.png) | `Use the eyes skill. review lens scripts/imaging/images/visualization/parametric/tracer.png` | [suggest](https://github.com/PyAutoLabs/autolens_visualization/issues/new?title=figure%3A%20imaging%2Fparametric%2Ftracer.png&body=Figure%3A%20%60scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Ftracer.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautolens_visualization%2Fmain%2Fscripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Ftracer.png%0AInstance%3A%20lens%20%28PyAutoLabs%2Fautolens_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-28%2C%20rendered%20with%20autolens%202026.8.17.1%29%0AProducer%3A%20%60scripts%2Fimaging%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20lens%20scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Ftracer.png%20--%3E&labels=eyes-critique) |
 
-### lens / interferometer
+### interferometer
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -89,22 +84,19 @@ Rendered with autolens 2026.8.17.1, autogalaxy 2026.8.17.1, autoarray 2026.8.17.
 | [parametric/tracer.png](https://raw.githubusercontent.com/PyAutoLabs/autolens_visualization/main/scripts/interferometer/images/visualization/parametric/tracer.png) | `Use the eyes skill. review lens scripts/interferometer/images/visualization/parametric/tracer.png` | [suggest](https://github.com/PyAutoLabs/autolens_visualization/issues/new?title=figure%3A%20interferometer%2Fparametric%2Ftracer.png&body=Figure%3A%20%60scripts%2Finterferometer%2Fimages%2Fvisualization%2Fparametric%2Ftracer.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautolens_visualization%2Fmain%2Fscripts%2Finterferometer%2Fimages%2Fvisualization%2Fparametric%2Ftracer.png%0AInstance%3A%20lens%20%28PyAutoLabs%2Fautolens_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-28%2C%20rendered%20with%20autolens%202026.8.17.1%29%0AProducer%3A%20%60scripts%2Finterferometer%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20lens%20scripts%2Finterferometer%2Fimages%2Fvisualization%2Fparametric%2Ftracer.png%20--%3E&labels=eyes-critique) |
 
 
-## galaxy
+<a id="galaxy"></a>
+
+## PyAutoGalaxy
 
 <!-- eyes:instance name=galaxy manifest=6277ccc6f97226ce -->
 <!-- eyes:context name=galaxy {"critiques":[["`PlotterEllipse.fit_ellipse` writes every variant to `ellipse_fit.png`, so only the last survives","draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ellipse":17,"imaging":11,"interferometer":13},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
-PyAutoGalaxy figures from [PyAutoLabs/autogalaxy_visualization](https://github.com/PyAutoLabs/autogalaxy_visualization) (manifest `gallery/viz_manifest.yaml`; re-rendered on `pyautogalaxy-release`).
 
-**Survey** (Brain Eyes conductor, local checkout): 41 PNGs on disk (ellipse 17, imaging 11, interferometer 13); gaps none; orphans none; stale renders none.
-
-**Open critiques** (PyAutoMind drafts mentioning this instance):
+**Open critiques:**
 
 - [`PlotterEllipse.fit_ellipse` writes every variant to `ellipse_fit.png`, so only the last survives](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md) (`draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md`)
 - [Hands release.yml fires the visualization re-render dispatches](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md) (`draft/feature/pyautohands/release_fires_visualization_dispatch.md`)
 
-Rendered with autogalaxy 2026.9.27.2, autoarray 2026.9.27.2, autofit 2026.9.27.2; generated 2026-09-29.
-
-### galaxy / ellipse
+### ellipse
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -126,7 +118,7 @@ Rendered with autogalaxy 2026.9.27.2, autoarray 2026.9.27.2, autofit 2026.9.27.2
 | [plain/ellipse_residuals.png](https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/scripts/ellipse/images/visualization/plain/ellipse_residuals.png) | `Use the eyes skill. review galaxy scripts/ellipse/images/visualization/plain/ellipse_residuals.png` | [suggest](https://github.com/PyAutoLabs/autogalaxy_visualization/issues/new?title=figure%3A%20ellipse%2Fplain%2Fellipse_residuals.png&body=Figure%3A%20%60scripts%2Fellipse%2Fimages%2Fvisualization%2Fplain%2Fellipse_residuals.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautogalaxy_visualization%2Fmain%2Fscripts%2Fellipse%2Fimages%2Fvisualization%2Fplain%2Fellipse_residuals.png%0AInstance%3A%20galaxy%20%28PyAutoLabs%2Fautogalaxy_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autogalaxy%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fellipse%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20galaxy%20scripts%2Fellipse%2Fimages%2Fvisualization%2Fplain%2Fellipse_residuals.png%20--%3E&labels=eyes-critique) |
 | [plain/fit_ellipse.png](https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/scripts/ellipse/images/visualization/plain/fit_ellipse.png) | `Use the eyes skill. review galaxy scripts/ellipse/images/visualization/plain/fit_ellipse.png` | [suggest](https://github.com/PyAutoLabs/autogalaxy_visualization/issues/new?title=figure%3A%20ellipse%2Fplain%2Ffit_ellipse.png&body=Figure%3A%20%60scripts%2Fellipse%2Fimages%2Fvisualization%2Fplain%2Ffit_ellipse.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautogalaxy_visualization%2Fmain%2Fscripts%2Fellipse%2Fimages%2Fvisualization%2Fplain%2Ffit_ellipse.png%0AInstance%3A%20galaxy%20%28PyAutoLabs%2Fautogalaxy_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autogalaxy%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fellipse%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20galaxy%20scripts%2Fellipse%2Fimages%2Fvisualization%2Fplain%2Ffit_ellipse.png%20--%3E&labels=eyes-critique) |
 
-### galaxy / imaging
+### imaging
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -142,7 +134,7 @@ Rendered with autogalaxy 2026.9.27.2, autoarray 2026.9.27.2, autofit 2026.9.27.2
 | [parametric/galaxy_images.png](https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/scripts/imaging/images/visualization/parametric/galaxy_images.png) | `Use the eyes skill. review galaxy scripts/imaging/images/visualization/parametric/galaxy_images.png` | [suggest](https://github.com/PyAutoLabs/autogalaxy_visualization/issues/new?title=figure%3A%20imaging%2Fparametric%2Fgalaxy_images.png&body=Figure%3A%20%60scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fgalaxy_images.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautogalaxy_visualization%2Fmain%2Fscripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fgalaxy_images.png%0AInstance%3A%20galaxy%20%28PyAutoLabs%2Fautogalaxy_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autogalaxy%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fimaging%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20galaxy%20scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fgalaxy_images.png%20--%3E&labels=eyes-critique) |
 | [parametric/of_galaxy_0.png](https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/scripts/imaging/images/visualization/parametric/of_galaxy_0.png) | `Use the eyes skill. review galaxy scripts/imaging/images/visualization/parametric/of_galaxy_0.png` | [suggest](https://github.com/PyAutoLabs/autogalaxy_visualization/issues/new?title=figure%3A%20imaging%2Fparametric%2Fof_galaxy_0.png&body=Figure%3A%20%60scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fof_galaxy_0.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautogalaxy_visualization%2Fmain%2Fscripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fof_galaxy_0.png%0AInstance%3A%20galaxy%20%28PyAutoLabs%2Fautogalaxy_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autogalaxy%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fimaging%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20galaxy%20scripts%2Fimaging%2Fimages%2Fvisualization%2Fparametric%2Fof_galaxy_0.png%20--%3E&labels=eyes-critique) |
 
-### galaxy / interferometer
+### interferometer
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -161,24 +153,21 @@ Rendered with autogalaxy 2026.9.27.2, autoarray 2026.9.27.2, autofit 2026.9.27.2
 | [parametric/galaxy_images.png](https://raw.githubusercontent.com/PyAutoLabs/autogalaxy_visualization/main/scripts/interferometer/images/visualization/parametric/galaxy_images.png) | `Use the eyes skill. review galaxy scripts/interferometer/images/visualization/parametric/galaxy_images.png` | [suggest](https://github.com/PyAutoLabs/autogalaxy_visualization/issues/new?title=figure%3A%20interferometer%2Fparametric%2Fgalaxy_images.png&body=Figure%3A%20%60scripts%2Finterferometer%2Fimages%2Fvisualization%2Fparametric%2Fgalaxy_images.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautogalaxy_visualization%2Fmain%2Fscripts%2Finterferometer%2Fimages%2Fvisualization%2Fparametric%2Fgalaxy_images.png%0AInstance%3A%20galaxy%20%28PyAutoLabs%2Fautogalaxy_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autogalaxy%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Finterferometer%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20galaxy%20scripts%2Finterferometer%2Fimages%2Fvisualization%2Fparametric%2Fgalaxy_images.png%20--%3E&labels=eyes-critique) |
 
 
-## fit
+<a id="fit"></a>
+
+## PyAutoFit
 
 <!-- eyes:instance name=fit manifest=78e01182ec98d865 -->
 <!-- eyes:context name=fit {"critiques":[["autofit_visualization \u2014 seed every sampler so re-renders are byte-stable","draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md"],["Search extensibility epic: research report and phased plan","draft/research/autofit/search_extensibility_epic_report.md"],["03 \u2014 How non-linear searches are documented across PyAuto, and how that must scale","draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md"],["04 \u2014 Inference and profiling infrastructure survey for `autofit_inference` and `autofit_profiling`","draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ep":19,"model":12,"samples":15,"visualizer":3},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
-PyAutoFit figures from [PyAutoLabs/autofit_visualization](https://github.com/PyAutoLabs/autofit_visualization) (manifest `gallery/viz_manifest.yaml`; re-rendered on `pyautofit-release`).
 
-**Survey** (Brain Eyes conductor, local checkout): 49 PNGs on disk (ep 19, model 12, samples 15, visualizer 3); gaps none; orphans none; stale renders none.
-
-**Open critiques** (PyAutoMind drafts mentioning this instance):
+**Open critiques:**
 
 - [autofit_visualization — seed every sampler so re-renders are byte-stable](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md) (`draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md`)
 - [Search extensibility epic: research report and phased plan](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_report.md) (`draft/research/autofit/search_extensibility_epic_report.md`)
 - [03 — How non-linear searches are documented across PyAuto, and how that must scale](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md) (`draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md`)
 - [04 — Inference and profiling infrastructure survey for `autofit_inference` and `autofit_profiling`](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md) (`draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md`)
 
-Rendered with autofit 2026.9.27.2; generated 2026-09-29.
-
-### fit / ep
+### ep
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -202,7 +191,7 @@ Rendered with autofit 2026.9.27.2; generated 2026-09-29.
 | [graph_state.png](https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/scripts/ep/images/visualization/graph_state.png) | `Use the eyes skill. review fit scripts/ep/images/visualization/graph_state.png` | [suggest](https://github.com/PyAutoLabs/autofit_visualization/issues/new?title=figure%3A%20ep%2Fgraph_state.png&body=Figure%3A%20%60scripts%2Fep%2Fimages%2Fvisualization%2Fgraph_state.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautofit_visualization%2Fmain%2Fscripts%2Fep%2Fimages%2Fvisualization%2Fgraph_state.png%0AInstance%3A%20fit%20%28PyAutoLabs%2Fautofit_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autofit%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fep%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20fit%20scripts%2Fep%2Fimages%2Fvisualization%2Fgraph_state.png%20--%3E&labels=eyes-critique) |
 | [mean_field_evolution.png](https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/scripts/ep/images/visualization/mean_field_evolution.png) | `Use the eyes skill. review fit scripts/ep/images/visualization/mean_field_evolution.png` | [suggest](https://github.com/PyAutoLabs/autofit_visualization/issues/new?title=figure%3A%20ep%2Fmean_field_evolution.png&body=Figure%3A%20%60scripts%2Fep%2Fimages%2Fvisualization%2Fmean_field_evolution.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautofit_visualization%2Fmain%2Fscripts%2Fep%2Fimages%2Fvisualization%2Fmean_field_evolution.png%0AInstance%3A%20fit%20%28PyAutoLabs%2Fautofit_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autofit%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fep%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20fit%20scripts%2Fep%2Fimages%2Fvisualization%2Fmean_field_evolution.png%20--%3E&labels=eyes-critique) |
 
-### fit / model
+### model
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -219,7 +208,7 @@ Rendered with autofit 2026.9.27.2; generated 2026-09-29.
 | [linked/model_names_uncollapsed.png](https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/scripts/model/images/visualization/linked/model_names_uncollapsed.png) | `Use the eyes skill. review fit scripts/model/images/visualization/linked/model_names_uncollapsed.png` | [suggest](https://github.com/PyAutoLabs/autofit_visualization/issues/new?title=figure%3A%20model%2Flinked%2Fmodel_names_uncollapsed.png&body=Figure%3A%20%60scripts%2Fmodel%2Fimages%2Fvisualization%2Flinked%2Fmodel_names_uncollapsed.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautofit_visualization%2Fmain%2Fscripts%2Fmodel%2Fimages%2Fvisualization%2Flinked%2Fmodel_names_uncollapsed.png%0AInstance%3A%20fit%20%28PyAutoLabs%2Fautofit_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autofit%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fmodel%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20fit%20scripts%2Fmodel%2Fimages%2Fvisualization%2Flinked%2Fmodel_names_uncollapsed.png%20--%3E&labels=eyes-critique) |
 | [linked/model_priors.png](https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/scripts/model/images/visualization/linked/model_priors.png) | `Use the eyes skill. review fit scripts/model/images/visualization/linked/model_priors.png` | [suggest](https://github.com/PyAutoLabs/autofit_visualization/issues/new?title=figure%3A%20model%2Flinked%2Fmodel_priors.png&body=Figure%3A%20%60scripts%2Fmodel%2Fimages%2Fvisualization%2Flinked%2Fmodel_priors.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautofit_visualization%2Fmain%2Fscripts%2Fmodel%2Fimages%2Fvisualization%2Flinked%2Fmodel_priors.png%0AInstance%3A%20fit%20%28PyAutoLabs%2Fautofit_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autofit%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fmodel%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20fit%20scripts%2Fmodel%2Fimages%2Fvisualization%2Flinked%2Fmodel_priors.png%20--%3E&labels=eyes-critique) |
 
-### fit / samples
+### samples
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -239,7 +228,7 @@ Rendered with autofit 2026.9.27.2; generated 2026-09-29.
 | [zeus/corner_anesthetic.png](https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/scripts/samples/images/visualization/zeus/corner_anesthetic.png) | `Use the eyes skill. review fit scripts/samples/images/visualization/zeus/corner_anesthetic.png` | [suggest](https://github.com/PyAutoLabs/autofit_visualization/issues/new?title=figure%3A%20samples%2Fzeus%2Fcorner_anesthetic.png&body=Figure%3A%20%60scripts%2Fsamples%2Fimages%2Fvisualization%2Fzeus%2Fcorner_anesthetic.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautofit_visualization%2Fmain%2Fscripts%2Fsamples%2Fimages%2Fvisualization%2Fzeus%2Fcorner_anesthetic.png%0AInstance%3A%20fit%20%28PyAutoLabs%2Fautofit_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autofit%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fsamples%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20fit%20scripts%2Fsamples%2Fimages%2Fvisualization%2Fzeus%2Fcorner_anesthetic.png%20--%3E&labels=eyes-critique) |
 | [zeus/corner_cornerpy.png](https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/scripts/samples/images/visualization/zeus/corner_cornerpy.png) | `Use the eyes skill. review fit scripts/samples/images/visualization/zeus/corner_cornerpy.png` | [suggest](https://github.com/PyAutoLabs/autofit_visualization/issues/new?title=figure%3A%20samples%2Fzeus%2Fcorner_cornerpy.png&body=Figure%3A%20%60scripts%2Fsamples%2Fimages%2Fvisualization%2Fzeus%2Fcorner_cornerpy.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautofit_visualization%2Fmain%2Fscripts%2Fsamples%2Fimages%2Fvisualization%2Fzeus%2Fcorner_cornerpy.png%0AInstance%3A%20fit%20%28PyAutoLabs%2Fautofit_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autofit%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fsamples%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20fit%20scripts%2Fsamples%2Fimages%2Fvisualization%2Fzeus%2Fcorner_cornerpy.png%20--%3E&labels=eyes-critique) |
 
-### fit / visualizer
+### visualizer
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -248,21 +237,18 @@ Rendered with autofit 2026.9.27.2; generated 2026-09-29.
 | [model_fit.png](https://raw.githubusercontent.com/PyAutoLabs/autofit_visualization/main/scripts/visualizer/images/visualization/model_fit.png) | `Use the eyes skill. review fit scripts/visualizer/images/visualization/model_fit.png` | [suggest](https://github.com/PyAutoLabs/autofit_visualization/issues/new?title=figure%3A%20visualizer%2Fmodel_fit.png&body=Figure%3A%20%60scripts%2Fvisualizer%2Fimages%2Fvisualization%2Fmodel_fit.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautofit_visualization%2Fmain%2Fscripts%2Fvisualizer%2Fimages%2Fvisualization%2Fmodel_fit.png%0AInstance%3A%20fit%20%28PyAutoLabs%2Fautofit_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autofit%202026.9.27.2%29%0AProducer%3A%20%60scripts%2Fvisualizer%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20fit%20scripts%2Fvisualizer%2Fimages%2Fvisualization%2Fmodel_fit.png%20--%3E&labels=eyes-critique) |
 
 
-## cti
+<a id="cti"></a>
+
+## PyAutoCTI
 
 <!-- eyes:instance name=cti manifest=436b6cb010597464 -->
 <!-- eyes:context name=cti {"critiques":[["autocti_visualization render.yml fails on the released stack until PyAutoCTI releases","draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"dataset_1d":41,"imaging_ci":94},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
-PyAutoCTI figures from [PyAutoLabs/autocti_visualization](https://github.com/PyAutoLabs/autocti_visualization) (manifest `gallery/viz_manifest.yaml`; re-rendered on `pyautocti-release`).
 
-**Survey** (Brain Eyes conductor, local checkout): 135 PNGs on disk (dataset_1d 41, imaging_ci 94); gaps none; orphans none; stale renders none.
-
-**Open critiques** (PyAutoMind drafts mentioning this instance):
+**Open critiques:**
 
 - [autocti_visualization render.yml fails on the released stack until PyAutoCTI releases](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md) (`draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md`)
 
-Rendered with autocti 2024.11.13.2, autoarray 2026.8.17.1, autofit 2026.8.17.1; generated 2026-09-29.
-
-### cti / dataset_1d
+### dataset_1d
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
@@ -308,7 +294,7 @@ Rendered with autocti 2024.11.13.2, autoarray 2026.8.17.1, autofit 2026.8.17.1; 
 | [norm_5000/fit_dataset/subplot_fit_eper.png](https://raw.githubusercontent.com/PyAutoLabs/autocti_visualization/main/scripts/dataset_1d/images/visualization/norm_5000/fit_dataset/subplot_fit_eper.png) | `Use the eyes skill. review cti scripts/dataset_1d/images/visualization/norm_5000/fit_dataset/subplot_fit_eper.png` | [suggest](https://github.com/PyAutoLabs/autocti_visualization/issues/new?title=figure%3A%20dataset_1d%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_eper.png&body=Figure%3A%20%60scripts%2Fdataset_1d%2Fimages%2Fvisualization%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_eper.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautocti_visualization%2Fmain%2Fscripts%2Fdataset_1d%2Fimages%2Fvisualization%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_eper.png%0AInstance%3A%20cti%20%28PyAutoLabs%2Fautocti_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autocti%202024.11.13.2%29%0AProducer%3A%20%60scripts%2Fdataset_1d%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20cti%20scripts%2Fdataset_1d%2Fimages%2Fvisualization%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_eper.png%20--%3E&labels=eyes-critique) |
 | [norm_5000/fit_dataset/subplot_fit_fpr.png](https://raw.githubusercontent.com/PyAutoLabs/autocti_visualization/main/scripts/dataset_1d/images/visualization/norm_5000/fit_dataset/subplot_fit_fpr.png) | `Use the eyes skill. review cti scripts/dataset_1d/images/visualization/norm_5000/fit_dataset/subplot_fit_fpr.png` | [suggest](https://github.com/PyAutoLabs/autocti_visualization/issues/new?title=figure%3A%20dataset_1d%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_fpr.png&body=Figure%3A%20%60scripts%2Fdataset_1d%2Fimages%2Fvisualization%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_fpr.png%60%0ARaw%20PNG%3A%20https%3A%2F%2Fraw.githubusercontent.com%2FPyAutoLabs%2Fautocti_visualization%2Fmain%2Fscripts%2Fdataset_1d%2Fimages%2Fvisualization%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_fpr.png%0AInstance%3A%20cti%20%28PyAutoLabs%2Fautocti_visualization%2C%20manifest%20%60gallery%2Fviz_manifest.yaml%60%2C%20generated%202026-09-29%2C%20rendered%20with%20autocti%202024.11.13.2%29%0AProducer%3A%20%60scripts%2Fdataset_1d%2Fvisualization.py%60%0A%0ASuggested%20improvement%3A%0A%0A%0A%3C%21--%20Say%20what%20should%20change%20and%20why.%20A%20maintainer%20turns%20an%20accepted%20critique%20into%20a%20PyAutoMind%20intake%20prompt%20and%20routes%20it%20through%20start_dev%3B%20to%20review%20it%20with%20an%20AI%20assistant%2C%20copy%3A%20Use%20the%20eyes%20skill.%20review%20cti%20scripts%2Fdataset_1d%2Fimages%2Fvisualization%2Fnorm_5000%2Ffit_dataset%2Fsubplot_fit_fpr.png%20--%3E&labels=eyes-critique) |
 
-### cti / imaging_ci
+### imaging_ci
 
 | Figure | Review | Suggest |
 |--------|--------|---------|
