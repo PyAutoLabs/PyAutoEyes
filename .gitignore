@@ -13,3 +13,6 @@ _site/
 
 # PyAutoMind checkout the refresh workflow reads critiques from
 _mind/
+
+# Local browser validation evidence
+.scratch/

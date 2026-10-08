@@ -53,7 +53,7 @@ under the Brain board.
 
 - **Renders nothing.** Figures are rendered in the project repos by their own
   harness, on library release.
-- **Copies no figures.** Thumbnails are links to the raw PNGs, and the Pages
+- **Copies no figures.** The selected image loads directly from the project’s raw PNG URL, and the Pages
   site publishes `dashboard.html` alone.
 - **Never judges.** Critique is the Brain Eyes conductor's
   (`PyAutoBrain/agents/conductors/eyes/`), per instance via this registry.

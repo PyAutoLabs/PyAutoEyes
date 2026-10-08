@@ -122,4 +122,5 @@ def test_board_runs_the_conductor_survey_on_the_checkout(
     reg, o = base(registry_file, out)
     assert run(*reg, "board", "--offline", "--from", f"demo={project}", *o) == 0
     assert log.read_text().split() == ["eyes", "--json", "survey", str(project)]
-    assert "3 png · 1 gaps · 0 orphans · 1 stale" in (out / "dashboard.md").read_text()
+    survey = context.recorded((out / "dashboard.md").read_text())["demo"].survey
+    assert survey.png == 3 and len(survey.gaps) == 1 and len(survey.stale) == 1

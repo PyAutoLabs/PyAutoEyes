@@ -2,7 +2,7 @@
 
 **The Eyes of the PyAuto organism: where the human checks in on what every
 library's figures look like.** Dashboard: **[dashboard.md](dashboard.md)**, or
-with thumbnails and one-tap copy on Pages at
+with a library → dataset → figure browser and copyable review prompts on Pages at
 <https://pyautolabs.github.io/PyAutoEyes/>.
 
 ## Two layers
@@ -40,9 +40,10 @@ line into an AI assistant session. The dashboard files nothing itself, and an
 accepted critique becomes a PyAutoMind intake prompt that goes through
 start_dev.
 
-For each instance the dashboard also shows the Brain Eyes conductor's survey
-of the local checkout (PNGs on disk, never-rendered gaps, orphan image trees,
-stale renders), and the open PyAutoMind drafts that mention the instance.
+Expand a library, then a dataset, and choose one figure to inspect. Click the
+image to enlarge it without leaving the dashboard. Open critiques are tucked
+into a separate disclosure. Local survey evidence stays in the context markers
+and state feed rather than adding text to the gallery.
 
 Beside the page on Pages sit `badge.json` (the one-line headline) and
 `state.json`, the organ-cockpit feed: one status, one headline and the rows
@@ -58,7 +59,7 @@ that ask something of a human, in the shared contract
 | `eyes/` | `registry.py`, `manifest.py`, `context.py` (survey + critiques), `board.py`, `cli.py` |
 | `bin/pyauto-eyes` | `board`, `check`, `survey` |
 | `dashboard.md` / `dashboard.html` / `badge.json` / `state.json` | generated, never hand-edited |
-| `tests/` | hermetic tests (no network) |
+| `tests/` | hermetic pytest tests and an optional real-browser check |
 | `.github/workflows/` | `lint.yml`, `pages_dashboard.yml`, `dashboard_refresh.yml` |
 
 Requires Python 3.11+ and PyYAML. There is nothing to install: `bin/pyauto-eyes`
@@ -75,3 +76,17 @@ repo, at `_brain/`, or selected with `PYAUTO_BRAIN`. The banner, logo, responsiv
 layout and section navigation come from its `board/_theme.py`; CI and dashboard
 refresh workflows check it out automatically. Counts and section links remain
 owned by this board.
+
+### Browser validation
+
+The optional interaction check uses Playwright with Chromium and loads real
+project PNGs. It covers five viewport widths in light/dark, keyboard navigation,
+selection and critique matching, in-page enlargement, retry and response races.
+From an environment with Playwright available, run:
+
+```bash
+node tests/browser.cjs dashboard.html .scratch/browser
+```
+
+`NODE_PATH` may point to an existing Playwright installation's `node_modules`.
+Screenshots and a JSON result summary go to the requested output directory.
