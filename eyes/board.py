@@ -625,7 +625,11 @@ def render_html(views) -> str:
         "<table><thead><tr><th>Library</th><th>Figures</th>"
         "<th>Rendered with</th><th>Freshness</th></tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table></div>"
-        f"{''.join(sections)}</main>"
+        f"{''.join(sections)}"
+        + shared.boards_footer(
+            shared.board_links(PAGES_URL.rstrip("/").rsplit("/", 1)[0], "eyes"), "eyes"
+        )
+        + "</main>"
         "<dialog class='figure-dialog' aria-labelledby='enlarged-title'>"
         "<header><h2 id='enlarged-title'>Figure</h2>"
         "<button type='button' autofocus>Close</button></header><img alt=''></dialog>"
