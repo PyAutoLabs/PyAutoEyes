@@ -361,7 +361,8 @@ th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertic
 .dataset>summary{cursor:pointer;padding:12px;font-weight:600}
 .figure-browser{padding:12px;min-width:0}
 .figure-browser select{display:block;width:100%;max-width:100%;min-width:0;margin:8px 0 16px;
-font:inherit;padding:10px;background:var(--card);color:var(--fg);border:1px solid var(--line)}
+font:inherit;padding:10px;background:#fff;color:#1f2937;color-scheme:light;border:1px solid var(--line)}
+.figure-browser select option{background:#fff;color:#1f2937}
 .figure-image{display:block;width:100%;padding:0;border:0;background:#fff;cursor:zoom-in}
 .figure-image img{display:block;width:100%;max-height:75vh;object-fit:contain}
 .figure-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:12px 0}
