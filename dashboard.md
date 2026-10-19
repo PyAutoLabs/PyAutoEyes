@@ -9,7 +9,7 @@
 | [Instances](#instances) | 4 |
 | [Figures](#instances) | 265 |
 | [Behind](#instances) | 3 |
-| [Critiques](#instances) | 10 |
+| [Critiques](#instances) | 12 |
 
 ## Instances
 
@@ -25,10 +25,12 @@
 ## PyAutoLens
 
 <!-- eyes:instance name=lens manifest=d8dd28466586998d -->
-<!-- eyes:context name=lens {"critiques":[["autolens_visualization: group and cluster galleries (point-source + extended)","draft/feature/pyautoeyes/group_cluster_gallery.md"],["autolens_visualization: multi-galaxy gallery \u2014 producer and dataset","draft/feature/pyautoeyes/multi_galaxy_gallery.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"imaging":22,"interferometer":18},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
+<!-- eyes:context name=lens {"critiques":[["Source & Cluster arc \u2014 magnification science, PointSolver trust, cluster extended sources","draft/feature/autolens/source_cluster_arc.md"],["Eyes cluster visualization group: render every cluster/point-source figure for PyAutoEyes","draft/feature/autolens_visualization/eyes_cluster_visualization_group_render_every_cl.md"],["autolens_visualization: group and cluster galleries (point-source + extended)","draft/feature/pyautoeyes/group_cluster_gallery.md"],["autolens_visualization: multi-galaxy gallery \u2014 producer and dataset","draft/feature/pyautoeyes/multi_galaxy_gallery.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"imaging":22,"interferometer":18},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 
 **Open critiques:**
 
+- [Source & Cluster arc — magnification science, PointSolver trust, cluster extended sources](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/autolens/source_cluster_arc.md) (`draft/feature/autolens/source_cluster_arc.md`)
+- [Eyes cluster visualization group: render every cluster/point-source figure for PyAutoEyes](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/autolens_visualization/eyes_cluster_visualization_group_render_every_cl.md) (`draft/feature/autolens_visualization/eyes_cluster_visualization_group_render_every_cl.md`)
 - [autolens_visualization: group and cluster galleries (point-source + extended)](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautoeyes/group_cluster_gallery.md) (`draft/feature/pyautoeyes/group_cluster_gallery.md`)
 - [autolens_visualization: multi-galaxy gallery — producer and dataset](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautoeyes/multi_galaxy_gallery.md) (`draft/feature/pyautoeyes/multi_galaxy_gallery.md`)
 - [Hands release.yml fires the visualization re-render dispatches](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md) (`draft/feature/pyautohands/release_fires_visualization_dispatch.md`)
