@@ -260,31 +260,20 @@ def _critique_link(v, path: str) -> str:
     return f"{base}/blob/main/{path}" if base else ""
 
 
-# Canonical dashboard order of the dataset-type domains (the autolens_workspace folders);
-# domains not listed follow, alphabetically.
+# Canonical dashboard order of the dataset-type domains (one producer each); domains not
+# listed follow, alphabetically.
 DOMAIN_ORDER = (
     "imaging",
     "interferometer",
-    "point_source",
+    "interferometer_datacube",
+    "point_source_image_chi_squared",
+    "point_source_source_chi_squared",
     "multi_galaxy",
     "group",
     "cluster",
     "multi_dataset",
     "weak",
 )
-BASE_PRODUCER = "visualization"
-
-
-def _producer_stem(fig) -> str:
-    return Path(fig.producer).stem
-
-
-def _variant(stem: str) -> str:
-    """``visualization`` -> ""; ``visualization_<v>`` -> ``<v>``; any other stem as-is."""
-    if stem == BASE_PRODUCER:
-        return ""
-    prefix = BASE_PRODUCER + "_"
-    return stem[len(prefix) :] if stem.startswith(prefix) else stem
 
 
 def _domain_key(domain: str):
@@ -293,36 +282,18 @@ def _domain_key(domain: str):
     return (1, 0, domain)
 
 
-def _producer_key(stem: str):
-    return (stem != BASE_PRODUCER, stem)
-
-
-def _grouped(man) -> dict[tuple[str, str], list]:
-    """``{(domain, producer stem): figures}`` — one figure browser per entry.
-
-    Domains in ``DOMAIN_ORDER`` (unknown domains after, alphabetically); within a domain the
-    base ``visualization`` producer first, then its variants alphabetically; figures keep the
-    manifest's order."""
-    groups: dict[tuple[str, str], list] = defaultdict(list)
+def _grouped(man):
+    """``{domain: figures}`` in ``DOMAIN_ORDER`` (unknown domains after, alphabetically);
+    figures keep the manifest's order."""
+    groups = defaultdict(list)
     for fig in man.figures:
-        groups[(fig.domain, _producer_stem(fig))].append(fig)
-    return {
-        key: groups[key]
-        for key in sorted(groups, key=lambda k: (_domain_key(k[0]), _producer_key(k[1])))
-    }
-
-
-def _group_label(domain: str, stem: str) -> str:
-    """``domain`` for the base producer, ``domain / variant`` for a variant producer."""
-    variant = _variant(stem)
-    return f"{domain} / {variant}" if variant else domain
+        groups[fig.domain].append(fig)
+    return {domain: groups[domain] for domain in sorted(groups, key=_domain_key)}
 
 
 def _figure_label(fig) -> str:
-    """Unique within a domain: ``[variant/][source/]file``."""
     name = Path(fig.file).name
-    parts = [_variant(_producer_stem(fig)), fig.source, name]
-    return "/".join(p for p in parts if p)
+    return f"{fig.source}/{name}" if fig.source else name
 
 
 # ------------------------------------------------------------------ markdown ---
@@ -382,9 +353,9 @@ def render_markdown(views) -> str:
         if not v.manifest:
             out.append(f"**Manifest unavailable:** {v.error}")
             continue
-        for (domain, stem), figs in _grouped(v.manifest).items():
+        for domain, figs in _grouped(v.manifest).items():
             out += [
-                f"### {_group_label(domain, stem)}",
+                f"### {domain}",
                 "",
                 "| Figure | Review | Suggest |",
                 "|--------|--------|---------|",
@@ -539,7 +510,7 @@ def compact_freshness(view) -> str:
     )
 
 
-def _figure_browser(inst, man, summary, figs, identifier):
+def _figure_browser(inst, man, domain, figs, identifier):
     options = ["<option value=''>Choose a figure…</option>"]
     fallback = []
     for fig in figs:
@@ -551,7 +522,7 @@ def _figure_browser(inst, man, summary, figs, identifier):
         )
         fallback.append(f"<li><a href='{url}'>{label}</a></li>")
     return (
-        f"<details class='dataset'><summary>{_e(summary)}</summary>"
+        f"<details class='dataset'><summary>{_e(domain)}</summary>"
         "<div class='figure-browser'>"
         f"<label for='{identifier}'>Figure</label>"
         f"<select id='{identifier}'>{''.join(options)}</select>"
@@ -645,16 +616,8 @@ def render_html(views) -> str:
             sections.append(head + f"<p class='warn'>Manifest unavailable: {_e(v.error)}</p>")
             continue
         body = [head]
-        for group, ((domain, stem), figs) in enumerate(_grouped(v.manifest).items()):
-            body.append(
-                _figure_browser(
-                    inst,
-                    v.manifest,
-                    _group_label(domain, stem),
-                    figs,
-                    f"figure-{index}-{group}",
-                )
-            )
+        for group, (domain, figs) in enumerate(_grouped(v.manifest).items()):
+            body.append(_figure_browser(inst, v.manifest, domain, figs, f"figure-{index}-{group}"))
         if not v.manifest.figures:
             body.append("<p>No figures available.</p>")
         sections.append("".join(body))

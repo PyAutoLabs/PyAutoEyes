@@ -436,140 +436,39 @@ def test_refresh_uses_successful_collection_not_figure_generation(registry_file,
     assert "Last updated unavailable" in board.render_html(views)
 
 
-# ------------------------------------------------- producers within a domain ---
-
-MULTI_PRODUCER_FIGURES = [
-    # (file, domain, producer stem, source) — deliberately out of dashboard order.
-    ("scripts/weak/images/visualization/fit.png", "weak", "visualization", ""),
-    ("scripts/zeta/images/visualization/fit.png", "zeta", "visualization", ""),
-    (
-        "scripts/point_source/images/visualization_source_chi_squared/fit.png",
-        "point_source",
-        "visualization_source_chi_squared",
-        "",
-    ),
-    (
-        "scripts/point_source/images/visualization_image_chi_squared/fit.png",
-        "point_source",
-        "visualization_image_chi_squared",
-        "",
-    ),
-    (
-        "scripts/interferometer/images/visualization_datacube/channel_0/fit.png",
-        "interferometer",
-        "visualization_datacube",
-        "channel_0",
-    ),
-    (
-        "scripts/interferometer/images/visualization/parametric/fit.png",
-        "interferometer",
-        "visualization",
-        "parametric",
-    ),
-    ("scripts/alpha/images/visualization/fit.png", "alpha", "visualization", ""),
-    (
-        "scripts/imaging/images/visualization/parametric/fit.png",
-        "imaging",
-        "visualization",
-        "parametric",
-    ),
-    ("scripts/imaging/images/visualization/dataset.png", "imaging", "visualization", ""),
-]
-
-
-@pytest.fixture
-def multi_views(views):
+def test_domains_render_in_canonical_order_then_alphabetically(views):
     from dataclasses import replace
 
     view = views[0]
+    domains = ["zeta", "weak", "point_source_image_chi_squared", "alpha", "interferometer"]
+    domains += ["imaging", "interferometer_datacube", "cluster"]
     figures = [
         {
-            "file": file,
-            "producer": f"scripts/{domain}/{stem}.py",
-            "domain": domain,
-            "source": source,
+            "file": f"scripts/{d}/images/visualization/fit.png",
+            "producer": f"scripts/{d}/visualization.py",
+            "domain": d,
+            "source": "",
             "bytes": 1,
             "sha256": "0" * 64,
         }
-        for file, domain, stem, source in MULTI_PRODUCER_FIGURES
+        for d in domains
     ]
     doc = {**view.manifest.doc, "figures": figures, "figure_count": len(figures)}
-    return [replace(view, manifest=replace(view.manifest, doc=doc))]
-
-
-def test_grouped_orders_domains_canonically_then_unknown_alphabetically(multi_views):
-    keys = list(board._grouped(multi_views[0].manifest))
-    assert keys == [
-        ("imaging", "visualization"),
-        ("interferometer", "visualization"),
-        ("interferometer", "visualization_datacube"),
-        ("point_source", "visualization_image_chi_squared"),
-        ("point_source", "visualization_source_chi_squared"),
-        ("weak", "visualization"),
-        ("alpha", "visualization"),
-        ("zeta", "visualization"),
+    multi = [replace(view, manifest=replace(view.manifest, doc=doc))]
+    expected = [
+        "imaging",
+        "interferometer",
+        "interferometer_datacube",
+        "point_source_image_chi_squared",
+        "cluster",
+        "weak",
+        "alpha",
+        "zeta",
     ]
-    # Figures keep the manifest's order within a producer.
-    imaging = board._grouped(multi_views[0].manifest)[("imaging", "visualization")]
-    assert [f.source for f in imaging] == ["parametric", ""]
-
-
-def test_group_labels_name_the_variant_producer():
-    assert board._group_label("imaging", "visualization") == "imaging"
-    assert board._group_label("interferometer", "visualization_datacube") == (
-        "interferometer / datacube"
-    )
-    assert board._group_label("point_source", "visualization_image_chi_squared") == (
-        "point_source / image_chi_squared"
-    )
-    assert board._group_label("other", "render") == "other / render"
-
-
-def test_figure_labels_and_issue_titles_are_unique_across_producers(multi_views):
-    man = multi_views[0].manifest
-    labels = {(f.domain, board._figure_label(f)) for f in man.figures}
-    assert len(labels) == len(man.figures)
-    titles = {board.issue_title(f) for f in man.figures}
-    assert len(titles) == len(man.figures)
-    by_file = {f.file: f for f in man.figures}
-    assert (
-        board._figure_label(
-            by_file["scripts/point_source/images/visualization_image_chi_squared/fit.png"]
-        )
-        == "image_chi_squared/fit.png"
-    )
-    assert (
-        board._figure_label(
-            by_file["scripts/interferometer/images/visualization_datacube/channel_0/fit.png"]
-        )
-        == "datacube/channel_0/fit.png"
-    )
-    # The base producer's labels are unchanged: [source/]file.
-    assert (
-        board._figure_label(
-            by_file["scripts/interferometer/images/visualization/parametric/fit.png"]
-        )
-        == "parametric/fit.png"
-    )
-    assert board.issue_title(by_file["scripts/weak/images/visualization/fit.png"]) == (
-        "figure: weak/fit.png"
-    )
-
-
-def test_multi_producer_domain_renders_one_browser_per_producer(multi_views):
-    md = board.render_markdown(multi_views)
-    page = board.render_html(multi_views)
-    headings = [line for line in md.splitlines() if line.startswith("### ")]
-    assert headings == [
-        "### imaging",
-        "### interferometer",
-        "### interferometer / datacube",
-        "### point_source / image_chi_squared",
-        "### point_source / source_chi_squared",
-        "### weak",
-        "### alpha",
-        "### zeta",
+    assert list(board._grouped(multi[0].manifest)) == expected
+    headings = [
+        line[4:] for line in board.render_markdown(multi).splitlines() if line.startswith("### ")
     ]
-    summaries = re.findall(r"<details class='dataset'><summary>([^<]*)</summary>", page)
-    assert summaries == [h[4:] for h in headings]
-    assert page.count("<select") == len(headings)
+    assert headings == expected
+    page = board.render_html(multi)
+    assert re.findall(r"<details class='dataset'><summary>([^<]*)</summary>", page) == expected

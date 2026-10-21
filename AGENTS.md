@@ -107,8 +107,7 @@ Each figure carries two affordances, and neither files anything:
 
 - a copyable `Use the eyes skill. review <instance> <figure>` line for an AI assistant session;
 - a **Suggest an improvement** link that opens a pre-filled "new issue" form on
-  the *project* repo. The title is `figure: <domain>/<label>` (label =
-  `[<variant>/][<source>/]<file>`, see REFERENCE.md "Grouping"), the body holds the
+  the *project* repo. The title is `figure: <domain>/<file>`, the body holds the
   raw PNG link, the manifest version and a `Suggested improvement:` stub, and
   the label is `eyes-critique`.
 

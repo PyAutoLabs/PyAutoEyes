@@ -50,21 +50,16 @@ path.
 **What the organ reads:** the manifest at
 `<images_base_url><manifest>` (the raw GitHub URL on `main`), or a local
 checkout with `--offline` / `--from`. From it the organ takes `figures[*].file`
-to build each figure link (`<images_base_url><file>`), `domain`, `producer` and
-`source` to group and label the figures, `rendered_with[<import_name>]` and
-`generated` for the freshness columns, and `bytes` + `sha256` for `check`'s
-local integrity test. `producer` is also read by the Brain Eyes conductor.
+to build each figure link (`<images_base_url><file>`), `domain` and `source` to
+group and label the figures, `rendered_with[<import_name>]` and `generated` for
+the freshness columns, and `bytes` + `sha256` for `check`'s local integrity
+test. `producer` is carried for the Brain Eyes conductor and is not displayed.
 
-**Grouping:** the dashboard shows one figure browser per (domain, producer).
-Domains appear in a fixed order — `imaging`, `interferometer`, `point_source`,
+**Domain order:** the dashboard shows one figure browser per domain, in a fixed
+order — `imaging`, `interferometer`, `interferometer_datacube`,
+`point_source_image_chi_squared`, `point_source_source_chi_squared`,
 `multi_galaxy`, `group`, `cluster`, `multi_dataset`, `weak` — then any other
-domain alphabetically. Within a domain the base `visualization` producer comes
-first, then its variants (`visualization_<variant>`, from the `producer` stem)
-alphabetically. A browser is titled `<domain>` for the base producer and
-`<domain> / <variant>` for a variant (e.g. `point_source / image_chi_squared`),
-so a single-producer domain looks exactly as before. A figure's label is
-`[<variant>/][<source>/]<file name>`, unique within its domain; the issue title
-is `figure: <domain>/<label>`.
+domain alphabetically (`DOMAIN_ORDER` in `eyes/board.py`).
 
 **Versioning:**
 
