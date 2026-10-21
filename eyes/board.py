@@ -260,35 +260,13 @@ def _critique_link(v, path: str) -> str:
     return f"{base}/blob/main/{path}" if base else ""
 
 
-# Canonical dashboard order of the dataset-type domains (one producer each); domains not
-# listed follow, alphabetically.
-DOMAIN_ORDER = (
-    "imaging",
-    "interferometer",
-    "interferometer_datacube",
-    "point_source_image_chi_squared",
-    "point_source_source_chi_squared",
-    "multi_galaxy",
-    "group",
-    "cluster",
-    "multi_dataset",
-    "weak",
-)
-
-
-def _domain_key(domain: str):
-    if domain in DOMAIN_ORDER:
-        return (0, DOMAIN_ORDER.index(domain), "")
-    return (1, 0, domain)
-
-
 def _grouped(man):
-    """``{domain: figures}`` in ``DOMAIN_ORDER`` (unknown domains after, alphabetically);
-    figures keep the manifest's order."""
+    """``{domain: figures}`` with domains alphabetical, mirroring the project repo's
+    ``scripts/`` folders; figures keep the manifest's order."""
     groups = defaultdict(list)
     for fig in man.figures:
         groups[fig.domain].append(fig)
-    return {domain: groups[domain] for domain in sorted(groups, key=_domain_key)}
+    return {domain: groups[domain] for domain in sorted(groups)}
 
 
 def _figure_label(fig) -> str:
