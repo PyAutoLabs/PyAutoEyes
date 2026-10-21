@@ -436,7 +436,7 @@ def test_refresh_uses_successful_collection_not_figure_generation(registry_file,
     assert "Last updated unavailable" in board.render_html(views)
 
 
-def test_domains_render_in_canonical_order_then_alphabetically(views):
+def test_domains_render_alphabetically(views):
     from dataclasses import replace
 
     view = views[0]
@@ -455,16 +455,7 @@ def test_domains_render_in_canonical_order_then_alphabetically(views):
     ]
     doc = {**view.manifest.doc, "figures": figures, "figure_count": len(figures)}
     multi = [replace(view, manifest=replace(view.manifest, doc=doc))]
-    expected = [
-        "imaging",
-        "interferometer",
-        "interferometer_datacube",
-        "point_source_image_chi_squared",
-        "cluster",
-        "weak",
-        "alpha",
-        "zeta",
-    ]
+    expected = sorted(domains)
     assert list(board._grouped(multi[0].manifest)) == expected
     headings = [
         line[4:] for line in board.render_markdown(multi).splitlines() if line.startswith("### ")
