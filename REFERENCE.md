@@ -55,6 +55,12 @@ group and label the figures, `rendered_with[<import_name>]` and `generated` for
 the freshness columns, and `bytes` + `sha256` for `check`'s local integrity
 test. `producer` is carried for the Brain Eyes conductor and is not displayed.
 
+**Domain order:** the dashboard shows one figure browser per domain, in a fixed
+order — `imaging`, `interferometer`, `interferometer_datacube`,
+`point_source_image_chi_squared`, `point_source_source_chi_squared`,
+`multi_galaxy`, `group`, `cluster`, `multi_dataset`, `weak` — then any other
+domain alphabetically (`DOMAIN_ORDER` in `eyes/board.py`).
+
 **Versioning:**
 
 - *Additive* changes stay on schema 1. A new top-level key or a new per-figure

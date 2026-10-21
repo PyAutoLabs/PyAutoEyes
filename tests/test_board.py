@@ -434,3 +434,41 @@ def test_refresh_uses_successful_collection_not_figure_generation(registry_file,
     assert board.render_html(views) == page
     views[0].captured_at = None
     assert "Last updated unavailable" in board.render_html(views)
+
+
+def test_domains_render_in_canonical_order_then_alphabetically(views):
+    from dataclasses import replace
+
+    view = views[0]
+    domains = ["zeta", "weak", "point_source_image_chi_squared", "alpha", "interferometer"]
+    domains += ["imaging", "interferometer_datacube", "cluster"]
+    figures = [
+        {
+            "file": f"scripts/{d}/images/visualization/fit.png",
+            "producer": f"scripts/{d}/visualization.py",
+            "domain": d,
+            "source": "",
+            "bytes": 1,
+            "sha256": "0" * 64,
+        }
+        for d in domains
+    ]
+    doc = {**view.manifest.doc, "figures": figures, "figure_count": len(figures)}
+    multi = [replace(view, manifest=replace(view.manifest, doc=doc))]
+    expected = [
+        "imaging",
+        "interferometer",
+        "interferometer_datacube",
+        "point_source_image_chi_squared",
+        "cluster",
+        "weak",
+        "alpha",
+        "zeta",
+    ]
+    assert list(board._grouped(multi[0].manifest)) == expected
+    headings = [
+        line[4:] for line in board.render_markdown(multi).splitlines() if line.startswith("### ")
+    ]
+    assert headings == expected
+    page = board.render_html(multi)
+    assert re.findall(r"<details class='dataset'><summary>([^<]*)</summary>", page) == expected
