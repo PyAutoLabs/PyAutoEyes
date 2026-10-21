@@ -3,8 +3,8 @@
   "organ": "eyes",
   "repo": "PyAutoEyes",
   "status": "yellow",
-  "headline": "293 figures · 3 behind",
-  "updated": "2026-10-21T11:20:15Z",
+  "headline": "297 figures · 3 behind",
+  "updated": "2026-10-21T20:00:34Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -15,8 +15,8 @@
     },
     {
       "severity": "yellow",
-      "text": "lens: 5 open critiques",
-      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/autolens/source_cluster_arc.md",
+      "text": "lens: 10 open critiques",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autolens/point_fit_critical_curves_ignore_source_redshift.md",
       "prompt": "Use the eyes skill. review --instance lens"
     },
     {
@@ -27,7 +27,7 @@
     },
     {
       "severity": "yellow",
-      "text": "galaxy: 2 open critiques",
+      "text": "galaxy: 3 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md",
       "prompt": "Use the eyes skill. review --instance galaxy"
     },
@@ -39,13 +39,13 @@
     },
     {
       "severity": "yellow",
-      "text": "fit: 4 open critiques",
+      "text": "fit: 5 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/autofit_visualization/seed_samplers_for_byte_stable_rerenders.md",
       "prompt": "Use the eyes skill. review --instance fit"
     },
     {
       "severity": "yellow",
-      "text": "cti: 1 open critique",
+      "text": "cti: 2 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md",
       "prompt": "Use the eyes skill. review --instance cti"
     }
