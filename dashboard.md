@@ -24,7 +24,7 @@
 
 ## PyAutoLens
 
-<!-- eyes:instance name=lens manifest=2eb29bd57a6350b8 -->
+<!-- eyes:instance name=lens manifest=0c121794abb76560 -->
 <!-- eyes:context name=lens {"critiques":[["Source & Cluster arc \u2014 magnification science, PointSolver trust, cluster extended sources","draft/feature/autolens/source_cluster_arc.md"],["Eyes cluster visualization group: render every cluster/point-source figure for PyAutoEyes","draft/feature/autolens_visualization/eyes_cluster_visualization_group_render_every_cl.md"],["autolens_visualization: group and cluster galleries (point-source + extended)","draft/feature/pyautoeyes/group_cluster_gallery.md"],["autolens_visualization: multi-galaxy gallery \u2014 producer and dataset","draft/feature/pyautoeyes/multi_galaxy_gallery.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"cluster":4,"group":2,"imaging":22,"interferometer":18,"interferometer_datacube":6,"multi_dataset":4,"multi_galaxy":2,"point_source_image_chi_squared":2,"point_source_source_chi_squared":2,"weak":2},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 
 **Open critiques:**
