@@ -4,19 +4,19 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "310 figures · 3 behind",
-  "updated": "2026-10-22T09:00:38Z",
+  "updated": "2026-10-22T19:45:10Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
       "severity": "yellow",
-      "text": "lens: behind (rendered 2026.8.17.1, released 2026.10.18.1)",
+      "text": "lens: behind (rendered 2026.8.17.1, released 2026.10.22.1)",
       "url": "https://github.com/PyAutoLabs/autolens_visualization",
       "prompt": "Use the eyes skill. survey --instance lens"
     },
     {
       "severity": "yellow",
-      "text": "lens: 9 open critiques",
-      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autolens/point_fit_critical_curves_ignore_source_redshift.md",
+      "text": "lens: 8 open critiques",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/autolens/source_cluster_arc.md",
       "prompt": "Use the eyes skill. review --instance lens"
     },
     {
