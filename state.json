@@ -4,7 +4,7 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "297 figures · 3 behind",
-  "updated": "2026-10-21T20:00:34Z",
+  "updated": "2026-10-22T08:56:32Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -15,7 +15,7 @@
     },
     {
       "severity": "yellow",
-      "text": "lens: 10 open critiques",
+      "text": "lens: 9 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autolens/point_fit_critical_curves_ignore_source_redshift.md",
       "prompt": "Use the eyes skill. review --instance lens"
     },
