@@ -3,8 +3,8 @@
   "organ": "eyes",
   "repo": "PyAutoEyes",
   "status": "yellow",
-  "headline": "310 figures · 2 behind",
-  "updated": "2026-10-23T17:39:03Z",
+  "headline": "310 figures · 1 behind",
+  "updated": "2026-10-23T17:39:24Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -24,12 +24,6 @@
       "text": "galaxy: 3 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md",
       "prompt": "Use the eyes skill. review --instance galaxy"
-    },
-    {
-      "severity": "yellow",
-      "text": "fit: behind (rendered 2026.9.27.2, released 2026.10.23.1)",
-      "url": "https://github.com/PyAutoLabs/autofit_visualization",
-      "prompt": "Use the eyes skill. survey --instance fit"
     },
     {
       "severity": "yellow",
