@@ -4,7 +4,7 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "310 figures",
-  "updated": "2026-10-23T22:22:35Z",
+  "updated": "2026-10-24T08:25:21Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -27,8 +27,8 @@
     },
     {
       "severity": "yellow",
-      "text": "cti: 3 open critiques",
-      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md",
+      "text": "cti: 4 open critiques",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/manifest_rendered_with_stale_in_mains_mode.md",
       "prompt": "Use the eyes skill. review --instance cti"
     }
   ]
