@@ -8,16 +8,16 @@
 |-------|------:|
 | [Instances](#instances) | 4 |
 | [Figures](#instances) | 310 |
-| [Behind](#instances) | 0 |
+| [Behind](#instances) | 3 |
 | [Critiques](#instances) | 23 |
 
 ## Instances
 
 | Library | Figures | Rendered with | Freshness |
 |---------|--------:|---------------|-----------|
-| [PyAutoLens](#lens) | 85 | `2026.10.23.1` | Current |
-| [PyAutoGalaxy](#galaxy) | 41 | `2026.10.23.1` | Current |
-| [PyAutoFit](#fit) | 49 | `2026.10.23.1` | Current |
+| [PyAutoLens](#lens) | 85 | `2026.10.23.1` | Behind |
+| [PyAutoGalaxy](#galaxy) | 41 | `2026.10.23.1` | Behind |
+| [PyAutoFit](#fit) | 49 | `2026.10.23.1` | Behind |
 | [PyAutoCTI](#cti) | 135 | `2024.11.13.2` | Current |
 
 <a id="lens"></a>
