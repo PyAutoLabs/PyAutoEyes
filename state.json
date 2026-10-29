@@ -4,7 +4,7 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "310 figures · 3 behind",
-  "updated": "2026-10-27T09:21:59Z",
+  "updated": "2026-10-29T10:26:53Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -15,7 +15,7 @@
     },
     {
       "severity": "yellow",
-      "text": "lens: 10 open critiques",
+      "text": "lens: 9 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/autolens/source_cluster_arc.md",
       "prompt": "Use the eyes skill. review --instance lens"
     },
