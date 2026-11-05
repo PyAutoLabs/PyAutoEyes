@@ -9,7 +9,7 @@
 | [Instances](#instances) | 4 |
 | [Figures](#instances) | 310 |
 | [Behind](#instances) | 3 |
-| [Critiques](#instances) | 22 |
+| [Critiques](#instances) | 24 |
 
 ## Instances
 
@@ -336,13 +336,15 @@
 ## PyAutoCTI
 
 <!-- eyes:instance name=cti manifest=263c730fde674616 -->
-<!-- eyes:context name=cti {"critiques":[["autocti_visualization manifest `rendered_with:` shows stale source-checkout versions in mains mode","draft/bug/autocti_visualization/manifest_rendered_with_stale_in_mains_mode.md"],["autocti_visualization render.yml fails on the released stack until PyAutoCTI releases","draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"],["Survey 03 \u2014 PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)","draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"dataset_1d":41,"imaging_ci":94},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
+<!-- eyes:context name=cti {"critiques":[["autocti_visualization manifest `rendered_with:` shows stale source-checkout versions in mains mode","draft/bug/autocti_visualization/manifest_rendered_with_stale_in_mains_mode.md"],["autocti_visualization render.yml fails on the released stack until PyAutoCTI releases","draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"],["CTI upkeep parity \u2014 bring PyAutoCTI and its satellites to the same level of upkeep as the other libraries","draft/maintenance/autocti/cti_upkeep_epic.md"],["CTI upkeep parity \u2014 survey report (2026-11-04)","draft/maintenance/autocti/cti_upkeep_epic_report.md"],["Survey 03 \u2014 PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)","draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"dataset_1d":41,"imaging_ci":94},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 
 **Open critiques:**
 
 - [autocti_visualization manifest `rendered_with:` shows stale source-checkout versions in mains mode](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/manifest_rendered_with_stale_in_mains_mode.md) (`draft/bug/autocti_visualization/manifest_rendered_with_stale_in_mains_mode.md`)
 - [autocti_visualization render.yml fails on the released stack until PyAutoCTI releases](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md) (`draft/bug/autocti_visualization/render_yml_blocked_until_pyautocti_release.md`)
 - [Hands release.yml fires the visualization re-render dispatches](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md) (`draft/feature/pyautohands/release_fires_visualization_dispatch.md`)
+- [CTI upkeep parity — bring PyAutoCTI and its satellites to the same level of upkeep as the other libraries](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/autocti/cti_upkeep_epic.md) (`draft/maintenance/autocti/cti_upkeep_epic.md`)
+- [CTI upkeep parity — survey report (2026-11-04)](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/autocti/cti_upkeep_epic_report.md) (`draft/maintenance/autocti/cti_upkeep_epic_report.md`)
 - [Survey 03 — PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md) (`draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md`)
 
 ### dataset_1d
