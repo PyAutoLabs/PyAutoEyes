@@ -3,25 +3,25 @@
   "organ": "eyes",
   "repo": "PyAutoEyes",
   "status": "yellow",
-  "headline": "310 figures · 3 behind",
-  "updated": "2026-11-05T11:35:31Z",
+  "headline": "310 figures · 4 behind",
+  "updated": "2026-11-06T11:33:45Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
       "severity": "yellow",
-      "text": "lens: behind (rendered 2026.10.23.1, released 2026.11.5.1)",
+      "text": "lens: behind (rendered 2026.10.23.1, released 2026.11.6.1)",
       "url": "https://github.com/PyAutoLabs/autolens_visualization",
       "prompt": "Use the eyes skill. survey --instance lens"
     },
     {
       "severity": "yellow",
-      "text": "lens: 9 open critiques",
+      "text": "lens: 7 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/autolens/source_cluster_arc.md",
       "prompt": "Use the eyes skill. review --instance lens"
     },
     {
       "severity": "yellow",
-      "text": "galaxy: behind (rendered 2026.10.23.1, released 2026.11.5.1)",
+      "text": "galaxy: behind (rendered 2026.10.23.1, released 2026.11.6.1)",
       "url": "https://github.com/PyAutoLabs/autogalaxy_visualization",
       "prompt": "Use the eyes skill. survey --instance galaxy"
     },
@@ -33,7 +33,7 @@
     },
     {
       "severity": "yellow",
-      "text": "fit: behind (rendered 2026.10.23.1, released 2026.11.5.1)",
+      "text": "fit: behind (rendered 2026.10.23.1, released 2026.11.6.1)",
       "url": "https://github.com/PyAutoLabs/autofit_visualization",
       "prompt": "Use the eyes skill. survey --instance fit"
     },
@@ -45,7 +45,13 @@
     },
     {
       "severity": "yellow",
-      "text": "cti: 6 open critiques",
+      "text": "cti: behind (rendered 2024.11.13.2, released 2026.11.6.1)",
+      "url": "https://github.com/PyAutoLabs/autocti_visualization",
+      "prompt": "Use the eyes skill. survey --instance cti"
+    },
+    {
+      "severity": "yellow",
+      "text": "cti: 5 open critiques",
       "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autocti_visualization/manifest_rendered_with_stale_in_mains_mode.md",
       "prompt": "Use the eyes skill. review --instance cti"
     }
