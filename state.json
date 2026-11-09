@@ -4,12 +4,12 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "310 figures · 4 behind",
-  "updated": "2026-11-07T10:42:27Z",
+  "updated": "2026-11-09T12:10:47Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
       "severity": "yellow",
-      "text": "lens: behind (rendered 2026.10.23.1, released 2026.11.7.1)",
+      "text": "lens: behind (rendered 2026.10.23.1, released 2026.11.9.1)",
       "url": "https://github.com/PyAutoLabs/autolens_visualization",
       "prompt": "Use the eyes skill. survey --instance lens"
     },
@@ -21,7 +21,7 @@
     },
     {
       "severity": "yellow",
-      "text": "galaxy: behind (rendered 2026.10.23.1, released 2026.11.7.1)",
+      "text": "galaxy: behind (rendered 2026.10.23.1, released 2026.11.9.1)",
       "url": "https://github.com/PyAutoLabs/autogalaxy_visualization",
       "prompt": "Use the eyes skill. survey --instance galaxy"
     },
@@ -33,7 +33,7 @@
     },
     {
       "severity": "yellow",
-      "text": "fit: behind (rendered 2026.10.23.1, released 2026.11.7.1)",
+      "text": "fit: behind (rendered 2026.10.23.1, released 2026.11.9.1)",
       "url": "https://github.com/PyAutoLabs/autofit_visualization",
       "prompt": "Use the eyes skill. survey --instance fit"
     },
@@ -45,7 +45,7 @@
     },
     {
       "severity": "yellow",
-      "text": "cti: behind (rendered 2024.11.13.2, released 2026.11.7.1)",
+      "text": "cti: behind (rendered 2024.11.13.2, released 2026.11.9.1)",
       "url": "https://github.com/PyAutoLabs/autocti_visualization",
       "prompt": "Use the eyes skill. survey --instance cti"
     },
