@@ -178,12 +178,12 @@
 ## PyAutoGalaxy
 
 <!-- eyes:instance name=galaxy manifest=8e0cfa2068d91b73 -->
-<!-- eyes:context name=galaxy {"critiques":[["`PlotterEllipse.fit_ellipse` writes every variant to `ellipse_fit.png`, so only the last survives","draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"],["Survey 03 \u2014 PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)","draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ellipse":17,"imaging":11,"interferometer":13},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
+<!-- eyes:context name=galaxy {"critiques":[["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"],["Sweep the retired `data_no_ellipse` toggle from configs and prose","draft/maintenance/workspaces/data_no_ellipse_config_and_prose_sweep.md"],["Survey 03 \u2014 PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)","draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ellipse":17,"imaging":11,"interferometer":13},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 
 **Open critiques:**
 
-- [`PlotterEllipse.fit_ellipse` writes every variant to `ellipse_fit.png`, so only the last survives](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md) (`draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md`)
 - [Hands release.yml fires the visualization re-render dispatches](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md) (`draft/feature/pyautohands/release_fires_visualization_dispatch.md`)
+- [Sweep the retired `data_no_ellipse` toggle from configs and prose](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/maintenance/workspaces/data_no_ellipse_config_and_prose_sweep.md) (`draft/maintenance/workspaces/data_no_ellipse_config_and_prose_sweep.md`)
 - [Survey 03 — PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md) (`draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md`)
 
 ### ellipse

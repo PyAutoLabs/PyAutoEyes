@@ -4,7 +4,7 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "310 figures · 4 behind",
-  "updated": "2026-11-09T12:10:47Z",
+  "updated": "2026-11-11T11:28:21Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -28,7 +28,7 @@
     {
       "severity": "yellow",
       "text": "galaxy: 3 open critiques",
-      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/autogalaxy/ellipse_plotter_fit_ellipse_overwrites.md",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md",
       "prompt": "Use the eyes skill. review --instance galaxy"
     },
     {
