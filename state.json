@@ -4,7 +4,7 @@
   "repo": "PyAutoEyes",
   "status": "yellow",
   "headline": "310 figures · 4 behind",
-  "updated": "2026-11-17T12:30:54Z",
+  "updated": "2026-11-18T12:18:29Z",
   "pages_url": "https://pyautolabs.github.io/PyAutoEyes/",
   "items": [
     {
@@ -39,8 +39,8 @@
     },
     {
       "severity": "yellow",
-      "text": "fit: 6 open critiques",
-      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/pyautobrain/shift_in_turn_notify_merges_ignore_merge_cap.md",
+      "text": "fit: 5 open critiques",
+      "url": "https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md",
       "prompt": "Use the eyes skill. review --instance fit"
     },
     {

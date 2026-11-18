@@ -9,7 +9,7 @@
 | [Instances](#instances) | 4 |
 | [Figures](#instances) | 310 |
 | [Behind](#instances) | 4 |
-| [Critiques](#instances) | 21 |
+| [Critiques](#instances) | 20 |
 
 ## Instances
 
@@ -248,11 +248,10 @@
 ## PyAutoFit
 
 <!-- eyes:instance name=fit manifest=7642ff11cb9a0dab -->
-<!-- eyes:context name=fit {"critiques":[["M3.6e Shift workers merge notify-tier PRs in-turn past the shift's merge-cap, and inconsistently","draft/bug/pyautobrain/shift_in_turn_notify_merges_ignore_merge_cap.md"],["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"],["Search extensibility epic: research report and phased plan","draft/research/autofit/search_extensibility_epic_report.md"],["03 \u2014 How non-linear searches are documented across PyAuto, and how that must scale","draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md"],["04 \u2014 Inference and profiling infrastructure survey for `autofit_inference` and `autofit_profiling`","draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md"],["Survey 03 \u2014 PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)","draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ep":19,"model":12,"samples":15,"visualizer":3},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
+<!-- eyes:context name=fit {"critiques":[["Hands release.yml fires the visualization re-render dispatches","draft/feature/pyautohands/release_fires_visualization_dispatch.md"],["Search extensibility epic: research report and phased plan","draft/research/autofit/search_extensibility_epic_report.md"],["03 \u2014 How non-linear searches are documented across PyAuto, and how that must scale","draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md"],["04 \u2014 Inference and profiling infrastructure survey for `autofit_inference` and `autofit_profiling`","draft/research/autofit/search_extensibility_epic_surveys/04_inference_profiling_infra.md"],["Survey 03 \u2014 PyAutoEyes and autolens_visualization coverage per dataset type (2026-10-21, Explore worker, read-only)","draft/research/autolens_profiling/likelihood_lifecycle_epic_surveys/03_eyes_viz_coverage.md"]],"critiques_note":"","mind_url":"https://github.com/PyAutoLabs/PyAutoMind","survey":{"domains":{"ep":19,"model":12,"samples":15,"visualizer":3},"gaps":[],"orphans":[],"stale":[]},"survey_note":""} -->
 
 **Open critiques:**
 
-- [M3.6e Shift workers merge notify-tier PRs in-turn past the shift's merge-cap, and inconsistently](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/bug/pyautobrain/shift_in_turn_notify_merges_ignore_merge_cap.md) (`draft/bug/pyautobrain/shift_in_turn_notify_merges_ignore_merge_cap.md`)
 - [Hands release.yml fires the visualization re-render dispatches](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/feature/pyautohands/release_fires_visualization_dispatch.md) (`draft/feature/pyautohands/release_fires_visualization_dispatch.md`)
 - [Search extensibility epic: research report and phased plan](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_report.md) (`draft/research/autofit/search_extensibility_epic_report.md`)
 - [03 — How non-linear searches are documented across PyAuto, and how that must scale](https://github.com/PyAutoLabs/PyAutoMind/blob/main/draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md) (`draft/research/autofit/search_extensibility_epic_surveys/03_search_docs.md`)
